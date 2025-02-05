@@ -86,7 +86,7 @@ const InputComp = styled.div`
     font-size: 1em;
     &:disabled {
       opacity: 1;
-      background-color: white;
+      background-color: gray;
     }
   }
   .msg {

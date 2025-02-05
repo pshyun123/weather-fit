@@ -2,11 +2,12 @@ import { useState } from "react";
 import UserApi from "../api/UserApi";
 import JoinComp from "../component/join/JoinStyle";
 import { InputButton } from "../component/join/JoinInputstyle";
+import { useEffect } from "react";
 
 const Join = () => {
   // 입력 칸에 이메일, 이메일 인증, 비밀번호, 이름 입력 / 프로필, 나이대별 선택
   const [inputEmail, setInputEmail] = useState(""); // 이메일
-  const [emailConf, setEmailConf] = useState(""); // 이메일 인증
+  const [inputEmailConf, setInputEmailConf] = useState(""); // 이메일 인증
   const [inputPw, setInputPw] = useState(""); // 비밀번호
   const [inputPw2, setInputPw2] = useState(""); // 비밀번호 확인
   const [inputName, setInputName] = useState(""); // 이름
@@ -30,6 +31,27 @@ const Join = () => {
   const [isName, setIsName] = useState(false);
   const [isProfileImage, setIsProfileImage] = useState(false);
   const [isAgeGroup, setIsAgeGroup] = useState(false);
+
+  // 전체 유효성
+  const [isFormValid, setIsFormValid] = useState(false);
+
+  // 모든 입력이 유효한지 확인하는 함수
+  const isAllInputValid = () => {
+    return (
+      isEmail &&
+      isEmailConf &&
+      isPw &&
+      isPw2 &&
+      isName &&
+      isProfileImage &&
+      ageGroup !== ""
+    );
+  };
+
+  // 각 입력 상태가 변경될 때마다 전체 유효성 확인
+  useEffect(() => {
+    setIsFormValid(isAllInputValid());
+  }, [isEmail, isEmailConf, isPw, isPw2, isName, isProfileImage, ageGroup]);
 
   // 이메일, 비밀번호 정규식
   const regexList = {
@@ -63,6 +85,7 @@ const Join = () => {
     } else {
       isUnique("email", value);
     }
+    console.log("Email is valid:", isEmail);
   };
 
   // 이메일 인증번호 요청
@@ -76,6 +99,41 @@ const Join = () => {
       }
     } catch (error) {
       console.error("인증번호 요청 실패:", error);
+    }
+  };
+
+  // 이메일 요청 확인
+  const onChangeEmailConf = (e) => {
+    const value = e.target.value;
+    setInputEmailConf(value);
+
+    // 인증번호 유효성 검사 (예: 6자리 숫자)
+    const isValidAuthCode = /^\d{6}$/.test(value);
+
+    if (isValidAuthCode) {
+      setEmailConfMessage("인증번호 형식이 올바릅니다.");
+      setIsEmailConf(true);
+    } else {
+      setEmailConfMessage("올바른 인증번호를 입력해주세요.");
+      setIsEmailConf(false);
+    }
+  };
+
+  // 실제 인증번호 확인 로직
+  const verifyEmailAuthCode = async () => {
+    try {
+      const res = await UserApi.verifyAuthCode(inputEmail, inputEmailConf);
+      if (res.data.success) {
+        setEmailConfMessage("이메일 인증이 완료되었습니다.");
+        setIsEmailConf(true);
+      } else {
+        setEmailConfMessage("인증번호가 올바르지 않습니다.");
+        setIsEmailConf(false);
+      }
+    } catch (error) {
+      console.error("인증번호 확인 실패:", error);
+      setEmailConfMessage("인증 과정에서 오류가 발생했습니다.");
+      setIsEmailConf(false);
     }
   };
 
@@ -118,14 +176,14 @@ const Join = () => {
     }
   };
 
-  // 프로필 사진
   const onChangeProfileImage = (e) => {
-    const file = e.target.files[0]; // 선택한 파일
+    const file = e.target.files[0];
     if (file) {
       setProfileImage(file);
-      setProfileImageMessage("프로필 이미지가 업로드되었습니다.");
+      setIsProfileImage(true);
     } else {
       setProfileImageMessage("이미지를 선택하세요.");
+      setIsProfileImage(false);
     }
   };
 
@@ -137,29 +195,26 @@ const Join = () => {
     "30대 초반",
     "30대 중반",
     "30대 후반",
-  ]; // 나이대 목록
+  ];
 
-  const onChangeAgeGroup = (e) => {
-    setAgeGroup(e.target.value);
-    setAgeGroupMessage("나이대가 선택되었습니다.");
-    setIsAgeGroup(true);
+  // 나이대 목록
+  const onChangeAgeGroup = (selectedGroup) => {
+    setAgeGroup((prevGroup) => {
+      const newGroup = prevGroup === selectedGroup ? "" : selectedGroup;
+      setIsAgeGroup(newGroup !== "");
+      return newGroup;
+    });
   };
 
   const onSubmit = async () => {
-    if (
-      isEmail &&
-      isEmailConf &&
-      isPw &&
-      isPw2 &&
-      isName &&
-      isProfileImage &&
-      isAgeGroup
-    ) {
+    if (isAllInputValid()) {
       try {
         const res = await UserApi.register({
           email: inputEmail,
           password: inputPw,
           name: inputName,
+          profileImage: profileImage,
+          ageGroup: ageGroup,
         });
         console.log("회원가입 성공:", res.data);
       } catch (error) {
@@ -193,7 +248,6 @@ const Join = () => {
                 />
               </div>
             )}
-            <p>{profileImageMessage}</p>
           </div>
 
           <div className="inputArea">
@@ -206,6 +260,16 @@ const Join = () => {
               msg={emailMessage}
               msgType={isEmail}
               btnClick={sendEmailAuthCode} // 버튼 클릭 시 인증번호 발송 요청
+            />
+            <InputButton
+              holder="이메일 인증번호 입력"
+              value={inputEmailConf}
+              changeEvt={onChangeEmailConf}
+              btnChild="인증번호 확인"
+              active={isEmailConf}
+              msg={emailConfMessage}
+              msgType={isEmailConf}
+              btnClick={verifyEmailAuthCode} // 버튼 클릭 시 인증번호 확인
             />
             <InputButton
               holder="비밀번호 입력"
@@ -235,30 +299,22 @@ const Join = () => {
           {/* 나이대 선택 */}
           <div className="select-age">
             <label>나이대 선택</label>
-            <select value={ageGroup} onChange={onChangeAgeGroup}>
-              <option value="">나이대를 선택하세요</option>
+            <div className="age-group-grid">
               {ageGroups.map((group, index) => (
-                <option key={index} value={group}>
+                <button
+                  key={index}
+                  className={`age-group-button ${
+                    ageGroup === group ? "active" : ""
+                  }`}
+                  onClick={() => onChangeAgeGroup(group)}>
                   {group}
-                </option>
+                </button>
               ))}
-            </select>
+            </div>
             <p>{ageGroupMessage}</p>
           </div>
 
-          <button
-            onClick={onSubmit}
-            disabled={
-              !(
-                isEmail &&
-                isEmailConf &&
-                isPw &&
-                isPw2 &&
-                isName &&
-                isProfileImage &&
-                isAgeGroup
-              )
-            }>
+          <button onClick={onSubmit} disabled={!isAllInputValid()}>
             완료하기
           </button>
         </div>

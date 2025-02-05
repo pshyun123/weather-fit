@@ -5,7 +5,6 @@ const JoinComp = styled.section`
   flex-direction: column;
   align-items: center;
   background-color: var(--IVORY);
-  border: 1px solid red;
 
   h2 {
     font-size: 2em;
@@ -14,21 +13,18 @@ const JoinComp = styled.section`
   }
 
   .container {
-    border: 1px solid blue;
     width: 100%;
     padding: 30px;
 
     .profile {
       display: flex;
       flex-direction: column;
+      align-items: center;
       margin-bottom: 50px;
-      border: 1px solid purple;
 
       label {
         font-size: 1.3em;
         font-weight: 600;
-        input {
-        }
       }
     }
     .inputArea {
@@ -36,13 +32,48 @@ const JoinComp = styled.section`
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      border: 1px solid green;
+    }
+
+    .inputArea > div:first-child button {
+      /* 인증번호 발송 버튼 스타일 */
+      background-color: #007bff;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .inputArea > div:first-child button:hover {
+      background-color: #0056b3;
     }
 
     .select-age {
-      border: 1px solid pink;
-      label {
-      }
+      margin-bottom: 20px;
+    }
+
+    .age-group-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .age-group-button {
+      padding: 10px;
+      border: 1px solid #ccc;
+      background-color: #f8f8f8;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .age-group-button:hover {
+      background-color: #e8e8e8;
+    }
+
+    .age-group-button.active {
+      background-color: #007bff;
+      color: white;
     }
   }
 `;
