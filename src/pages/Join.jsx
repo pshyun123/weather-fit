@@ -3,6 +3,7 @@ import UserApi from "../api/UserApi";
 import JoinComp from "../component/join/JoinStyle";
 import { InputButton } from "../component/join/JoinInputstyle";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Join = () => {
   // 입력 칸에 이메일, 이메일 인증, 비밀번호, 이름 입력 / 프로필, 나이대별 선택
@@ -31,27 +32,44 @@ const Join = () => {
   const [isName, setIsName] = useState(false);
   const [isProfileImage, setIsProfileImage] = useState(false);
   const [isAgeGroup, setIsAgeGroup] = useState(false);
+  const [isSendingCode, setIsSendingCode] = useState(false);
+  const [isCodeSent, setIsCodeSent] = useState(false);
 
   // 전체 유효성
   const [isFormValid, setIsFormValid] = useState(false);
 
+  // 완료하기 활성화 비활성화 버튼
+  const [isButtonActive, setIsButtonActive] = useState(false);
+
+  // 페이지 이동
+  const navigate = useNavigate();
+
   // 모든 입력이 유효한지 확인하는 함수
   const isAllInputValid = () => {
-    return (
-      isEmail &&
+    const isValid =
+      inputEmail &&
       isEmailConf &&
-      isPw &&
+      inputPw &&
       isPw2 &&
-      isName &&
-      isProfileImage &&
-      ageGroup !== ""
-    );
+      inputName &&
+      profileImage &&
+      ageGroup;
+    setIsButtonActive(isValid);
+    return isValid;
   };
 
   // 각 입력 상태가 변경될 때마다 전체 유효성 확인
   useEffect(() => {
-    setIsFormValid(isAllInputValid());
-  }, [isEmail, isEmailConf, isPw, isPw2, isName, isProfileImage, ageGroup]);
+    isAllInputValid();
+  }, [
+    inputEmail,
+    inputEmailConf,
+    inputPw,
+    inputPw2,
+    inputName,
+    profileImage,
+    ageGroup,
+  ]);
 
   // 이메일, 비밀번호 정규식
   const regexList = {
@@ -210,13 +228,14 @@ const Join = () => {
     if (isAllInputValid()) {
       try {
         const res = await UserApi.register({
-          email: inputEmail,
-          password: inputPw,
+          email: inputEmail && inputEmailConf,
+          password: inputPw && inputPw2,
           name: inputName,
           profileImage: profileImage,
           ageGroup: ageGroup,
         });
         console.log("회원가입 성공:", res.data);
+        navigate("/"); // 회원가입 성공 후 메인 페이지로 이동
       } catch (error) {
         console.error("회원가입 실패:", error);
       }
@@ -261,6 +280,7 @@ const Join = () => {
               msgType={isEmail}
               btnClick={sendEmailAuthCode} // 버튼 클릭 시 인증번호 발송 요청
             />
+            ㄴ
             <InputButton
               holder="이메일 인증번호 입력"
               value={inputEmailConf}
@@ -314,7 +334,14 @@ const Join = () => {
             <p>{ageGroupMessage}</p>
           </div>
 
-          <button onClick={onSubmit} disabled={!isAllInputValid()}>
+          <button
+            onClick={onSubmit}
+            disabled={!isButtonActive}
+            style={{
+              backgroundColor: isButtonActive ? "blue" : "gray",
+              color: "white",
+              cursor: isButtonActive ? "pointer" : "not-allowed",
+            }}>
             완료하기
           </button>
         </div>

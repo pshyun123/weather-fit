@@ -34,18 +34,22 @@ const JoinComp = styled.section`
       align-items: center;
     }
 
-    .inputArea > div:first-child button {
+    .inputArea > div:nth-child(1) button,
+    .inputArea > div:nth-child(2) button {
       /* 인증번호 발송 버튼 스타일 */
-      background-color: #007bff;
+      background-color: #cccccc;
       color: white;
       padding: 10px 15px;
       border: none;
       border-radius: 5px;
-      cursor: pointer;
+      cursor: not-allowed;
     }
 
-    .inputArea > div:first-child button:hover {
-      background-color: #0056b3;
+    .inputArea > div:nth-child(1) button:active,
+    .inputArea > div:nth-child(2) button:active {
+      background-color: #007bff;
+      cursor: pointer;
+      opacity: 1;
     }
 
     .select-age {

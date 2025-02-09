@@ -45,6 +45,7 @@ export const InputButton = (props) => {
     msgType,
     disabled,
     height,
+    btnClick,
   } = props;
 
   return (
@@ -54,10 +55,12 @@ export const InputButton = (props) => {
           type={type ? type : "text"}
           defaultValue={value}
           placeholder={holder}
-          onChange={(e) => changeEvt(e)}
-          disabled={disabled}
+          onChange={changeEvt}
         />
         <Button
+          onClick={btnClick}
+          disabled={!active}
+          className={active ? "active" : ""}
           children={btnChild}
           active={active}
           clickEvt={clickEvt}
@@ -103,7 +106,18 @@ const InputComp = styled.div`
   }
 `;
 export const Input = (props) => {
-  const { value, holder, changeEvt, type, msg, msgType, disabled } = props;
+  const {
+    value,
+    holder,
+    changeEvt,
+    type,
+    msg,
+    msgType,
+    disabled,
+    btnClick,
+    active,
+    btnChild,
+  } = props;
   return (
     <InputComp>
       <input
@@ -113,7 +127,11 @@ export const Input = (props) => {
         onChange={(e) => changeEvt(e)}
         disabled={disabled}
       />
-      <div className={`msg ${msgType ? "" : "fail"}`}>{msg}</div>
+      <button onClick={btnClick} disabled={!active}>
+        {btnChild}
+      </button>
+      {/* <div className={`msg ${msgType ? "" : "fail"}`}>{msg}</div> */}
+      <p className={msgType ? "success" : "error"}>{msg}</p>
     </InputComp>
   );
 };
