@@ -43,7 +43,6 @@ export const InputButton = (props) => {
     clickEvt,
     msg,
     msgType,
-    disabled,
     height,
     btnClick,
   } = props;
@@ -115,7 +114,6 @@ export const Input = (props) => {
     msgType,
     disabled,
     btnClick,
-    active,
     btnChild,
   } = props;
   return (
@@ -125,13 +123,11 @@ export const Input = (props) => {
         value={value}
         placeholder={holder}
         onChange={(e) => changeEvt(e)}
-        disabled={disabled}
       />
-      <button onClick={btnClick} disabled={!active}>
+      <button onClick={btnClick} disabled={disabled}>
         {btnChild}
       </button>
-      {/* <div className={`msg ${msgType ? "" : "fail"}`}>{msg}</div> */}
-      <p className={msgType ? "success" : "error"}>{msg}</p>
+      <div className={`msg ${msgType ? "" : "fail"}`}>{msg}</div>
     </InputComp>
   );
 };

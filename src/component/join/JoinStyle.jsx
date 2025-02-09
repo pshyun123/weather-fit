@@ -36,20 +36,11 @@ const JoinComp = styled.section`
 
     .inputArea > div:nth-child(1) button,
     .inputArea > div:nth-child(2) button {
-      /* 인증번호 발송 버튼 스타일 */
-      background-color: #cccccc;
+      background-color: ${(props) => (props.isActive ? "#007bff" : "#cccccc")};
       color: white;
       padding: 10px 15px;
       border: none;
       border-radius: 5px;
-      cursor: not-allowed;
-    }
-
-    .inputArea > div:nth-child(1) button:active,
-    .inputArea > div:nth-child(2) button:active {
-      background-color: #007bff;
-      cursor: pointer;
-      opacity: 1;
     }
 
     .select-age {
@@ -78,6 +69,16 @@ const JoinComp = styled.section`
     .age-group-button.active {
       background-color: #007bff;
       color: white;
+    }
+
+    // 완료 버튼
+    .submitButton {
+      cursor: pointer;
+      background-color: #cccccc;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
     }
   }
 `;

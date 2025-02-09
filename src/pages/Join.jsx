@@ -32,11 +32,6 @@ const Join = () => {
   const [isName, setIsName] = useState(false);
   const [isProfileImage, setIsProfileImage] = useState(false);
   const [isAgeGroup, setIsAgeGroup] = useState(false);
-  const [isSendingCode, setIsSendingCode] = useState(false);
-  const [isCodeSent, setIsCodeSent] = useState(false);
-
-  // 전체 유효성
-  const [isFormValid, setIsFormValid] = useState(false);
 
   // 완료하기 활성화 비활성화 버튼
   const [isButtonActive, setIsButtonActive] = useState(false);
@@ -81,15 +76,22 @@ const Join = () => {
   const isUnique = async (type, value) => {
     try {
       const res = await UserApi.checkUnique(type, value);
-      if (!res.data) {
-        setEmailMessage("사용 가능합니다.");
-        setIsEmail(true);
+      if (res.data.success) {
+        if (type === "email") {
+          setEmailMessage("사용 가능한 이메일입니다.");
+          setIsEmail(true);
+          setIsButtonActive(true); // 이메일이 유효하고 중복이 아닐 때 버튼 활성화
+        } // ... 다른 타입에 대한 처리
       } else {
-        setEmailMessage("이미 사용 중입니다.");
-        setIsEmail(false);
+        if (type === "email") {
+          setEmailMessage("이미 사용 중인 이메일입니다.");
+          setIsEmail(false);
+          setIsButtonActive(false); // 이메일이 중복일 때 버튼 비활성화
+        }
       }
     } catch (err) {
       console.error("중복 검사 실패:", err);
+      setIsButtonActive(false); // 에러 발생 시 버튼 비활성화
     }
   };
 
@@ -100,7 +102,10 @@ const Join = () => {
     if (!regexList.email.test(value)) {
       setEmailMessage("이메일 형식이 올바르지 않습니다.");
       setIsEmail(false);
+      setIsButtonActive(false); // 이메일 형식이 올바르지 않으면 버튼 비활성화
     } else {
+      setEmailMessage("이메일 형식이 올바릅니다.");
+      setIsEmail(true);
       isUnique("email", value);
     }
     console.log("Email is valid:", isEmail);
@@ -112,11 +117,14 @@ const Join = () => {
       const res = await UserApi.sendAuthCode(inputEmail); // API 호출
       if (res.data.success) {
         setEmailConfMessage("인증번호가 발송되었습니다.");
+        setIsButtonActive(true); // 인증번호 발송 성공 시 버튼 활성화
       } else {
         setEmailConfMessage("인증번호 발송 실패.");
+        setIsButtonActive(false); // 실패 시 버튼 비활성화
       }
     } catch (error) {
       console.error("인증번호 요청 실패:", error);
+      setIsButtonActive(false);
     }
   };
 
@@ -127,13 +135,17 @@ const Join = () => {
 
     // 인증번호 유효성 검사 (예: 6자리 숫자)
     const isValidAuthCode = /^\d{6}$/.test(value);
+    setIsEmailConf(isValidAuthCode);
+    setIsButtonActive(isValidAuthCode);
 
     if (isValidAuthCode) {
       setEmailConfMessage("인증번호 형식이 올바릅니다.");
       setIsEmailConf(true);
+      setIsButtonActive(true); // 유효한 인증번호 입력 시 버튼 활성화
     } else {
       setEmailConfMessage("올바른 인증번호를 입력해주세요.");
       setIsEmailConf(false);
+      setIsButtonActive(false); // 유효하지 않은 경우 버튼 비활성화
     }
   };
 
@@ -144,14 +156,17 @@ const Join = () => {
       if (res.data.success) {
         setEmailConfMessage("이메일 인증이 완료되었습니다.");
         setIsEmailConf(true);
+        setIsButtonActive(true);
       } else {
         setEmailConfMessage("인증번호가 올바르지 않습니다.");
         setIsEmailConf(false);
+        setIsButtonActive(false);
       }
     } catch (error) {
       console.error("인증번호 확인 실패:", error);
       setEmailConfMessage("인증 과정에서 오류가 발생했습니다.");
       setIsEmailConf(false);
+      setIsButtonActive(false);
     }
   };
 
@@ -278,9 +293,9 @@ const Join = () => {
               active={isEmail}
               msg={emailMessage}
               msgType={isEmail}
+              disabled={!isEmail}
               btnClick={sendEmailAuthCode} // 버튼 클릭 시 인증번호 발송 요청
             />
-            ㄴ
             <InputButton
               holder="이메일 인증번호 입력"
               value={inputEmailConf}
@@ -289,6 +304,7 @@ const Join = () => {
               active={isEmailConf}
               msg={emailConfMessage}
               msgType={isEmailConf}
+              disabled={!inputEmailConf || !isEmail}
               btnClick={verifyEmailAuthCode} // 버튼 클릭 시 인증번호 확인
             />
             <InputButton
@@ -335,6 +351,7 @@ const Join = () => {
           </div>
 
           <button
+            className="submitButton"
             onClick={onSubmit}
             disabled={!isButtonActive}
             style={{
