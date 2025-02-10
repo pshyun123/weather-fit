@@ -34,15 +34,6 @@ const JoinComp = styled.section`
       align-items: center;
     }
 
-    .inputArea > div:nth-child(1) button,
-    .inputArea > div:nth-child(2) button {
-      background-color: ${(props) => (props.isActive ? "#007bff" : "#cccccc")};
-      color: white;
-      padding: 10px 15px;
-      border: none;
-      border-radius: 5px;
-    }
-
     .select-age {
       margin-bottom: 20px;
     }
