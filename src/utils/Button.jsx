@@ -45,8 +45,7 @@ const Button = ({
           e.stopPropagation();
           clickEvt();
         }
-      }}
-    >
+      }}>
       {children}
     </ButtonComp>
   );

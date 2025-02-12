@@ -335,7 +335,7 @@ const Join = () => {
               value={inputEmailConf}
               changeEvt={onChangeEmailConf}
               btnChild="인증번호 확인"
-              active={isEmailConf}
+              active={isEmailConf && isEmail}
               msg={emailConfMessage}
               msgType={isEmailConf}
               disabled={!inputEmailConf || !isValidEmail}
@@ -376,8 +376,7 @@ const Join = () => {
                   className={`age-group-button ${
                     ageGroup === group ? "active" : ""
                   }`}
-                  onClick={() => onChangeAgeGroup(group)}
-                >
+                  onClick={() => onChangeAgeGroup(group)}>
                   {group}
                 </button>
               ))}
@@ -393,8 +392,7 @@ const Join = () => {
               backgroundColor: isButtonActive ? "blue" : "gray",
               color: "white",
               cursor: isButtonActive ? "pointer" : "not-allowed",
-            }}
-          >
+            }}>
             완료하기
           </button>
         </div>
