@@ -1,12 +1,8 @@
 import axios from "axios";
 
 // 공통 api(common)
-const Common = axios.create({
-  WEATHERFIT_URL: "",
-  header: {
-    "content-Type": "application/json",
-  },
-  withCredentials: true,
-});
+const Common = {
+  WWEATHERFIT: "http://localhost:8080", // 백엔드 서버 주소
+};
 
 export default Common;

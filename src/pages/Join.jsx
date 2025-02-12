@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import UserApi from "../api/UserApi";
 import JoinComp from "../component/join/JoinStyle";
 import { InputButton, Input } from "../component/join/JoinInputstyle";
@@ -40,7 +40,7 @@ const Join = () => {
   const navigate = useNavigate();
 
   // 모든 입력이 유효한지 확인하는 함수
-  const isAllInputValid = () => {
+  const isAllInputValid = useCallback(() => {
     const isValid =
       inputEmail &&
       isEmailConf &&
@@ -51,7 +51,15 @@ const Join = () => {
       ageGroup;
     setIsButtonActive(isValid);
     return isValid;
-  };
+  }, [
+    inputEmail,
+    isEmailConf,
+    inputPw,
+    isPw2,
+    inputName,
+    profileImage,
+    ageGroup,
+  ]);
 
   // 각 입력 상태가 변경될 때마다 전체 유효성 확인
   useEffect(() => {
@@ -64,6 +72,7 @@ const Join = () => {
     inputName,
     profileImage,
     ageGroup,
+    isAllInputValid,
   ]);
 
   // 이메일, 비밀번호 정규식
@@ -116,7 +125,7 @@ const Join = () => {
   // 이메일 인증번호 요청
   const sendEmailAuthCode = async () => {
     try {
-      const res = await UserApi.sendAuthCode(inputEmail); // API 호출
+      const res = await UserApi.emailAuth(inputEmail); // API 호출
       if (res.data.success) {
         setEmailConfMessage("인증번호가 발송되었습니다.");
         setIsButtonActive(true); // 인증번호 발송 성공 시 버튼 활성화
@@ -135,7 +144,7 @@ const Join = () => {
     const value = e.target.value;
     setInputEmailConf(value);
 
-    // 인증번호 유효성 검사 (예: 6자리 숫자)
+    // 인증번호 유효성 검사 (6자리 숫자)
     const isValidAuthCode = /^\d{6}$/.test(value);
     setIsEmailConf(isValidAuthCode);
     setIsButtonActive(isValidAuthCode);
@@ -154,8 +163,18 @@ const Join = () => {
   // 실제 인증번호 확인 로직
   const verifyEmailAuthCode = async () => {
     try {
-      const res = await UserApi.verifyAuthCode(inputEmail, inputEmailConf);
-      if (res.data.success) {
+      // 요청 전 데이터 확인
+      console.log("인증번호 확인 요청:", {
+        email: inputEmail,
+        code: inputEmailConf,
+        type: typeof inputEmailConf, // 타입 체크 추가
+      });
+
+      const res = await UserApi.emailAuthCheck(inputEmail, inputEmailConf);
+      console.log("인증번호 확인 응답:", res);
+
+      if (res.data === true) {
+        // 백엔드에서 Boolean을 반환하므로 수정
         setEmailConfMessage("이메일 인증이 완료되었습니다.");
         setIsEmailConf(true);
         setIsButtonActive(true);
@@ -165,7 +184,7 @@ const Join = () => {
         setIsButtonActive(false);
       }
     } catch (error) {
-      console.error("인증번호 확인 실패:", error);
+      console.error("인증번호 확인 상세 에러:", error.response?.data); // 상세 에러 로그 추가
       setEmailConfMessage("인증 과정에서 오류가 발생했습니다.");
       setIsEmailConf(false);
       setIsButtonActive(false);
