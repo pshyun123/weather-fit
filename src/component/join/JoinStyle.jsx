@@ -33,22 +33,6 @@ const JoinComp = styled.section`
       align-items: center;
     }
 
-    .inputArea > div:nth-child(1) button,
-    .inputArea > div:nth-child(2) button {
-      background-color: #cccccc;
-      color: black;
-      padding: 10px 15px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      opacity: 0.6;
-
-      &.active {
-        background-color: #007bff;
-        opacity: 1;
-      }
-    }
-
     .select-age {
       margin-bottom: 20px;
     }

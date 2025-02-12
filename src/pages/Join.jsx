@@ -1,7 +1,7 @@
 import { useState } from "react";
 import UserApi from "../api/UserApi";
 import JoinComp from "../component/join/JoinStyle";
-import { InputButton } from "../component/join/JoinInputstyle";
+import { InputButton, Input } from "../component/join/JoinInputstyle";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -99,17 +99,18 @@ const Join = () => {
   const onChangeEmail = (e) => {
     const value = e.target.value;
     setInputEmail(value);
+    const isValidFormat = regexList.email.test(value);
+    setIsValidEmail(isValidFormat); // 이메일 형식 유효성 상태 업데이트
 
-    if (!regexList.email.test(value)) {
+    if (!isValidFormat) {
       setEmailMessage("이메일 형식이 올바르지 않습니다.");
       setIsEmail(false);
-      setIsButtonActive(false); // 이메일 형식이 올바르지 않으면 버튼 비활성화
+      setIsButtonActive(false);
     } else {
       setEmailMessage("이메일 형식이 올바릅니다.");
       setIsEmail(true);
       isUnique("email", value);
     }
-    console.log("Email is valid:", isEmail);
   };
 
   // 이메일 인증번호 요청
@@ -260,6 +261,19 @@ const Join = () => {
     }
   };
 
+  const [isValidEmail, setIsValidEmail] = useState(false);
+
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const handleEmailChange = (e) => {
+    const newEmail = e.target.value;
+    setInputEmail(newEmail);
+    setIsValidEmail(validateEmail(newEmail));
+  };
+
   return (
     <>
       <JoinComp>
@@ -291,11 +305,11 @@ const Join = () => {
               value={inputEmail}
               changeEvt={onChangeEmail}
               btnChild="인증번호 발송"
-              active={isEmail}
+              active={isValidEmail}
               msg={emailMessage}
-              msgType={isEmail}
-              disabled={!isEmail}
-              btnClick={sendEmailAuthCode} // 버튼 클릭 시 인증번호 발송 요청
+              msgType={isValidEmail}
+              disabled={!isValidEmail}
+              btnClick={sendEmailAuthCode}
             />
             <InputButton
               holder="이메일 인증번호 입력"
@@ -305,10 +319,10 @@ const Join = () => {
               active={isEmailConf && isEmail}
               msg={emailConfMessage}
               msgType={isEmailConf}
-              disabled={!inputEmailConf || !isEmail}
-              btnClick={verifyEmailAuthCode} // 버튼 클릭 시 인증번호 확인
+              disabled={!inputEmailConf || !isValidEmail}
+              btnClick={verifyEmailAuthCode}
             />
-            <InputButton
+            <Input
               holder="비밀번호 입력"
               value={inputPw}
               type="password"
@@ -316,7 +330,7 @@ const Join = () => {
               msg={pwMessage}
               msgType={isPw}
             />
-            <InputButton
+            <Input
               holder="비밀번호 확인"
               value={inputPw2}
               type="password"
@@ -324,7 +338,7 @@ const Join = () => {
               msg={pw2Message}
               msgType={isPw2}
             />
-            <InputButton
+            <Input
               holder="이름 입력"
               value={inputName}
               changeEvt={onChangeName}

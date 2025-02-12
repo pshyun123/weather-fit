@@ -1,6 +1,7 @@
 import Button from "../../utils/Button";
 import { styled } from "styled-components";
 
+// 버튼이 있는 입력창을 위한 스타일 (이메일, 인증번호용)
 const InputButtonComp = styled.div`
   width: 100%;
   margin-bottom: 30px;
@@ -10,7 +11,7 @@ const InputButtonComp = styled.div`
     display: flex;
     justify-content: space-between;
     input {
-      width: 64%;
+      width: 64%; // 버튼 공간 확보
       outline: none;
       font-size: 1em;
       padding: 0 10px;
@@ -32,6 +33,7 @@ const InputButtonComp = styled.div`
   }
 `;
 
+// 버튼이 있는 입력창 컴포넌트
 export const InputButton = (props) => {
   const {
     value,
@@ -40,35 +42,52 @@ export const InputButton = (props) => {
     type,
     btnChild,
     active,
-    clickEvt,
+    btnClick,
     msg,
     msgType,
     height,
-    btnClick,
-    disabled,
   } = props;
+
+  // Props 값 확인을 위한 console.log 추가
+  console.log("InputButton Props:", {
+    value,
+    holder,
+    type,
+    btnChild,
+    active,
+    msg,
+    msgType,
+    height,
+    hasBtnClick: !!btnClick, // btnClick 함수가 존재하는지 확인
+  });
+
+  // Button 컴포넌트에 전달되는 props 확인
+  console.log("Button Props:", {
+    disabled: !active,
+    active,
+    $front: active ? "#007bff" : "#cccccc",
+    $back: active ? "#0056b3" : "#cccccc",
+  });
 
   return (
     <InputButtonComp active={active}>
       <div className="inputWrap">
         <input
-          type={type ? type : "text"}
+          type={type || "text"}
           defaultValue={value}
           placeholder={holder}
           onChange={changeEvt}
         />
 
         <Button
-          onClick={btnClick}
-          disabled={disabled}
-          className={active ? "active" : ""}
+          clickEvt={() => btnClick && btnClick()}
           children={btnChild}
           active={active}
-          clickEvt={clickEvt}
           width="30%"
-          height={height ? height : "48px"}
+          height={height || "48px"}
           fontSize="14px"
-          color="black"
+          color="white"
+          $front={active ? "#007bff" : "#cccccc"}
         />
       </div>
       <div className={`msg ${msgType ? "" : "fail"}`}>{msg}</div>
@@ -76,12 +95,13 @@ export const InputButton = (props) => {
   );
 };
 
+// 일반 입력창을 위한 스타일 (비밀번호, 이름용)
 const InputComp = styled.div`
   width: 100%;
   margin-bottom: 30px;
   position: relative;
   input {
-    width: 100%;
+    width: 100%; // 버튼이 없으므로 전체 너비 사용
     height: 48px;
     padding: 0 10px;
     border: 1px solid #ccc;
@@ -106,6 +126,8 @@ const InputComp = styled.div`
     }
   }
 `;
+
+// 일반 입력창 컴포넌트
 export const Input = (props) => {
   const {
     value,
@@ -121,15 +143,32 @@ export const Input = (props) => {
   return (
     <InputComp>
       <input
-        type={type ? type : "text"}
+        type={type || "text"}
         value={value}
         placeholder={holder}
         onChange={(e) => changeEvt(e)}
       />
-      <button onClick={btnClick} disabled={disabled}>
+      {/* <button onClick={btnClick} disabled={disabled}>
         {btnChild}
-      </button>
+      </button> */}
       <div className={`msg ${msgType ? "" : "fail"}`}>{msg}</div>
     </InputComp>
   );
 };
+
+// 회원가입 완료 버튼
+export const JoinButton = styled.button`
+  width: 100%;
+  height: 48px;
+  border: none;
+  font-weight: 700;
+  background-color: ${(props) => (props.$isValid ? "#007bff" : "#cccccc")};
+  color: white;
+  border-radius: 6px;
+  cursor: ${(props) => (props.$isValid ? "pointer" : "not-allowed")};
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: ${(props) => (props.$isValid ? "#0056b3" : "#cccccc")};
+  }
+`;
