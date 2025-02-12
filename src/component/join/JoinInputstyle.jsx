@@ -129,17 +129,7 @@ const InputComp = styled.div`
 
 // 일반 입력창 컴포넌트
 export const Input = (props) => {
-  const {
-    value,
-    holder,
-    changeEvt,
-    type,
-    msg,
-    msgType,
-    disabled,
-    btnClick,
-    btnChild,
-  } = props;
+  const { value, holder, changeEvt, type, msg, msgType } = props;
   return (
     <InputComp>
       <input
@@ -148,9 +138,6 @@ export const Input = (props) => {
         placeholder={holder}
         onChange={(e) => changeEvt(e)}
       />
-      {/* <button onClick={btnClick} disabled={disabled}>
-        {btnChild}
-      </button> */}
       <div className={`msg ${msgType ? "" : "fail"}`}>{msg}</div>
     </InputComp>
   );
