@@ -39,6 +39,25 @@ const UserApi = {
     };
     return await axios.post(Common.WEATHERFIT + "/auth/join", data);
   },
+
+  // 이메일 인증
+  emailAuth: async (email) => {
+    console.log("이메일 인증 진입 : " + email);
+    const data = {
+      email: email,
+    };
+    return await axios.post(Common.WWEATHERFIT + "/auth/email/verify", data);
+  },
+
+  // 이메일 인증 코드 확인
+  emailAuthCheck: async (email, code) => {
+    console.log("인증번호 확인 요청 데이터:", { email, code });
+    const data = {
+      email: email,
+      code: code,
+    };
+    return await axios.post(Common.WWEATHERFIT + "/auth/email/check", data);
+  },
 };
 
 export default UserApi;
