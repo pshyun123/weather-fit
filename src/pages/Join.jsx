@@ -264,9 +264,9 @@ const Join = () => {
   const onSubmit = async () => {
     if (isAllInputValid()) {
       try {
-        const res = await UserApi.register({
-          email: inputEmail && inputEmailConf,
-          password: inputPw && inputPw2,
+        const res = await UserApi.joinUser({
+          email: inputEmail,
+          password: inputPw,
           name: inputName,
           profileImage: profileImage,
           ageGroup: ageGroup,
