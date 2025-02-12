@@ -118,6 +118,7 @@ const Join = () => {
     try {
       const res = await UserApi.sendAuthCode(inputEmail); // API 호출
       if (res.data.success) {
+        console.log("인증번호 요청 성공 : ", res.data.success);
         setEmailConfMessage("인증번호가 발송되었습니다.");
         setIsButtonActive(true); // 인증번호 발송 성공 시 버튼 활성화
       } else {
@@ -263,16 +264,10 @@ const Join = () => {
 
   const [isValidEmail, setIsValidEmail] = useState(false);
 
-  const validateEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
-  const handleEmailChange = (e) => {
-    const newEmail = e.target.value;
-    setInputEmail(newEmail);
-    setIsValidEmail(validateEmail(newEmail));
-  };
+  // const validateEmail = (email) => {
+  //   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  //   return emailRegex.test(email);
+  // };
 
   return (
     <>
