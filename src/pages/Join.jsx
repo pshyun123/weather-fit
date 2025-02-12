@@ -99,6 +99,7 @@ const Join = () => {
   const onChangeEmail = (e) => {
     const value = e.target.value;
     setInputEmail(value);
+
     if (!regexList.email.test(value)) {
       setEmailMessage("이메일 형식이 올바르지 않습니다.");
       setIsEmail(false);
@@ -301,7 +302,7 @@ const Join = () => {
               value={inputEmailConf}
               changeEvt={onChangeEmailConf}
               btnChild="인증번호 확인"
-              active={isEmailConf}
+              active={isEmailConf && isEmail}
               msg={emailConfMessage}
               msgType={isEmailConf}
               disabled={!inputEmailConf || !isEmail}

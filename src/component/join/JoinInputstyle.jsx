@@ -45,10 +45,11 @@ export const InputButton = (props) => {
     msgType,
     height,
     btnClick,
+    disabled,
   } = props;
 
   return (
-    <InputButtonComp>
+    <InputButtonComp active={active}>
       <div className="inputWrap">
         <input
           type={type ? type : "text"}
@@ -56,9 +57,10 @@ export const InputButton = (props) => {
           placeholder={holder}
           onChange={changeEvt}
         />
+
         <Button
           onClick={btnClick}
-          disabled={!active}
+          disabled={disabled}
           className={active ? "active" : ""}
           children={btnChild}
           active={active}

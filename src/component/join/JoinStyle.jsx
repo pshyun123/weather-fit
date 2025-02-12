@@ -4,7 +4,6 @@ const JoinComp = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: var(--IVORY);
 
   h2 {
     font-size: 2em;
@@ -36,11 +35,18 @@ const JoinComp = styled.section`
 
     .inputArea > div:nth-child(1) button,
     .inputArea > div:nth-child(2) button {
-      background-color: ${(props) => (props.isActive ? "#007bff" : "#cccccc")};
-      color: white;
+      background-color: #cccccc;
+      color: black;
       padding: 10px 15px;
       border: none;
       border-radius: 5px;
+      cursor: pointer;
+      opacity: 0.6;
+
+      &.active {
+        background-color: #007bff;
+        opacity: 1;
+      }
     }
 
     .select-age {

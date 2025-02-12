@@ -43,6 +43,7 @@ const Button = (props) => {
       <ButtonComp
         color={color}
         $front={front}
+        active={active}
         $back={back}
         width={width}
         height={height}
