@@ -9,16 +9,27 @@ const UserApi = {
       type: type,
       data: data,
     };
-    return await axios.post(
-      Common.WEATHERFIT_DOMAIN + "/auth/isunique",
-      dataMap
-    );
+    return await axios.post(Common.WWEATHERFIT + "/auth/isunique", dataMap);
   },
 
-  // 회원 가입
+  // 이미지가 있는 회원가입
+  joinUserWithImage: async (formData) => {
+    console.log("이미지 포함 회원가입 진입");
+    return await axios.post(Common.WWEATHERFIT + "/auth/join", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  },
+
+  // 이미지가 없는 회원가입
   joinUser: async (userData) => {
-    console.log("회원가입 진입 : " + userData.email);
-    return await axios.post(Common.WEATHERFIT_DOMAIN + "/auth/join", userData);
+    console.log("기본 회원가입 진입");
+    return await axios.post(Common.WWEATHERFIT + "/auth/join", userData, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
   },
 
   // joinUser: async (email, password, name, profileImage, ageGroup) => {

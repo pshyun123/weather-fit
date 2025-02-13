@@ -42,24 +42,10 @@ const Join = () => {
   // 모든 입력이 유효한지 확인하는 함수
   const isAllInputValid = useCallback(() => {
     const isValid =
-      inputEmail &&
-      isEmailConf &&
-      inputPw &&
-      isPw2 &&
-      inputName &&
-      profileImage &&
-      ageGroup;
+      inputEmail && isEmailConf && inputPw && isPw2 && inputName && ageGroup;
     setIsButtonActive(isValid);
     return isValid;
-  }, [
-    inputEmail,
-    isEmailConf,
-    inputPw,
-    isPw2,
-    inputName,
-    profileImage,
-    ageGroup,
-  ]);
+  }, [inputEmail, isEmailConf, inputPw, isPw2, inputName, ageGroup]);
 
   // 각 입력 상태가 변경될 때마다 전체 유효성 확인
   useEffect(() => {
@@ -70,7 +56,6 @@ const Join = () => {
     inputPw,
     inputPw2,
     inputName,
-    profileImage,
     ageGroup,
     isAllInputValid,
   ]);
@@ -264,17 +249,36 @@ const Join = () => {
   const onSubmit = async () => {
     if (isAllInputValid()) {
       try {
-        const res = await UserApi.joinUser({
+        // 기본 사용자 데이터 (이미지 제외)
+        const userData = {
           email: inputEmail,
           password: inputPw,
           name: inputName,
-          profileImage: profileImage,
           ageGroup: ageGroup,
-        });
-        console.log("회원가입 성공:", res.data);
-        navigate("/"); // 회원가입 성공 후 메인 페이지로 이동
+        };
+
+        // 이미지가 있는 경우 FormData로 전송
+        if (profileImage instanceof File) {
+          const formData = new FormData();
+          formData.append(
+            "userData",
+            new Blob([JSON.stringify(userData)], {
+              type: "application/json",
+            })
+          );
+          formData.append("profileImage", profileImage);
+
+          const res = await UserApi.joinUserWithImage(formData);
+          console.log("회원가입 성공:", res.data);
+          navigate("/");
+        } else {
+          // 이미지가 없는 경우 JSON으로 전송
+          const res = await UserApi.joinUser(userData);
+          console.log("회원가입 성공:", res.data);
+          navigate("/");
+        }
       } catch (error) {
-        console.error("회원가입 실패:", error);
+        console.error("회원가입 실패:", error.response?.data || error);
       }
     } else {
       console.error("입력 값을 확인하세요.");
@@ -371,7 +375,8 @@ const Join = () => {
                   className={`age-group-button ${
                     ageGroup === group ? "active" : ""
                   }`}
-                  onClick={() => onChangeAgeGroup(group)}>
+                  onClick={() => onChangeAgeGroup(group)}
+                >
                   {group}
                 </button>
               ))}
@@ -387,7 +392,8 @@ const Join = () => {
               backgroundColor: isButtonActive ? "blue" : "gray",
               color: "white",
               cursor: isButtonActive ? "pointer" : "not-allowed",
-            }}>
+            }}
+          >
             완료하기
           </button>
         </div>
