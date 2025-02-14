@@ -1,9 +1,19 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import LoginComp from "../component/login/LoginStyle";
-import { Input, LoginButton } from "../component/login/LoginInputStyle";
+import LoginComp, {
+  LoginFormSection,
+  CharacterSection,
+} from "../component/login/LoginStyle";
+import {
+  Input,
+  LoginButton,
+  JoinButton,
+} from "../component/login/LoginInputStyle";
 import logo from "../assets/weatherfitlogo.png";
 import LoginApi from "../api/LoginApi";
+import rainCharacter from "../assets/raniny.png";
+import sunCharacter from "../assets/sunnynohand.png";
+import snowCharacter from "../assets/snowy.png";
 
 const LoginPage = () => {
   const [inputEmail, setInputEmail] = useState("");
@@ -54,41 +64,58 @@ const LoginPage = () => {
 
   return (
     <LoginComp>
-      <div className="logo">
-        {" "}
-        <img src={logo} alt="Wheather FIT" />{" "}
-      </div>
-      <div className="title">회원님의 정보를 입력해주세요.</div>
-      <div className="container">
-        <div className="inputArea">
-          <Input
-            holder="이메일"
-            value={inputEmail}
-            changeEvt={onChangeEmail}
-            msg={emailMessage}
-          />
-          <Input
-            holder="비밀번호"
-            value={inputPw}
-            type="password"
-            changeEvt={onChangePw}
-            msg={pwMessage}
-          />
+      <LoginFormSection>
+        <div className="logo">
+          {" "}
+          <img src={logo} alt="Wheather FIT" />{" "}
         </div>
+        <div className="title">회원님의 정보를 입력해주세요 :)</div>
+        <div className="container">
+          <div className="inputArea">
+            <Input
+              holder="이메일 입력"
+              value={inputEmail}
+              changeEvt={onChangeEmail}
+              msg={emailMessage}
+            />
+            <Input
+              holder="비밀번호 입력"
+              value={inputPw}
+              type="password"
+              changeEvt={onChangePw}
+              msg={pwMessage}
+            />
+          </div>
 
-        <LoginButton
-          $isValid={isButtonActive}
-          onClick={onSubmit}
-          disabled={!isButtonActive}
-        >
-          로그인
-        </LoginButton>
+          <LoginButton
+            $isValid={isButtonActive}
+            onClick={onSubmit}
+            disabled={!isButtonActive}
+          >
+            로그인
+          </LoginButton>
 
-        <div className="links">
-          <Link to="/find-password">비밀번호 찾기</Link>
-          <Link to="/join">회원가입</Link>
+          <div className="title">
+            <hr />
+            아직 회원이 아니신가요?
+            <hr />
+          </div>
+          <JoinButton>회원가입</JoinButton>
+
+          <div className="password">
+            <div className="title">비밀번호를 잊으셨나요?</div>
+            <div className="links">
+              <Link to="/find-password">비밀번호 찾기</Link>
+            </div>
+          </div>
         </div>
-      </div>
+      </LoginFormSection>
+
+      <CharacterSection>
+        <img src={rainCharacter} alt="우산 캐릭터" />
+        <img src={sunCharacter} alt="햇살 캐릭터" />
+        <img src={snowCharacter} alt="눈 캐릭터" />
+      </CharacterSection>
     </LoginComp>
   );
 };
