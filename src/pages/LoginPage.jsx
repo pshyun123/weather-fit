@@ -45,19 +45,20 @@ const LoginPage = () => {
     if (isButtonActive) {
       try {
         const res = await LoginApi.login(inputEmail, inputPw);
-        if (res.data.success) {
-          console.log("로그인 성공 : ", res.data.success);
+        console.log("로그인 응답:", res.data);
+
+        if (res.data && res.data.success) {
+          console.log("로그인 성공");
           navigate("/");
         } else {
-          console.log("로그인 실패 : ", res.data.success);
+          console.log("로그인 실패");
+          setEmailMessage("이메일 또는 비밀번호가 올바르지 않습니다.");
+          setPwMessage("이메일 또는 비밀번호가 올바르지 않습니다.");
         }
-        // 로그인 API 호출 로직 추가 예정
-        console.log("로그인 시도:", { inputEmail, inputPw });
-        navigate("/");
       } catch (error) {
-        console.error("로그인 실패:", error);
-        setEmailMessage("이메일이 올바르지 않습니다.");
-        setPwMessage(" 비밀번호가 올바르지 않습니다.");
+        console.error("로그인 실패:", error.response?.data);
+        setEmailMessage("로그인 처리 중 오류가 발생했습니다.");
+        setPwMessage("로그인 처리 중 오류가 발생했습니다.");
       }
     }
   };

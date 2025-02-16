@@ -4,6 +4,7 @@ const JoinComp = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
+  background-color: var(--IVORY);
 
   h2 {
     font-size: 2em;

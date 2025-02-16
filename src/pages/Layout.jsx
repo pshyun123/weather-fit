@@ -1,9 +1,9 @@
 import { Outlet } from "react-router-dom";
-
+import Header from "../component/layout/Header";
 const Layout = () => {
   return (
     <div>
-      <header>Header 부분</header>
+      <Header />
       <main>
         <Outlet /> {/* 여기서 중첩된 라우트 렌더링 */}
       </main>
