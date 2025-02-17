@@ -6,14 +6,28 @@ const FooterContainer = styled.div`
   background-color: #333333;
   width: 100%;
   padding: 40px 0;
+  flex-direction: column;
+
+  .inner-container {
+    width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+  }
 `;
 
 const FooterLeftContainer = styled.footer`
-  width: 1200px;
-  margin: 0 auto;
+  width: 50%;
   display: flex;
   flex-direction: column;
   gap: 15px;
+  position: relative;
+
+  .footer-content {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
 
   .customer-service {
     font-size: 14px;
@@ -42,34 +56,16 @@ const FooterLeftContainer = styled.footer`
     color: #999;
     line-height: 1.6;
   }
-
-  .bottom-row {
-    display: flex;
-    gap: 20px;
-    margin-top: 10px;
-
-    .links {
-      display: flex;
-      gap: 20px;
-      a {
-        color: #999;
-        text-decoration: none;
-        font-size: 14px;
-        &:hover {
-          text-decoration: underline;
-        }
-      }
-    }
-  }
 `;
 
 const FooterRightContainer = styled.footer`
-  position: absolute;
-  right: 50px;
+  position: relative;
+
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   gap: 20px;
+  width: 50%;
 
   .social-icons {
     display: flex;
@@ -87,4 +83,62 @@ const FooterRightContainer = styled.footer`
   }
 `;
 
-export { FooterContainer, FooterLeftContainer, FooterRightContainer };
+const FooterBottomContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 1200px;
+  margin: 0 auto;
+
+  .bottom-row {
+    display: flex;
+    gap: 20px;
+    margin-top: 10px;
+    position: relative;
+    flex-direction: column;
+
+    .bottom-line {
+      width: 1200px;
+      height: 1px;
+      background-color: #999;
+    }
+
+    .bottom-row-content {
+      display: flex;
+      gap: 20px;
+      position: relative;
+      align-items: center;
+      justify-content: space-between;
+      flex-direction: row;
+    }
+
+    .links {
+      display: flex;
+      gap: 10px;
+      a {
+        color: #999;
+        text-decoration: none;
+        font-size: 14px;
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+      .link-divider {
+        color: #999;
+        font-size: 14px;
+      }
+    }
+
+    .copyright {
+      color: #999;
+      font-size: 14px;
+    }
+  }
+`;
+
+export {
+  FooterContainer,
+  FooterLeftContainer,
+  FooterRightContainer,
+  FooterBottomContainer,
+};
