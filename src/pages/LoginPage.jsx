@@ -113,9 +113,24 @@ const LoginPage = () => {
       </LoginFormSection>
 
       <CharacterSection>
-        <img src={rainCharacter} alt="우산 캐릭터" />
-        <img src={sunCharacter} alt="햇살 캐릭터" />
-        <img src={snowCharacter} alt="눈 캐릭터" />
+        <img
+          src={rainCharacter}
+          alt="우산 캐릭터"
+          style={{ width: "300px", height: "300px" }}
+        />
+        <img
+          src={sunCharacter}
+          alt="햇살 캐릭터"
+          style={{ width: "300px", height: "300px" }}
+        />
+        <img
+          src={snowCharacter}
+          alt="눈 캐릭터"
+          style={{ width: "300px", height: "300px" }}
+        />
+
+        <div className="yellow-circle"></div>
+        <div className="opacity-yellow-circle"></div>
       </CharacterSection>
     </LoginComp>
   );
