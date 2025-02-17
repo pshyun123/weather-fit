@@ -15,11 +15,11 @@ function App() {
         <Routes>
           <Route element={<Layout />}>
             <Route path="/" element={<MainPage />} />
-            <Route path="/login" element={<Login />} />
             <Route path="/mypage" element={<Mypage />} />
-            <Route path="/join" element={<Join />} />
             <Route path="/weatherdetailpage" element={<WeatherDetailPage />} />
           </Route>
+          <Route path="/login" element={<Login />} />
+          <Route path="/join" element={<Join />} />
         </Routes>
       </Router>
     </>
