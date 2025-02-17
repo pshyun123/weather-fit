@@ -207,8 +207,8 @@ const Join = () => {
   const onChangeName = (e) => {
     const value = e.target.value;
     setInputName(value);
-    if (value.length < 2 || value.length > 5) {
-      setNameMessage("이름은 2~5자 사이여야 합니다.");
+    if (value.length < 8 || value.length > 5) {
+      setNameMessage("이름은 한글 8자 미만 공백없이 입력 바랍니다.");
       setIsName(false);
     } else {
       setNameMessage("사용 가능한 이름입니다.");
@@ -229,12 +229,12 @@ const Join = () => {
 
   // 나이대 선택하기
   const ageGroups = [
-    "20대 초반",
+    "~20대 초반",
     "20대 중반",
     "20대 후반",
     "30대 초반",
     "30대 중반",
-    "30대 후반",
+    "30대 후반~",
   ];
 
   // 나이대 목록
@@ -287,16 +287,14 @@ const Join = () => {
 
   const [isValidEmail, setIsValidEmail] = useState(false);
 
-  // const validateEmail = (email) => {
-  //   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  //   return emailRegex.test(email);
-  // };
-
   return (
     <>
       <JoinComp>
-        <h2>회원가입</h2>
+        {/* 왼쪽: 회원가입 폼 */}
         <div className="container">
+          <h2>회원가입</h2>
+          <p>웨더핏의 회원이 되기 위한 과정이예요 :) </p>
+
           {/* 프로필 사진 */}
           <div className="profile">
             <label>프로필 사진 업로드</label>
@@ -318,11 +316,18 @@ const Join = () => {
           </div>
 
           <div className="inputArea">
+            <Input
+              holder="이름 입력"
+              value={inputName}
+              changeEvt={onChangeName}
+              msg={nameMessage}
+              msgType={isName}
+            />
             <InputButton
               holder="이메일 입력"
               value={inputEmail}
               changeEvt={onChangeEmail}
-              btnChild="인증번호 발송"
+              btnChild="인증번호 받기"
               active={isValidEmail}
               msg={emailMessage}
               msgType={isValidEmail}
@@ -356,18 +361,14 @@ const Join = () => {
               msg={pw2Message}
               msgType={isPw2}
             />
-            <Input
-              holder="이름 입력"
-              value={inputName}
-              changeEvt={onChangeName}
-              msg={nameMessage}
-              msgType={isName}
-            />
           </div>
+
+          {/* 다음으로 넘어가는 버튼 */}
 
           {/* 나이대 선택 */}
           <div className="select-age">
-            <label>나이대 선택</label>
+            <h3>연령대</h3>
+            <p>연령대에 맞춘 스타일을 추천해드려요 :)</p>
             <div className="age-group-grid">
               {ageGroups.map((group, index) => (
                 <button
@@ -375,8 +376,7 @@ const Join = () => {
                   className={`age-group-button ${
                     ageGroup === group ? "active" : ""
                   }`}
-                  onClick={() => onChangeAgeGroup(group)}
-                >
+                  onClick={() => onChangeAgeGroup(group)}>
                   {group}
                 </button>
               ))}
@@ -392,11 +392,13 @@ const Join = () => {
               backgroundColor: isButtonActive ? "blue" : "gray",
               color: "white",
               cursor: isButtonActive ? "pointer" : "not-allowed",
-            }}
-          >
+            }}>
             완료하기
           </button>
         </div>
+
+        {/* 오른쪽: 노란색 배경 영역 */}
+        <div className="right-section"></div>
       </JoinComp>
     </>
   );

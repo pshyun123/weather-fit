@@ -15,8 +15,8 @@ const InputButtonComp = styled.div`
       outline: none;
       font-size: 1em;
       padding: 0 10px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
+      border: none;
+      border-bottom: 1px solid #ccc;
     }
   }
   .msg {
@@ -65,8 +65,8 @@ export const InputButton = (props) => {
   console.log("Button Props:", {
     disabled: !active,
     active,
-    $front: active ? "#007bff" : "#cccccc",
-    $back: active ? "#0056b3" : "#cccccc",
+    $front: active ? "#737F8F" : "#D9D9D9",
+    $back: active ? "#737F8F" : "#D9D9D9",
   });
 
   return (
@@ -85,8 +85,8 @@ export const InputButton = (props) => {
           width="30%"
           height={height || "48px"}
           fontSize="14px"
-          color="white"
-          $front={active ? "#007bff" : "#cccccc"}
+          $color={active ? "#5D5E62" : "#D9D9D9"}
+          $front={active ? "#737F8F" : "#D9D9D9"}
         />
       </div>
       <div className={`msg ${msgType ? "" : "fail"}`}>{msg}</div>
