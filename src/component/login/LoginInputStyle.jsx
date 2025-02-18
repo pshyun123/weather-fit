@@ -72,12 +72,13 @@ export const JoinButton = styled.button`
   font-weight: 600;
   font-size: 15px;
   background-color: #cccccc;
-  color: black;
+  color: #5d5e62;
   border-radius: 5px;
   cursor: pointer;
   transition: all 0.3s ease;
 
   &:hover {
-    background-color: #cccccc;
+    background-color: #007bff;
+    color: white;
   }
 `;
