@@ -4,6 +4,7 @@ import JoinComp from "../component/join/JoinStyle";
 import { InputButton, Input } from "../component/join/JoinInputstyle";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import userIcon from "../assets/header_person.png";
 
 const Join = () => {
   // 입력 칸에 이메일, 이메일 인증, 비밀번호, 이름 입력 / 프로필, 나이대별 선택
@@ -249,34 +250,29 @@ const Join = () => {
   const onSubmit = async () => {
     if (isAllInputValid()) {
       try {
-        // 기본 사용자 데이터 (이미지 제외)
+        const formData = new FormData();
+
         const userData = {
           email: inputEmail,
           password: inputPw,
           name: inputName,
           ageGroup: ageGroup,
+          profileImage: profileImage ? profileImage : null,
         };
 
-        // 이미지가 있는 경우 FormData로 전송
-        if (profileImage instanceof File) {
-          const formData = new FormData();
-          formData.append(
-            "userData",
-            new Blob([JSON.stringify(userData)], {
-              type: "application/json",
-            })
-          );
-          formData.append("profileImage", profileImage);
+        formData.append(
+          "userData",
+          new Blob([JSON.stringify(userData)], { type: "application/json" })
+        );
 
-          const res = await UserApi.joinUserWithImage(formData);
-          console.log("회원가입 성공:", res.data);
-          navigate("/");
-        } else {
-          // 이미지가 없는 경우 JSON으로 전송
-          const res = await UserApi.joinUser(userData);
-          console.log("회원가입 성공:", res.data);
-          navigate("/");
+        // 프로필 이미지가 있는 경우에만 추가
+        if (profileImage) {
+          formData.append("profileImage", profileImage);
         }
+
+        const res = await UserApi.joinUserWithImage(formData);
+        console.log("회원가입 성공:", res.data);
+        navigate("/");
       } catch (error) {
         console.error("회원가입 실패:", error.response?.data || error);
       }
@@ -376,7 +372,8 @@ const Join = () => {
                   className={`age-group-button ${
                     ageGroup === group ? "active" : ""
                   }`}
-                  onClick={() => onChangeAgeGroup(group)}>
+                  onClick={() => onChangeAgeGroup(group)}
+                >
                   {group}
                 </button>
               ))}
@@ -392,7 +389,8 @@ const Join = () => {
               backgroundColor: isButtonActive ? "blue" : "gray",
               color: "white",
               cursor: isButtonActive ? "pointer" : "not-allowed",
-            }}>
+            }}
+          >
             완료하기
           </button>
         </div>

@@ -19,21 +19,20 @@ const Header = () => {
         console.log("로그인 상태 확인 응답:", res.data);
 
         if (res.data && res.data.success) {
+          // success 값만으로 로그인 상태 판단
           setIsLoggedIn(true);
-          // URL에서 앞의 슬래시 제거
-          const profileUrl = res.data.profileImage.startsWith("/")
-            ? res.data.profileImage.substring(1)
-            : res.data.profileImage;
-          setUserProfile(profileUrl);
-          console.log("로그인 상태 확인 성공:", {
-            isLoggedIn: true,
-            profileImage: profileUrl,
-            name: res.data.name,
-          });
+          // profileImage가 있는 경우에만 설정
+          if (res.data.profileImage) {
+            const profileUrl = res.data.profileImage.startsWith("/")
+              ? res.data.profileImage.substring(1)
+              : res.data.profileImage;
+            setUserProfile(profileUrl);
+          } else {
+            setUserProfile(null); // 프로필 이미지가 없으면 null로 설정
+          }
         } else {
           setIsLoggedIn(false);
           setUserProfile(null);
-          console.log("로그인 되지 않은 상태");
         }
       } catch (error) {
         console.error("로그인 상태 확인 실패:", error);
@@ -43,7 +42,7 @@ const Header = () => {
     };
 
     checkLoginStatus();
-  }, []); // 컴포넌트 마운트 시 한 번만 실행
+  }, []);
 
   const handleLogoClick = () => {
     console.log("로고 클릭, 메인페이지 이동");
@@ -93,9 +92,9 @@ const Header = () => {
           style={{ cursor: "pointer" }}
         >
           <span>
-            {isLoggedIn && userProfile ? (
+            {isLoggedIn ? (
               <img
-                src={userProfile}
+                src={userProfile || userIcon}
                 alt="프로필"
                 className="profile-image"
                 onError={(e) => {

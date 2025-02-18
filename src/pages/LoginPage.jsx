@@ -101,7 +101,7 @@ const LoginPage = () => {
             아직 회원이 아니신가요?
             <hr />
           </div>
-          <JoinButton>회원가입</JoinButton>
+          <JoinButton onClick={() => navigate("/join")}>회원가입</JoinButton>
 
           <div className="password">
             <div className="title">비밀번호를 잊으셨나요?</div>

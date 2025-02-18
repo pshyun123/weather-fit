@@ -1,30 +1,31 @@
 import axios from "axios";
 import Common from "../utils/Common";
 
+// API 설정
+const axiosInstance = axios.create({
+  baseURL: Common.WWEATHERFIT,
+  withCredentials: true,
+  headers: {
+    "Content-Type": "application/json",
+    Accept: "application/json",
+  },
+});
+
 const LoginApi = {
   login: async (email, password) => {
     try {
-      console.log("로그인 진입 : " + email);
-      const data = {
-        email: email,
-        password: password,
+      const credentials = {
+        email,
+        password,
       };
 
-      const response = await axios.post(
-        Common.WWEATHERFIT + "/auth/login",
-        data,
-        {
-          withCredentials: true, // 쿠키를 포함하여 요청
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
+      const response = await axiosInstance.post("/auth/login", credentials);
       console.log("로그인 응답:", response.data);
+      console.log("Set-Cookie:", response.headers["set-cookie"]);
+
       return response;
     } catch (error) {
-      console.error("로그인 에러:", error.response?.data);
+      console.error("로그인 실패:", error);
       throw error;
     }
   },
