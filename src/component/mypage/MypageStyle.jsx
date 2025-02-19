@@ -1,23 +1,54 @@
 import styled from "styled-components";
 
-const MyPageContainer = styled.div`
-  width: 1200px;
-  margin: 0 auto;
-  padding: 40px 0;
+const MyPageBoard = styled.div`
+  width: 1920px;
+  min-height: 1440px;
   display: flex;
   flex-direction: row;
-  //   justify-content: space-between;
+  background-color: #435a76;
+  justify-content: center;
+  align-items: center;
+`;
+
+const MyPageContainer = styled.div`
+  width: 100%;
+  max-width: 1500px;
+  height: 1000px;
+  padding-top: 40px;
+  display: flex;
+  flex-direction: row;
+  background-color: #ffffff;
 `;
 
 const ProfileSection = styled.div`
   display: flex;
-
-  gap: 20px;
-  margin-bottom: 40px;
+  // gap: 20px;
   align-items: center;
-  justify-content: center;
+
   flex-direction: column;
   width: 40%;
+  border-right: 1px solid #e3e4e8;
+  height: 100%;
+
+  .profile-image-header {
+    font-size: 24px;
+    font-weight: 500;
+    color: #32363e;
+  }
+
+  .profile-container {
+    position: relative;
+    margin: 20px 0;
+  }
+
+  .profile-divider {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    width: 100%;
+    height: 13px;
+    width: 100%;
+    background-color: #f9f9f9;
+  }
 
   .profile-image {
     width: 100px;
@@ -53,7 +84,18 @@ const ProfileSection = styled.div`
   }
 `;
 
+const ProfileBottomSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  background-color: #435a76;
+`;
+
 const StyleSection = styled.div`
+  width: 60%;
   h2 {
     font-size: 18px;
     margin-bottom: 20px;
@@ -87,4 +129,10 @@ const StyleSection = styled.div`
   }
 `;
 
-export { MyPageContainer, ProfileSection, StyleSection };
+export {
+  MyPageBoard,
+  MyPageContainer,
+  ProfileSection,
+  ProfileBottomSection,
+  StyleSection,
+};

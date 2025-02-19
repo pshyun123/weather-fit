@@ -8,11 +8,29 @@ const GlobalStyle = createGlobalStyle`
   }
 
   * {
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
   }
+
   body {
-    background-color: #fff;
+    margin: 0;
+    padding: 0;
+    font-family: 'Noto Sans KR', sans-serif;
+    overflow-x: hidden;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
+
+  #root {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
   html, body, div, span, applet, object, iframe,
   h1, h2, h3, h4, h5, h6, p, blockquote, pre,
   a, abbr, acronym, address, big, cite, code,
@@ -26,7 +44,6 @@ const GlobalStyle = createGlobalStyle`
   figure, figcaption, footer, header, hgroup,
   menu, nav, output, ruby, section, summary,
   time, mark, audio, video{
-    font-family: 'Noto Sans KR', sans-serif;
     color: var(--BLACK);
   }
   /* width */
@@ -58,9 +75,9 @@ const GlobalStyle = createGlobalStyle`
   main {
   }
   .container {
-    max-width: 1200px;
+    max-width: 1920px;
     margin: 0 auto;
-    @media only screen and (max-width:1200px){
+    @media only screen and (max-width:1920px){
       padding: 0 20px;
     }
   }
