@@ -14,6 +14,7 @@ import LoginApi from "../api/LoginApi";
 import rainCharacter from "../assets/raniny.png";
 import sunCharacter from "../assets/sunnynohand.png";
 import snowCharacter from "../assets/snowy.png";
+import { useAuth } from "../context/AuthContext";
 
 const LoginPage = () => {
   const [inputEmail, setInputEmail] = useState("");
@@ -21,6 +22,16 @@ const LoginPage = () => {
   const [emailMessage, setEmailMessage] = useState("");
   const [pwMessage, setPwMessage] = useState("");
   const [isButtonActive, setIsButtonActive] = useState(false);
+  const { setIsLoggedIn, setUserProfile } = useAuth();
+
+  //useAuth의 기능은 로그인 상태 확인 및 프로필 정보 업데이트
+  //자세히 설명하자면,
+  //1. 로그인 상태 확인
+  //2. 프로필 정보 업데이트
+  //3. 로그인 상태 확인
+  //4. 프로필 정보 업데이트
+  //5. 로그인 상태 확인
+  //6. 프로필 정보 업데이트
 
   const navigate = useNavigate();
 
@@ -41,25 +52,23 @@ const LoginPage = () => {
     setIsButtonActive(isValid);
   };
 
-  const onSubmit = async () => {
-    if (isButtonActive) {
-      try {
-        const res = await LoginApi.login(inputEmail, inputPw);
-        console.log("로그인 응답:", res.data);
+  const onClickLogin = async () => {
+    try {
+      const res = await LoginApi.login(inputEmail, inputPw);
+      console.log("로그인 응답:", res.data);
 
-        if (res.data && res.data.success) {
-          console.log("로그인 성공");
-          navigate("/");
-        } else {
-          console.log("로그인 실패");
-          setEmailMessage("이메일 또는 비밀번호가 올바르지 않습니다.");
-          setPwMessage("이메일 또는 비밀번호가 올바르지 않습니다.");
-        }
-      } catch (error) {
-        console.error("로그인 실패:", error.response?.data);
-        setEmailMessage("로그인 처리 중 오류가 발생했습니다.");
-        setPwMessage("로그인 처리 중 오류가 발생했습니다.");
+      if (res.data.success) {
+        setIsLoggedIn(true);
+        setUserProfile(res.data); // 로그인 성공 시 프로필 정보 업데이트
+        navigate("/");
+      } else {
+        setEmailMessage("이메일 또는 비밀번호가 일치하지 않습니다.");
+        setPwMessage("이메일 또는 비밀번호가 일치하지 않습니다.");
       }
+    } catch (error) {
+      console.error("로그인 실패:", error);
+      setEmailMessage("로그인 중 오류가 발생했습니다.");
+      setPwMessage("로그인 중 오류가 발생했습니다.");
     }
   };
 
@@ -90,7 +99,7 @@ const LoginPage = () => {
 
           <LoginButton
             $isValid={isButtonActive}
-            onClick={onSubmit}
+            onClick={onClickLogin}
             disabled={!isButtonActive}
           >
             로그인

@@ -1,64 +1,32 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { ProfileSection } from "./MypageStyle";
-import UserApi from "../../api/UserApi";
+
 import userIcon from "../../assets/header_person.png";
+import { useAuth } from "../../context/AuthContext";
 
 const UserProfile = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userProfile, setUserProfile] = useState({
-    profileImage: null,
+  const { userProfile } = useAuth();
+
+  // userProfile이 null일 때 기본값 설정
+  const defaultProfile = {
+    profileImage: userIcon,
     name: "",
     email: "",
-  });
+  };
 
-  // 로그인 상태 및 사용자 정보 확인
-  useEffect(() => {
-    const checkLoginStatus = async () => {
-      try {
-        const res = await UserApi.checkLoginStatus();
-        console.log("로그인 상태 확인 응답:", res.data);
-
-        if (res.data && res.data.success) {
-          setIsLoggedIn(true);
-          const profileUrl = res.data.profileImage?.startsWith("/")
-            ? res.data.profileImage.substring(1)
-            : res.data.profileImage;
-
-          setUserProfile({
-            profileImage: profileUrl,
-            name: res.data.name,
-            email: res.data.email,
-          });
-        } else {
-          setIsLoggedIn(false);
-          setUserProfile({
-            profileImage: null,
-            name: "",
-            email: "",
-          });
-        }
-      } catch (error) {
-        console.error("로그인 상태 확인 실패:", error);
-        setIsLoggedIn(false);
-        setUserProfile({
-          profileImage: null,
-          name: "",
-          email: "",
-        });
-      }
-    };
-
-    checkLoginStatus();
-  }, []);
+  // userProfile이 null이면 defaultProfile 사용
+  const profile = userProfile || defaultProfile;
 
   return (
     <ProfileSection>
       <div className="profile-image">
         <img
-          src={userProfile.profileImage || userIcon}
+          src={profile?.profileImage || userIcon}
+          width={150}
+          height={150}
           alt="프로필"
           onError={(e) => {
-            console.error("이미지 로드 실패:", userProfile.profileImage);
+            console.error("이미지 로드 실패:", profile?.profileImage);
             e.target.src = userIcon;
           }}
         />
@@ -67,8 +35,8 @@ const UserProfile = () => {
         <button>수정하기</button>
       </div>
       <div className="profile-info">
-        <div className="name">{userProfile.name}</div>
-        <div className="email">{userProfile.email}</div>
+        <div className="name">{profile.name}</div>
+        <div className="email">{profile.email}</div>
       </div>
     </ProfileSection>
   );

@@ -70,8 +70,17 @@ const UserApi = {
   checkLoginStatus: async () => {
     try {
       const response = await axiosInstance.get("/auth/login/check");
-      console.log("Set-Cookie:", response.headers["set-cookie"]);
-      console.log("로그인 상태 확인 응답:", response.data);
+      console.log("로그인 체크 요청 전 데이터:", response);
+
+      // 응답 데이터 구조 확인을 위한 로깅 추가
+      console.log("로그인 상태 응답 데이터 구조:", {
+        success: response.data.success,
+        name: response.data.name,
+        email: response.data.email,
+        profileImage: response.data.profileImage,
+        ageGroup: response.data.ageGroup,
+      });
+
       return response;
     } catch (error) {
       console.error("로그인 상태 확인 실패:", error);

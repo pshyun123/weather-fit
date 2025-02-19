@@ -4,44 +4,23 @@ import HeaderContainer from "./HeaderStyle";
 import { useNavigate } from "react-router-dom";
 import UserApi from "../../api/UserApi";
 import Common from "../../utils/Common";
+import { useAuth } from "../../context/AuthContext";
 
 const Header = () => {
   const navigate = useNavigate();
+  const { isLoggedIn, userProfile, setIsLoggedIn, setUserProfile } = useAuth();
   const [showUserOptions, setShowUserOptions] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userProfile, setUserProfile] = useState(null);
 
-  // 로그인 상태 및 사용자 정보 확인
+  // 외부 클릭 시 옵션 메뉴 닫기
   useEffect(() => {
-    const checkLoginStatus = async () => {
-      try {
-        const res = await UserApi.checkLoginStatus();
-        console.log("로그인 상태 확인 응답:", res.data);
-
-        if (res.data && res.data.success) {
-          // success 값만으로 로그인 상태 판단
-          setIsLoggedIn(true);
-          // profileImage가 있는 경우에만 설정
-          if (res.data.profileImage) {
-            const profileUrl = res.data.profileImage.startsWith("/")
-              ? res.data.profileImage.substring(1)
-              : res.data.profileImage;
-            setUserProfile(profileUrl);
-          } else {
-            setUserProfile(null); // 프로필 이미지가 없으면 null로 설정
-          }
-        } else {
-          setIsLoggedIn(false);
-          setUserProfile(null);
-        }
-      } catch (error) {
-        console.error("로그인 상태 확인 실패:", error);
-        setIsLoggedIn(false);
-        setUserProfile(null);
+    const handleClickOutside = (event) => {
+      if (!event.target.closest(".user-icon")) {
+        setShowUserOptions(false);
       }
     };
 
-    checkLoginStatus();
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const handleLogoClick = () => {
@@ -49,7 +28,8 @@ const Header = () => {
     navigate("/");
   };
 
-  const handleUserIconClick = () => {
+  const handleUserIconClick = (e) => {
+    e.stopPropagation(); // 이벤트 버블링 방지
     setShowUserOptions(!showUserOptions);
   };
 
@@ -94,11 +74,11 @@ const Header = () => {
           <span>
             {isLoggedIn ? (
               <img
-                src={userProfile || userIcon}
+                src={userProfile?.profileImage || userIcon}
                 alt="프로필"
                 className="profile-image"
                 onError={(e) => {
-                  console.error("이미지 로드 실패:", userProfile);
+                  console.error("이미지 로드 실패:", userProfile?.profileImage);
                   e.target.src = userIcon;
                 }}
               />

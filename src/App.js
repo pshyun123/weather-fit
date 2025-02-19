@@ -6,10 +6,11 @@ import Login from "./pages/LoginPage";
 import Mypage from "./pages/Mypage";
 import Join from "./pages/Join";
 import WeatherDetailPage from "./pages/WetherDetailPage";
+import { AuthProvider } from "./context/AuthContext";
 
 function App() {
   return (
-    <>
+    <AuthProvider>
       <GlobalStyle />
       <Router>
         <Routes>
@@ -22,7 +23,7 @@ function App() {
           <Route path="/join" element={<Join />} />
         </Routes>
       </Router>
-    </>
+    </AuthProvider>
   );
 }
 
