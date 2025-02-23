@@ -15,6 +15,7 @@ const Join = () => {
   const [inputName, setInputName] = useState(""); // 이름
   const [profileImage, setProfileImage] = useState(""); // 프로필 이미지
   const [ageGroup, setAgeGroup] = useState(""); // 나이대 고르기
+  const [preferences, setPreferences] = useState([]); // 취향 선택
 
   // 메세지 입력
   const [emailMessage, setEmailMessage] = useState("");
@@ -34,32 +35,106 @@ const Join = () => {
   const [isProfileImage, setIsProfileImage] = useState(false);
   const [isAgeGroup, setIsAgeGroup] = useState(false);
 
+  // 현재 화면 단계 (1: 첫 번째 화면, 2: 두 번째 화면)
+  const [step, setStep] = useState(1);
+
   // 완료하기 활성화 비활성화 버튼
   const [isButtonActive, setIsButtonActive] = useState(false);
+
+  const [isFormValid, setIsFormValid] = useState(false);
 
   // 페이지 이동
   const navigate = useNavigate();
 
-  // 모든 입력이 유효한지 확인하는 함수
-  const isAllInputValid = useCallback(() => {
-    const isValid =
-      inputEmail && isEmailConf && inputPw && isPw2 && inputName && ageGroup;
-    setIsButtonActive(isValid);
-    return isValid;
-  }, [inputEmail, isEmailConf, inputPw, isPw2, inputName, ageGroup]);
-
   // 각 입력 상태가 변경될 때마다 전체 유효성 확인
   useEffect(() => {
-    isAllInputValid();
-  }, [
-    inputEmail,
-    inputEmailConf,
-    inputPw,
-    inputPw2,
-    inputName,
-    ageGroup,
-    isAllInputValid,
-  ]);
+    const checkFormValidity = () => {
+      const isStep1Valid = isEmail && isEmailConf && isPw && isPw2 && isName;
+      const isStep2Valid = ageGroup !== "" && preferences.length > 0;
+      setIsFormValid(step === 1 ? isStep1Valid : isStep2Valid);
+      console.log({
+        email: inputEmail,
+        emailConfirmed: isEmailConf,
+        password: inputPw,
+        passwordConfirmed: isPw2,
+        name: inputName,
+        ageGroup: ageGroup,
+        preferences: preferences,
+        isFormValid: isFormValid,
+      });
+    };
+
+    checkFormValidity();
+  }, [isEmail, isEmailConf, isPw, isPw2, isName, ageGroup, preferences, step]);
+  // useEffect(() => {
+  //   const isFirstStepValid = isEmail && isEmailConf && isPw && isPw2 && isName;
+  //   setIsButtonActive(
+  //     step === 1 ? isFirstStepValid : isAgeGroup && preferences.length > 0
+  //   );
+  // }, [
+  //   isEmail,
+  //   isEmailConf,
+  //   isPw,
+  //   isPw2,
+  //   isName,
+  //   isAgeGroup,
+  //   preferences,
+  //   step,
+  // ]);
+
+  const handleNextStep = () => {
+    if (isButtonActive && step === 1) {
+      setStep(2);
+    }
+  };
+
+  const preferenceOptions = [
+    "미니멀",
+    "모던",
+    "캐주얼",
+    "스트릿",
+    "러블리",
+    "럭셔리",
+  ];
+
+  useEffect(() => {
+    if (preferences.length > 2) {
+      setPreferences(preferences.slice(0, 2));
+    }
+  }, [preferences]);
+
+  const handlePreferenceChange = (preference) => {
+    setPreferences((prev) => {
+      if (prev.includes(preference)) {
+        // 이미 선택된 취향이면 제거
+        return prev.filter((p) => p !== preference);
+      } else if (prev.length < 2) {
+        // 선택된 취향이 2개 미만이면 추가
+        return [...prev, preference];
+      } else {
+        // 이미 2개가 선택된 상태면 추가하지 않음
+        return prev;
+      }
+    });
+  };
+
+  // 모든 입력이 유효한지 확인하는 함수
+  // const isAllInputValid = useCallback(() => {
+  //   if (step === 1) {
+  //     return inputEmail && isEmailConf && inputPw && isPw2 && inputName;
+  //   } else {
+  //     return ageGroup && preferences;
+  //   }
+  // }, [
+  //   step,
+  //   inputEmail,
+  //   isEmailConf,
+  //   inputPw,
+  //   isPw2,
+  //   inputName,
+  //   ageGroup,
+  //   preferences,
+  // ]);
 
   // 이메일, 비밀번호 정규식
   const regexList = {
@@ -208,7 +283,7 @@ const Join = () => {
   const onChangeName = (e) => {
     const value = e.target.value;
     setInputName(value);
-    if (value.length < 8 || value.length > 5) {
+    if (value.length === 0 || value.length > 8 || /\s/.test(value)) {
       setNameMessage("이름은 한글 8자 미만 공백없이 입력 바랍니다.");
       setIsName(false);
     } else {
@@ -248,36 +323,60 @@ const Join = () => {
   };
 
   const onSubmit = async () => {
-    if (isAllInputValid()) {
+    if (isFormValid) {
       try {
         const formData = new FormData();
-
         const userData = {
           email: inputEmail,
           password: inputPw,
           name: inputName,
           ageGroup: ageGroup,
-          profileImage: profileImage ? profileImage : null,
+          preferences: preferences,
         };
+
+        console.log("Sending user data:", userData); // 전송하는 데이터 로깅
 
         formData.append(
           "userData",
           new Blob([JSON.stringify(userData)], { type: "application/json" })
         );
 
-        // 프로필 이미지가 있는 경우에만 추가
         if (profileImage) {
           formData.append("profileImage", profileImage);
         }
 
         const res = await UserApi.joinUserWithImage(formData);
-        console.log("회원가입 성공:", res.data);
-        navigate("/");
+        console.log("Server response:", res.data); // 서버 응답 로깅
+
+        if (res.data.success) {
+          alert("회원가입이 완료되었습니다!");
+          navigate("/");
+        } else {
+          alert(
+            `회원가입 실패: ${
+              res.data.message || "알 수 없는 오류가 발생했습니다."
+            }`
+          );
+        }
       } catch (error) {
-        console.error("회원가입 실패:", error.response?.data || error);
+        console.error("회원가입 오류:", error);
+        if (error.response) {
+          console.error("서버 응답:", error.response.data);
+          alert(
+            `회원가입 실패: ${
+              error.response.data.message || "서버에서 오류가 발생했습니다."
+            }`
+          );
+        } else if (error.request) {
+          console.error("요청 오류:", error.request);
+          alert("서버에 연결할 수 없습니다. 네트워크 연결을 확인해주세요.");
+        } else {
+          console.error("기타 오류:", error.message);
+          alert(`회원가입 중 오류가 발생했습니다: ${error.message}`);
+        }
       }
     } else {
-      console.error("입력 값을 확인하세요.");
+      alert("모든 필수 정보를 올바르게 입력해주세요.");
     }
   };
 
@@ -293,106 +392,125 @@ const Join = () => {
 
           {/* 프로필 사진 */}
           <div className="profile">
-            <label>프로필 사진 업로드</label>
+            <img
+              src={profileImage ? URL.createObjectURL(profileImage) : userIcon}
+              alt="프로필 미리보기"
+            />
+            <label htmlFor="fileUpload"></label>
             <input
               type="file"
+              id="fileUpload"
               accept="image/*"
               onChange={onChangeProfileImage}
             />
-            {profileImage && (
-              <div>
-                <img
-                  src={URL.createObjectURL(profileImage)}
-                  alt="프로필 미리보기"
-                  width="150px"
-                  height="150px"
+          </div>
+          {step === 1 ? (
+            <>
+              <div className="inputArea">
+                <Input
+                  holder="이름 입력"
+                  value={inputName}
+                  changeEvt={onChangeName}
+                  msg={nameMessage}
+                  msgType={isName}
+                />
+                <InputButton
+                  holder="이메일 입력"
+                  value={inputEmail}
+                  changeEvt={onChangeEmail}
+                  btnChild="인증번호 받기"
+                  active={isValidEmail}
+                  msg={emailMessage}
+                  msgType={isValidEmail}
+                  disabled={!isValidEmail}
+                  btnClick={sendEmailAuthCode}
+                />
+                <InputButton
+                  holder="이메일 인증번호 입력"
+                  value={inputEmailConf}
+                  changeEvt={onChangeEmailConf}
+                  btnChild="인증번호 확인"
+                  active={isEmailConf && isEmail}
+                  msg={emailConfMessage}
+                  msgType={isEmailConf}
+                  disabled={!inputEmailConf || !isValidEmail}
+                  btnClick={verifyEmailAuthCode}
+                />
+                <Input
+                  holder="비밀번호 입력"
+                  value={inputPw}
+                  type="password"
+                  changeEvt={onChangePw}
+                  msg={pwMessage}
+                  msgType={isPw}
+                />
+                <Input
+                  holder="비밀번호 확인"
+                  value={inputPw2}
+                  type="password"
+                  changeEvt={onChangePw2}
+                  msg={pw2Message}
+                  msgType={isPw2}
                 />
               </div>
-            )}
-          </div>
+              <button
+                onClick={handleNextStep}
+                disabled={!isButtonActive}
+                className={isButtonActive ? "active" : ""}>
+                다음으로
+              </button>
+            </>
+          ) : (
+            <>
+              <h3>취향 선택</h3>
+              <div className="select-age">
+                <h3>취향</h3>
+                <p>최대 2개의 스타일을 고를 수 있어요.</p>
+                <div className="group-grid">
+                  {preferenceOptions.map((pref, index) => (
+                    <button
+                      key={index}
+                      className={`group-button ${
+                        preferences.includes(pref) ? "active" : ""
+                      }`}
+                      onClick={() => handlePreferenceChange(pref)}
+                      disabled={
+                        preferences.length >= 2 && !preferences.includes(pref)
+                      }>
+                      {pref}
+                    </button>
+                  ))}
+                </div>
+              </div>
 
-          <div className="inputArea">
-            <Input
-              holder="이름 입력"
-              value={inputName}
-              changeEvt={onChangeName}
-              msg={nameMessage}
-              msgType={isName}
-            />
-            <InputButton
-              holder="이메일 입력"
-              value={inputEmail}
-              changeEvt={onChangeEmail}
-              btnChild="인증번호 받기"
-              active={isValidEmail}
-              msg={emailMessage}
-              msgType={isValidEmail}
-              disabled={!isValidEmail}
-              btnClick={sendEmailAuthCode}
-            />
-            <InputButton
-              holder="이메일 인증번호 입력"
-              value={inputEmailConf}
-              changeEvt={onChangeEmailConf}
-              btnChild="인증번호 확인"
-              active={isEmailConf && isEmail}
-              msg={emailConfMessage}
-              msgType={isEmailConf}
-              disabled={!inputEmailConf || !isValidEmail}
-              btnClick={verifyEmailAuthCode}
-            />
-            <Input
-              holder="비밀번호 입력"
-              value={inputPw}
-              type="password"
-              changeEvt={onChangePw}
-              msg={pwMessage}
-              msgType={isPw}
-            />
-            <Input
-              holder="비밀번호 확인"
-              value={inputPw2}
-              type="password"
-              changeEvt={onChangePw2}
-              msg={pw2Message}
-              msgType={isPw2}
-            />
-          </div>
-
-          {/* 다음으로 넘어가는 버튼 */}
-
-          {/* 나이대 선택 */}
-          <div className="select-age">
-            <h3>연령대</h3>
-            <p>연령대에 맞춘 스타일을 추천해드려요 :)</p>
-            <div className="age-group-grid">
-              {ageGroups.map((group, index) => (
+              <h3>연령대 선택</h3>
+              <div className="select-age">
+                <h3>연령대</h3>
+                <p>연령대에 맞춘 스타일을 추천해드려요 :)</p>
+                <div className="group-grid">
+                  {ageGroups.map((group, index) => (
+                    <button
+                      key={index}
+                      className={`group-button ${
+                        ageGroup === group ? "active" : ""
+                      }`}
+                      onClick={() => onChangeAgeGroup(group)}>
+                      {group}
+                    </button>
+                  ))}
+                </div>
+                <p>{ageGroupMessage}</p>
+              </div>
+              {step === 2 && (
                 <button
-                  key={index}
-                  className={`age-group-button ${
-                    ageGroup === group ? "active" : ""
-                  }`}
-                  onClick={() => onChangeAgeGroup(group)}
-                >
-                  {group}
+                  onClick={onSubmit}
+                  disabled={!isFormValid}
+                  className={isFormValid ? "active" : ""}>
+                  완료하기
                 </button>
-              ))}
-            </div>
-            <p>{ageGroupMessage}</p>
-          </div>
-
-          <button
-            className="submitButton"
-            onClick={onSubmit}
-            disabled={!isButtonActive}
-            style={{
-              backgroundColor: isButtonActive ? "blue" : "gray",
-              color: "white",
-              cursor: isButtonActive ? "pointer" : "not-allowed",
-            }}
-          >
-            완료하기
-          </button>
+              )}
+            </>
+          )}
         </div>
 
         {/* 오른쪽: 노란색 배경 영역 */}

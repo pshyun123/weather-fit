@@ -3,11 +3,11 @@ import { styled } from "styled-components";
 const JoinComp = styled.section`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  height: 100vh;
+  width: 100%;
+  margin: 70px;
 
   .container {
-    width: 100%;
-    padding: 30px;
+    padding: 80px;
 
     h2 {
       font-size: 2em;
@@ -32,10 +32,36 @@ const JoinComp = styled.section`
       flex-direction: column;
       align-items: center;
       margin-bottom: 50px;
+      position: relative;
 
       label {
         font-size: 1.3em;
         font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        bottom: 0;
+        right: 33%;
+      }
+
+      label::before {
+        content: "✏️"; /* 연필 아이콘 */
+        font-size: 1.2em;
+        transform: scaleX(-1); /* 좌우 반전 */
+        display: inline-block; /* transform 적용을 위해 추가 */
+      }
+
+      input[type="file"] {
+        display: none; /* 기본 파일 업로드 버튼 숨기기 */
+      }
+
+      img {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        object-fit: cover;
       }
     }
     .inputArea {
@@ -69,14 +95,14 @@ const JoinComp = styled.section`
       }
     }
 
-    .age-group-grid {
+    .group-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 10px;
       margin-top: 10px;
     }
 
-    .age-group-button {
+    .group-button {
       padding: 10px;
       border-radius: 20px;
       border: 1px solid #ccc;
@@ -85,11 +111,11 @@ const JoinComp = styled.section`
       transition: all 0.3s ease;
     }
 
-    .age-group-button:hover {
+    .group-button:hover {
       background-color: #e8e8e8;
     }
 
-    .age-group-button.active {
+    .group-button.active {
       background-color: #c9c9c9;
     }
 
