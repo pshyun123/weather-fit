@@ -22,19 +22,22 @@ const UserApi = {
     return await axiosInstance.post("/auth/isunique", dataMap);
   },
 
-  // 이미지가 있는 회원가입
-  joinUserWithImage: async (formData) => {
-    console.log("이미지 포함 회원가입 진입");
-    return await axiosInstance.post("/auth/join", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-  },
+  // // 이미지가 있는 회원가입
+  // joinUserWithImage: async (formData) => {
+  //   console.log("이미지 포함 회원가입 진입");
+  //   return await axiosInstance.post("/auth/join", formData, {
+  //     headers: {
+  //       "Content-Type": "multipart/form-data",
+  //     },
+  //   });
+  // },
 
   // 이미지가 없는 회원가입
   joinUser: async (userData) => {
     console.log("기본 회원가입 진입");
+    // 요청 전 데이터 구조 확인을 위한 로그 추가
+    console.log("회원가입 요청 데이터:", userData);
+
     return await axiosInstance.post("/auth/join", userData, {
       headers: {
         "Content-Type": "application/json",
@@ -77,7 +80,7 @@ const UserApi = {
         success: response.data.success,
         name: response.data.name,
         email: response.data.email,
-        profileImage: response.data.profileImage,
+        // profileImage: response.data.profileImage,
         ageGroup: response.data.ageGroup,
       });
 

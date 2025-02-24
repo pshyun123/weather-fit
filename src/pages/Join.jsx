@@ -325,7 +325,6 @@ const Join = () => {
   const onSubmit = async () => {
     if (isFormValid) {
       try {
-        const formData = new FormData();
         const userData = {
           email: inputEmail,
           password: inputPw,
@@ -334,32 +333,46 @@ const Join = () => {
           preferences: preferences,
         };
 
-        console.log("Sending user data:", userData); // 전송하는 데이터 로깅
+        // 상세 데이터 로깅
+        console.log("회원가입 요청 데이터 상세:", {
+          email: inputEmail,
+          password: "비밀번호 가림",
+          name: inputName,
+          ageGroup: ageGroup,
+          preferences: {
+            value: preferences,
+            type: typeof preferences,
+            isArray: Array.isArray(preferences),
+            length: preferences.length,
+          },
+        });
 
-        formData.append(
-          "userData",
-          new Blob([JSON.stringify(userData)], { type: "application/json" })
-        );
+        const res = await UserApi.joinUser(userData);
+        console.log("서버 응답 상세:", res); // 전체 응답 확인
 
-        if (profileImage) {
-          formData.append("profileImage", profileImage);
-        }
-
-        const res = await UserApi.joinUserWithImage(formData);
-        console.log("Server response:", res.data); // 서버 응답 로깅
-
-        if (res.data.success) {
+        if (res.status === 200) {
           alert("회원가입이 완료되었습니다!");
-          navigate("/");
+          console.log("로그인 페이지로 이동 시도"); // 이동 시도 로그
+          navigate("/login", { replace: true }); // replace 옵션 추가
+          console.log("이동 명령 실행 후"); // 이동 후 로그
         } else {
-          alert(
-            `회원가입 실패: ${
-              res.data.message || "알 수 없는 오류가 발생했습니다."
-            }`
-          );
+          alert("회원가입 실패: 서버에서 오류가 발생했습니다.");
         }
       } catch (error) {
-        console.error("회원가입 오류:", error);
+        // 에러 상세 로깅
+        console.error("회원가입 에러 상세:", {
+          name: error.name,
+          message: error.message,
+          response: error.response && {
+            status: error.response.status,
+            statusText: error.response.statusText,
+            data: error.response.data,
+            headers: error.response.headers,
+          },
+          request: error.request,
+          config: error.config,
+        });
+
         if (error.response) {
           console.error("서버 응답:", error.response.data);
           alert(
@@ -376,6 +389,15 @@ const Join = () => {
         }
       }
     } else {
+      console.log("폼 유효성 검사 실패:", {
+        email: { value: inputEmail, isValid: isEmail },
+        emailConf: { isValid: isEmailConf },
+        password: { isValid: isPw },
+        password2: { isValid: isPw2 },
+        name: { value: inputName, isValid: isName },
+        ageGroup: { value: ageGroup, isValid: isAgeGroup },
+        preferences: { value: preferences, length: preferences.length },
+      });
       alert("모든 필수 정보를 올바르게 입력해주세요.");
     }
   };
@@ -391,7 +413,7 @@ const Join = () => {
           <p>웨더핏의 회원이 되기 위한 과정이예요 :) </p>
 
           {/* 프로필 사진 */}
-          <div className="profile">
+          {/* <div className="profile">
             <img
               src={profileImage ? URL.createObjectURL(profileImage) : userIcon}
               alt="프로필 미리보기"
@@ -403,7 +425,7 @@ const Join = () => {
               accept="image/*"
               onChange={onChangeProfileImage}
             />
-          </div>
+          </div> */}
           {step === 1 ? (
             <>
               <div className="inputArea">
@@ -456,7 +478,8 @@ const Join = () => {
               <button
                 onClick={handleNextStep}
                 disabled={!isButtonActive}
-                className={isButtonActive ? "active" : ""}>
+                className={isButtonActive ? "active" : ""}
+              >
                 다음으로
               </button>
             </>
@@ -476,7 +499,8 @@ const Join = () => {
                       onClick={() => handlePreferenceChange(pref)}
                       disabled={
                         preferences.length >= 2 && !preferences.includes(pref)
-                      }>
+                      }
+                    >
                       {pref}
                     </button>
                   ))}
@@ -494,7 +518,8 @@ const Join = () => {
                       className={`group-button ${
                         ageGroup === group ? "active" : ""
                       }`}
-                      onClick={() => onChangeAgeGroup(group)}>
+                      onClick={() => onChangeAgeGroup(group)}
+                    >
                       {group}
                     </button>
                   ))}
@@ -505,7 +530,8 @@ const Join = () => {
                 <button
                   onClick={onSubmit}
                   disabled={!isFormValid}
-                  className={isFormValid ? "active" : ""}>
+                  className={isFormValid ? "active" : ""}
+                >
                   완료하기
                 </button>
               )}

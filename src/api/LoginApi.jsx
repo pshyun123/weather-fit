@@ -1,5 +1,5 @@
-import axios from "axios";
 import Common from "../utils/Common";
+import axios from "axios";
 
 // API 설정
 const axiosInstance = axios.create({
@@ -14,18 +14,14 @@ const axiosInstance = axios.create({
 const LoginApi = {
   login: async (email, password) => {
     try {
-      const credentials = {
-        email,
-        password,
-      };
-
-      const response = await axiosInstance.post("/auth/login", credentials);
-      console.log("로그인 응답:", response.data);
-      console.log("Set-Cookie:", response.headers["set-cookie"]);
-
+      const response = await axiosInstance.post("/auth/login", {
+        email: email,
+        password: password,
+      });
+      console.log("로그인 요청 응답:", response);
       return response;
     } catch (error) {
-      console.error("로그인 실패:", error);
+      console.error("로그인 요청 실패:", error.response || error);
       throw error;
     }
   },
