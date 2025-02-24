@@ -6,8 +6,8 @@ const InputComp = styled.div`
   margin-bottom: 10px;
 
   input {
-    width: 100%;
-    height: 45px;
+    width: 420px;
+    height: 60px;
     padding: 0 15px;
     border: 1px solid #e1e1e1;
     outline: none;
@@ -49,8 +49,8 @@ export const Input = (props) => {
 };
 
 export const LoginButton = styled.button`
-  width: 100%;
-  height: 45px;
+  width: 420px;
+  height: 65px;
   border: none;
   font-weight: 600;
   font-size: 15px;
