@@ -7,6 +7,7 @@ const LoginContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  border-radius: 16px;
 `;
 
 // 왼쪽 로그인 폼 영역
@@ -17,6 +18,7 @@ const LoginFormSection = styled.div`
   flex-direction: column;
   // justify-content: center;
   align-items: center;
+  border-radius: 16px;
 
   .logo {
     width: 100%;
@@ -70,11 +72,23 @@ const LoginFormSection = styled.div`
     .inputArea {
       display: flex;
       flex-direction: column;
-      gap: 30px;
+      gap: 16px;
 
       width: 420px;
 
       padding-top: 60px;
+    }
+
+    .login-id-container {
+      display: flex;
+      width: 408px;
+      height: 24px;
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-end;
+      // gap: 10px;
+      margin-right: 10px;
+      margin-left: 10px;
     }
 
     .login-id {
@@ -83,29 +97,39 @@ const LoginFormSection = styled.div`
       align-items: center;
       justify-content: center;
       gap: 10px;
+      width: 130px;
+      height: 24px;
+      color: #737f8f;
+      font-size: 14px;
+      font-weight: 400;
 
       .login-id-text {
         color: #737f8f;
         font-size: 14px;
         font-weight: 400;
+        width: 84px;
+        height: 24px;
       }
     }
 
     .login-links {
       display: flex;
       flex-direction: row;
-      justify-content: center;
+      justify-content: flex-end;
       align-items: center;
-      margin-top: 25px;
       gap: 20px;
       white-space: nowrap;
       width: 100%;
+      height: 24px;
 
       .links-divider {
-        color: #737f8f;
+        border-left: 1px solid rgb(159, 159, 159, 0.3);
+        height: 10px;
+        width: 1px;
+        margin-top: 1px;
       }
 
-      .links {
+      .links a {
         color: #737f8f;
         text-decoration: none;
         font-size: 13px;
@@ -128,6 +152,7 @@ const CharacterSection = styled.div`
   align-items: center;
   justify-content: center;
   background-color: #f0f0f0;
+  border-radius: 16px;
 
   .yellow-circle {
     position: absolute;
@@ -191,7 +216,7 @@ const CharacterSection = styled.div`
 const LoginComp = styled.section`
   width: 1500px;
   height: 1000px;
-
+  border-radius: 16px;
   position: relative;
   background-color: #f9f9f9;
   display: flex;

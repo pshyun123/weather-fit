@@ -11,7 +11,7 @@ const InputComp = styled.div`
     padding: 0 15px;
     border: 1px solid #e1e1e1;
     outline: none;
-    border-radius: 5px;
+    border-radius: 10px;
     font-size: 14px;
     transition: border-color 0.3s ease;
 
@@ -49,7 +49,7 @@ export const Input = (props) => {
 };
 
 export const LoginButton = styled.button`
-  width: 420px;
+  width: 419px;
   height: 65px;
   border: none;
   font-weight: 600;

@@ -99,11 +99,6 @@ const LoginPage = () => {
               />
             </div>
 
-            <div className="login-id">
-              <div className="login-id-text">아이디 기억하기</div>
-              <input type="checkbox" />
-            </div>
-
             <LoginButton
               $isValid={isButtonActive}
               onClick={onClickLogin}
@@ -112,14 +107,21 @@ const LoginPage = () => {
               로그인
             </LoginButton>
 
-            <div className="login-links">
-              <div className="links">
-                <Link to="/find-password">비밀번호 찾기</Link>
+            <div className="login-id-container">
+              <div className="login-id">
+                <input type="checkbox" className="checkbox-input" />
+                <span className="checkbox-label">아이디 저장</span>
               </div>
-              <div className="links-divider">|</div>
-              <div className="links">
-                {" "}
-                <Link to="/join">회원가입</Link>
+
+              <div className="login-links">
+                <div className="links">
+                  <Link to="/find-password">비밀번호 찾기</Link>
+                </div>
+                <div className="links-divider"></div>
+                <div className="links">
+                  {" "}
+                  <Link to="/join">회원가입</Link>
+                </div>
               </div>
             </div>
           </div>
