@@ -2,116 +2,128 @@ import styled from "styled-components";
 
 const MyPageBoard = styled.div`
   width: 1920px;
-  min-height: 1440px;
+  min-height: 100vh;
   display: flex;
-  flex-direction: row;
-  background-color: #435a76;
   justify-content: center;
-  align-items: center;
+  background-color: #f9f9f9;
+  // padding: 40px 0;
+  border: 1px solid red;
 `;
 
 const MyPageContainer = styled.div`
-  width: 100%;
-  max-width: 1500px;
-  height: 1000px;
-  padding-top: 40px;
+  width: 1200px;
   display: flex;
-  flex-direction: row;
-  background-color: #ffffff;
+  // gap: 40px;
+  border: 1px solid blue;
 `;
 
 const ProfileSection = styled.div`
+  width: 291px;
+  background: rgba(226, 226, 226, 1);
+  border-radius: 8px;
+  padding: 24px;
+  height: 331px;
   display: flex;
-  // gap: 20px;
+  flex-direction: column;
   align-items: center;
 
-  flex-direction: column;
-  width: 40%;
-  border-right: 1px solid #e3e4e8;
-  height: 100%;
+  margin-bottom: 120px;
 
   .profile-image-header {
     font-size: 24px;
     font-weight: 500;
-    color: #32363e;
+    color: rgba(50, 54, 62, 1);
+    margin-bottom: 24px;
+    width: 130px;
+    height: 22px;
+    text-align: center;
   }
 
   .profile-container {
-    position: relative;
-    margin: 20px 0;
-  }
-
-  .profile-divider {
-    margin-top: 20px;
-    margin-bottom: 20px;
-    width: 100%;
-    height: 13px;
-    width: 100%;
-    background-color: #f9f9f9;
-  }
-
-  .profile-image {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    background-color: #f0f0f0;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    overflow: hidden;
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+    margin-bottom: 24px;
   }
 
   .profile-info {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+    margin-top: 16px;
+    text-align: center;
 
     .name {
-      font-size: 24px;
-      font-weight: bold;
-      color: #000;
-    }
-
-    .email {
-      color: #666;
+      font-size: 18px;
+      font-weight: 500;
+      color: #262626;
     }
   }
 `;
 
-const ProfileBottomSection = styled.div`
+const BasicInfoSection = styled.div`
+  width: 347px;
+  height: 986px;
+  background: rgba(243, 243, 243, 1);
+  border-radius: 8px;
+  padding: 24px;
   display: flex;
   flex-direction: column;
-  width: 100%;
-  height: 100%;
-  justify-content: center;
   align-items: center;
-  background-color: #435a76;
+
+  .basic-info-title {
+    font-size: 20px;
+    font-weight: 500;
+    color: rgba(50, 54, 62, 1);
+    margin-bottom: 24px;
+    width: 130px;
+    height: 22px;
+    text-align: center;
+    margin-bottom: 24px;
+  }
+
+  .email-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 500;
+    color: rgba(166, 166, 166, 1);
+    width: 280px;
+    height: 28px;
+  }
+
+  .email {
+    color: #666;
+    font-size: 18px;
+    text-align: center;
+    color: rgba(166, 166, 166, 1);
+    width: 192px;
+    height: 28px;
+  }
 `;
 
 const StyleSection = styled.div`
-  width: 60%;
+  flex: 1;
+  background: #fff;
+  border-radius: 8px;
+  padding: 24px;
+  border: 1px solid green;
+
   h2 {
-    font-size: 18px;
-    margin-bottom: 20px;
+    font-size: 20px;
+    font-weight: 600;
+    color: #262626;
+    margin-bottom: 24px;
   }
 
   .style-grid {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 20px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
 
     .style-item {
-      position: relative;
       aspect-ratio: 1;
-      background-color: #f0f0f0;
       border-radius: 8px;
       overflow: hidden;
+      position: relative;
 
       img {
         width: 100%;
@@ -121,8 +133,15 @@ const StyleSection = styled.div`
 
       .like-button {
         position: absolute;
-        bottom: 10px;
-        right: 10px;
+        bottom: 12px;
+        right: 12px;
+        width: 32px;
+        height: 32px;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         cursor: pointer;
       }
     }
@@ -133,6 +152,6 @@ export {
   MyPageBoard,
   MyPageContainer,
   ProfileSection,
-  ProfileBottomSection,
+  BasicInfoSection,
   StyleSection,
 };
