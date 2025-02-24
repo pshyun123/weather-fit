@@ -1,23 +1,32 @@
 import { styled } from "styled-components";
 
-// 왼쪽 로그인 폼 영역
-const LoginFormSection = styled.div`
-  width: 50%;
-  height: 100%;
+const LoginContainer = styled.div`
+  width: 750px;
+  height: 1000px;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  // padding-left: 210px;
+  justify-content: center;
+  align-items: center;
+`;
+
+// 왼쪽 로그인 폼 영역
+const LoginFormSection = styled.div`
+  width: 470px;
+  height: 760px;
+  display: flex;
+  flex-direction: column;
+  // justify-content: center;
+  align-items: center;
 
   .logo {
-    margin-top: 216px;
     width: 100%;
+    height: 150px;
     display: flex;
     justify-content: center;
+    align-items: center;
     img {
       width: 300px;
-      height: 200px;
-      object-fit: contain;
+      height: 300px;
     }
   }
   .password {
@@ -40,46 +49,68 @@ const LoginFormSection = styled.div`
     justify-content: center;
     font-size: 14px;
     font-weight: 400;
-    margin-top: 15px;
+    margin-top: 25px;
     margin-bottom: 15px;
     color: #737f8f;
   }
 
   .container {
     width: 100%;
-    max-width: 300px;
-    margin-top: 20px;
+    height: 600px;
+    margin-top: 16px;
+    max-width: 500px;
+
+    gap: 20px;
+
     display: flex;
     flex-direction: column;
+    // justify-content: center;
     align-items: center;
 
     .inputArea {
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      margin-bottom: 20px;
-      width: 100%;
+      gap: 30px;
+
+      width: 420px;
+
+      padding-top: 60px;
     }
 
-    .password {
+    .login-id {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+
+      .login-id-text {
+        color: #737f8f;
+        font-size: 14px;
+        font-weight: 400;
+      }
+    }
+
+    .login-links {
       display: flex;
       flex-direction: row;
       justify-content: center;
       align-items: center;
       margin-top: 25px;
-      gap: 10px;
+      gap: 20px;
       white-space: nowrap;
       width: 100%;
 
-      .title {
-        margin: 0;
+      .links-divider {
         color: #737f8f;
       }
 
-      .links a {
+      .links {
         color: #737f8f;
         text-decoration: none;
         font-size: 13px;
+        display: flex;
+
         &:hover {
           color: #007bff;
         }
@@ -91,8 +122,8 @@ const LoginFormSection = styled.div`
 // 오른쪽 캐릭터 영역
 const CharacterSection = styled.div`
   position: relative;
-  width: 50%;
-  height: 100%;
+  width: 750px;
+  height: 1000px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -158,14 +189,16 @@ const CharacterSection = styled.div`
 
 // 메인 컨테이너
 const LoginComp = styled.section`
-  width: 100%;
+  width: 1500px;
   height: 1000px;
-  margin: 0 auto;
+
   position: relative;
   background-color: #f9f9f9;
   display: flex;
+  flex-direction: row;
+  margin: 70px;
   justify-content: center;
 `;
 
-export { LoginFormSection, CharacterSection };
+export { LoginFormSection, CharacterSection, LoginContainer };
 export default LoginComp;

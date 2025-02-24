@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import LoginComp, {
   LoginFormSection,
   CharacterSection,
+  LoginContainer,
 } from "../component/login/LoginStyle";
 import {
   Input,
@@ -74,52 +75,56 @@ const LoginPage = () => {
 
   return (
     <LoginComp>
-      <LoginFormSection>
-        <div className="logo">
-          {" "}
-          <img src={logo} alt="Wheather FIT" />{" "}
-        </div>
-        <div className="title">회원님의 정보를 입력해주세요 :)</div>
-        <div className="container">
-          <div className="inputArea">
-            <Input
-              holder="이메일 입력"
-              value={inputEmail}
-              changeEvt={onChangeEmail}
-              msg={emailMessage}
-            />
-            <Input
-              holder="비밀번호 입력"
-              value={inputPw}
-              type="password"
-              changeEvt={onChangePw}
-              msg={pwMessage}
-            />
+      <LoginContainer>
+        <LoginFormSection>
+          <div className="logo">
+            {" "}
+            <img src={logo} alt="Wheather FIT" />{" "}
           </div>
+          <div className="title">회원님의 정보를 입력해주세요 :)</div>
+          <div className="container">
+            <div className="inputArea">
+              <Input
+                holder="이메일 입력"
+                value={inputEmail}
+                changeEvt={onChangeEmail}
+                msg={emailMessage}
+              />
+              <Input
+                holder="비밀번호 입력"
+                value={inputPw}
+                type="password"
+                changeEvt={onChangePw}
+                msg={pwMessage}
+              />
+            </div>
 
-          <LoginButton
-            $isValid={isButtonActive}
-            onClick={onClickLogin}
-            disabled={!isButtonActive}
-          >
-            로그인
-          </LoginButton>
+            <div className="login-id">
+              <div className="login-id-text">아이디 기억하기</div>
+              <input type="checkbox" />
+            </div>
 
-          <div className="title">
-            <hr />
-            아직 회원이 아니신가요?
-            <hr />
-          </div>
-          <JoinButton onClick={() => navigate("/join")}>회원가입</JoinButton>
+            <LoginButton
+              $isValid={isButtonActive}
+              onClick={onClickLogin}
+              disabled={!isButtonActive}
+            >
+              로그인
+            </LoginButton>
 
-          <div className="password">
-            <div className="title">비밀번호를 잊으셨나요?</div>
-            <div className="links">
-              <Link to="/find-password">비밀번호 찾기</Link>
+            <div className="login-links">
+              <div className="links">
+                <Link to="/find-password">비밀번호 찾기</Link>
+              </div>
+              <div className="links-divider">|</div>
+              <div className="links">
+                {" "}
+                <Link to="/join">회원가입</Link>
+              </div>
             </div>
           </div>
-        </div>
-      </LoginFormSection>
+        </LoginFormSection>
+      </LoginContainer>
 
       <CharacterSection>
         <img
