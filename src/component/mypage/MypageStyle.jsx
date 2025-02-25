@@ -82,21 +82,60 @@ const BasicInfoSection = styled.div`
   .email-container {
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    align-items: center;
+    width: 280px;
+    height: 28px;
+    margin-bottom: 16px;
+    gap: 30px;
+  }
+
+  .email-title {
     font-size: 18px;
     font-weight: 500;
     color: rgba(166, 166, 166, 1);
-    width: 280px;
-    height: 28px;
+    width: 80px;
   }
 
   .email {
-    color: #666;
-    font-size: 18px;
-    text-align: center;
     color: rgba(166, 166, 166, 1);
-    width: 192px;
+    font-size: 18px;
+    font-weight: 400;
+    width: 90px;
     height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  .edit-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 280px;
+    height: 28px;
+    margin-bottom: 16px;
+    gap: 30px;
+  }
+
+  .edit-title {
+    font-size: 18px;
+    font-weight: 500;
+    color: rgba(166, 166, 166, 1);
+    width: 80px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+  }
+
+  .edit-content {
+    color: rgba(166, 166, 166, 1);
+    font-size: 18px;
+    font-weight: 400;
+    width: 90px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
   }
 `;
 

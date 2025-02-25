@@ -12,6 +12,8 @@ const UserProfile = () => {
     profileImage: snowyIcon,
     name: "유저명",
     email: "유저이메일",
+    preference: "미니멀",
+    age_group: "20대 후반",
   };
 
   // userProfile이 null이면 defaultProfile 사용
@@ -94,8 +96,101 @@ const UserProfile = () => {
       <div className="basic-info-title">기본 정보</div>
 
       <div className="email-container">
-        아이디
+        <div className="email-title">아이디</div>
         <div className="email">{profile.email}</div>
+      </div>
+
+      <div className="edit-container">
+        <div className="edit-title">비밀번호</div>
+        <div className="edit-content">********</div>
+        <div
+          className="info-edit-button"
+          style={{
+            position: "relative",
+            marginLeft: "auto",
+            border: "1px solid #262626",
+            backgroundColor: "#ffffff",
+            width: "16px",
+            height: "16px",
+            borderRadius: "50%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            cursor: "pointer",
+            zIndex: 1,
+          }}
+        >
+          <img
+            src={editIcon}
+            alt="수정"
+            style={{
+              width: "12px",
+              height: "12px",
+            }}
+          />
+        </div>
+      </div>
+
+      <div className="edit-container">
+        <div className="edit-title">취향</div>
+        <div className="edit-content">{profile.preference}</div>
+        <div
+          className="info-edit-button"
+          style={{
+            position: "relative",
+            marginLeft: "auto",
+            border: "1px solid #262626",
+            backgroundColor: "#ffffff",
+            width: "16px",
+            height: "16px",
+            borderRadius: "50%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            cursor: "pointer",
+            zIndex: 1,
+          }}
+        >
+          <img
+            src={editIcon}
+            alt="수정"
+            style={{
+              width: "12px",
+              height: "12px",
+            }}
+          />
+        </div>
+      </div>
+
+      <div className="edit-container">
+        <div className="edit-title">연령대</div>
+        <div className="edit-content">{profile.age_group}</div>
+        <div
+          className="info-edit-button"
+          style={{
+            position: "relative",
+            marginLeft: "auto",
+            border: "1px solid #262626",
+            backgroundColor: "#ffffff",
+            width: "16px",
+            height: "16px",
+            borderRadius: "50%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            cursor: "pointer",
+            zIndex: 1,
+          }}
+        >
+          <img
+            src={editIcon}
+            alt="수정"
+            style={{
+              width: "12px",
+              height: "12px",
+            }}
+          />
+        </div>
       </div>
     </BasicInfoSection>
   );
