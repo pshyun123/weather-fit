@@ -19,6 +19,7 @@ const LoginFormSection = styled.div`
   // justify-content: center;
   align-items: center;
   border-radius: 16px;
+  margin-top: 200px;
 
   .logo {
     width: 100%;
@@ -72,11 +73,9 @@ const LoginFormSection = styled.div`
     .inputArea {
       display: flex;
       flex-direction: column;
-      gap: 16px;
-
-      width: 420px;
-
-      padding-top: 60px;
+      width: 100%;
+      padding-top: 30px;
+      margin-bottom: 10px;
     }
 
     .login-id-container {
@@ -163,7 +162,7 @@ const CharacterSection = styled.div`
     opacity: 0.9;
     z-index: 0;
     top: 38%;
-    left: 38%;
+    left: 28%;
   }
 
   .opacity-yellow-circle {
@@ -175,7 +174,7 @@ const CharacterSection = styled.div`
     opacity: 0.3; // 더 진한 투명도
     z-index: 0;
     top: 36%;
-    left: 40%;
+    left: 29%;
   }
 
   img {
@@ -187,22 +186,22 @@ const CharacterSection = styled.div`
 
     &:nth-child(1) {
       // 우산 캐릭터
-      top: 20%;
-      left: 55%;
+      top: 22%;
+      left: 40%;
       z-index: 2;
     }
 
     &:nth-child(2) {
       // 햇살 캐릭터
       top: 40%;
-      left: 20%;
+      left: 14%;
       z-index: 1;
     }
 
     &:nth-child(3) {
       // 구름 캐릭터
       top: 60%;
-      left: 55%;
+      left: 40%;
       z-index: 3;
     }
 
@@ -225,5 +224,16 @@ const LoginComp = styled.section`
   justify-content: center;
 `;
 
-export { LoginFormSection, CharacterSection, LoginContainer };
+const LoginPageBoard = styled.div`
+  width: 1920px;
+  height: 1440px;
+  border-radius: 16px;
+  position: relative;
+  background-color: rgba(60, 59, 59, 1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+export { LoginFormSection, CharacterSection, LoginContainer, LoginPageBoard };
 export default LoginComp;
