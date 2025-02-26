@@ -34,25 +34,25 @@ const UserProfile = () => {
           <div
             className="profile-image"
             style={{
-              width: "114.31px",
-              height: "114.31px",
+              width: "124px",
+              height: "124px",
               borderRadius: "50%",
               overflow: "hidden",
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-              backgroundColor: "#f5f5f5",
+              backgroundColor: "rgba(255, 255, 255, 1)",
             }}
           >
             <img
               src={profile?.profileImage || snowyIcon}
               alt="프로필"
               style={{
-                width: "242px",
-                height: "260px",
+                width: "222px",
+                height: "240px",
                 objectFit: "cover",
                 paddingTop: "30px",
-                paddingRight: "36px",
+                paddingRight: "30px",
               }}
               onError={(e) => {
                 console.error("이미지 로드 실패:", profile?.profileImage);
@@ -67,9 +67,9 @@ const UserProfile = () => {
               right: "-8px",
               bottom: "-8px",
               border: "1px solid #262626",
-              backgroundColor: "#ffffff",
-              width: "32px",
-              height: "32px",
+              backgroundColor: "rgba(38, 38, 38, 1)",
+              width: "36px",
+              height: "36px",
               borderRadius: "50%",
               display: "flex",
               justifyContent: "center",
@@ -84,6 +84,8 @@ const UserProfile = () => {
               style={{
                 width: "20px",
                 height: "20px",
+                marginLeft: "2.2px",
+                marginBottom: "2px",
               }}
             />
           </div>
@@ -109,9 +111,9 @@ const UserProfile = () => {
             position: "relative",
             marginLeft: "auto",
             border: "1px solid #262626",
-            backgroundColor: "#ffffff",
-            width: "16px",
-            height: "16px",
+            backgroundColor: "rgba(143,143,143,1)",
+            width: "25px",
+            height: "25px",
             borderRadius: "50%",
             display: "flex",
             justifyContent: "center",
@@ -124,8 +126,10 @@ const UserProfile = () => {
             src={editIcon}
             alt="수정"
             style={{
-              width: "12px",
-              height: "12px",
+              width: "15px",
+              height: "15px",
+              marginLeft: "2.2px",
+              marginBottom: "2px",
             }}
           />
         </div>
@@ -140,9 +144,9 @@ const UserProfile = () => {
             position: "relative",
             marginLeft: "auto",
             border: "1px solid #262626",
-            backgroundColor: "#ffffff",
-            width: "16px",
-            height: "16px",
+            backgroundColor: "rgba(143,143,143,1)",
+            width: "25px",
+            height: "25px",
             borderRadius: "50%",
             display: "flex",
             justifyContent: "center",
@@ -155,8 +159,10 @@ const UserProfile = () => {
             src={editIcon}
             alt="수정"
             style={{
-              width: "12px",
-              height: "12px",
+              width: "15px",
+              height: "15px",
+              marginLeft: "2.2px",
+              marginBottom: "2px",
             }}
           />
         </div>
@@ -171,9 +177,9 @@ const UserProfile = () => {
             position: "relative",
             marginLeft: "auto",
             border: "1px solid #262626",
-            backgroundColor: "#ffffff",
-            width: "16px",
-            height: "16px",
+            backgroundColor: "rgba(143,143,143,1)",
+            width: "25px",
+            height: "25px",
             borderRadius: "50%",
             display: "flex",
             justifyContent: "center",
@@ -186,8 +192,10 @@ const UserProfile = () => {
             src={editIcon}
             alt="수정"
             style={{
-              width: "12px",
-              height: "12px",
+              width: "15px",
+              height: "15px",
+              marginLeft: "2.2px",
+              marginBottom: "2px",
             }}
           />
         </div>
