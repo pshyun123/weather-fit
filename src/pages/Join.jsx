@@ -4,7 +4,6 @@ import JoinComp from "../component/join/JoinStyle";
 import { InputButton, Input } from "../component/join/JoinInputstyle";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import userIcon from "../assets/header_person.png";
 
 const Join = () => {
   // 입력 칸에 이메일, 이메일 인증, 비밀번호, 이름 입력 / 프로필, 나이대별 선택

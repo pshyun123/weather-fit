@@ -10,11 +10,11 @@ import {
   LoginButton,
   JoinButton,
 } from "../component/login/LoginInputStyle";
-import logo from "../assets/weatherfitlogo.png";
+import logo from "../images/weatherfitlogo.png";
 import LoginApi from "../api/LoginApi";
-import rainCharacter from "../assets/raniny.png";
-import sunCharacter from "../assets/sunnynohand.png";
-import snowCharacter from "../assets/snowy.png";
+import rainCharacter from "../images/raniny.png";
+import sunCharacter from "../images/sunnynohand.png";
+import snowCharacter from "../images/snowy.png";
 import { useAuth } from "../context/AuthContext";
 
 const LoginPage = () => {

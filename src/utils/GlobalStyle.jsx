@@ -30,7 +30,6 @@ const GlobalStyle = createGlobalStyle`
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: rgba(60, 59, 59, 1);
   }
 
   html, body, div, span, applet, object, iframe,

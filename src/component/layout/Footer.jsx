@@ -6,9 +6,9 @@ import {
   FooterBottomContainer,
 } from "./FooterStyle";
 import { Link } from "react-router-dom";
-import youtubeIcon from "../../assets/youtube-icon.png";
-import twitterIcon from "../../assets/twitter-icon.png";
-import facebookIcon from "../../assets/facebook-icon.png";
+import youtubeIcon from "../../images/youtube-icon.png";
+import twitterIcon from "../../images/twitter-icon.png";
+import facebookIcon from "../../images/facebook-icon.png";
 
 const Footer = () => {
   return (

@@ -1,8 +1,8 @@
 import React from "react";
 import { ProfileSection, BasicInfoSection } from "./MypageStyle";
-import snowyIcon from "../../assets/snowy.png";
+import snowyIcon from "../../images/snowy.png";
 import { useAuth } from "../../context/AuthContext";
-import editIcon from "../../assets/editing.png";
+import editIcon from "../../images/editing.png";
 
 const UserProfile = () => {
   const { userProfile } = useAuth();

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import userIcon from "../../assets/header_person.png";
+import userIcon from "../../images/header_person.png";
 import HeaderContainer from "./HeaderStyle";
 import { useNavigate } from "react-router-dom";
 import UserApi from "../../api/UserApi";
