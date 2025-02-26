@@ -16,7 +16,7 @@ import rainCharacter from "../images/raniny.png";
 import sunCharacter from "../images/sunnynohand.png";
 import snowCharacter from "../images/snowy.png";
 import { useAuth } from "../context/AuthContext";
-
+//
 const LoginPage = () => {
   const [inputEmail, setInputEmail] = useState("");
   const [inputPw, setInputPw] = useState("");
