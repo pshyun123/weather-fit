@@ -131,7 +131,7 @@ const BasicInfoSection = styled.div`
     color: rgba(166, 166, 166, 1);
     font-size: 18px;
     font-weight: 400;
-    width: 90px;
+    width: 100px;
     height: 28px;
     display: flex;
     align-items: center;

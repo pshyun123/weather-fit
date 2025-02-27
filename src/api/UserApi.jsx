@@ -84,6 +84,7 @@ const UserApi = {
         email: response.data.email,
         profileImage: response.data.profileImage,
         ageGroup: response.data.ageGroup,
+        preferences: response.data.preferences,
       });
 
       return response;
@@ -123,6 +124,103 @@ const UserApi = {
         ...response.data,
         profileImage: response.data?.profileImage ? "(이미지 데이터)" : null,
       });
+      return response.data;
+    } catch (error) {
+      if (error.response) {
+        console.error("서버 응답 오류:", {
+          status: error.response.status,
+          statusText: error.response.statusText,
+          data: error.response.data,
+        });
+      } else {
+        console.error("요청 오류:", error.message);
+      }
+      throw error;
+    }
+  },
+
+  // 프로필 취향 업데이트
+  updateProfileTaste: async (userData) => {
+    console.log("프로필 취향 업데이트 요청 시작 (JSON 방식)");
+    return await jsonInstance.post("/member/update/preferences", userData);
+  },
+
+  // 프로필 연령대 업데이트
+  updateProfileAgegroup: async (userData) => {
+    console.log("프로필 연령대 업데이트 요청 시작 (JSON 방식)");
+    console.log("요청 데이터:", userData);
+
+    try {
+      // 서버 API 엔드포인트에 맞게 데이터 형식 조정
+      const requestData = {
+        id: userData.id,
+        email: userData.email,
+        ageGroup: userData.agegroup, // 서버에서 ageGroup으로 받는 경우
+      };
+
+      console.log("변환된 요청 데이터:", requestData);
+
+      const response = await jsonInstance.post(
+        "/member/update/ageGroup",
+        requestData
+      );
+      console.log("연령대 업데이트 응답:", response.data);
+      return response.data;
+    } catch (error) {
+      if (error.response) {
+        console.error("서버 응답 오류:", {
+          status: error.response.status,
+          statusText: error.response.statusText,
+          data: error.response.data,
+        });
+      } else {
+        console.error("요청 오류:", error.message);
+      }
+      throw error;
+    }
+  },
+
+  // 현재 비밀번호 확인
+  verifyPassword: async (userData) => {
+    console.log("현재 비밀번호 확인 요청 시작");
+    console.log("요청 데이터:", {
+      email: userData.email,
+      password: "********", // 비밀번호는 로그에 표시하지 않음
+    });
+
+    try {
+      // 요청 데이터에서 필요한 필드만 추출하여 새 객체 생성
+      const requestData = {
+        email: userData.email,
+        password: userData.password,
+      };
+
+      const response = await jsonInstance.post(
+        "/member/verify/password",
+        requestData
+      );
+      console.log("비밀번호 확인 응답:", response.data);
+      return response.data;
+    } catch (error) {
+      console.error("비밀번호 확인 실패:", error);
+      throw error;
+    }
+  },
+
+  // 비밀번호 업데이트
+  updatePassword: async (userData) => {
+    console.log("비밀번호 업데이트 요청 시작");
+    console.log("요청 데이터:", {
+      ...userData,
+      password: "********", // 비밀번호는 로그에 표시하지 않음
+    });
+
+    try {
+      const response = await jsonInstance.post(
+        "/member/update/password",
+        userData
+      );
+      console.log("비밀번호 업데이트 응답:", response.data);
       return response.data;
     } catch (error) {
       if (error.response) {
