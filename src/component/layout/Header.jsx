@@ -44,6 +44,26 @@ const Header = () => {
     }
   };
 
+  // 프로필 이미지 URL 확인 및 처리
+  const getProfileImageSrc = () => {
+    if (!userProfile || !userProfile.profileImage) {
+      return userIcon;
+    }
+
+    // Base64 이미지인 경우 그대로 사용
+    if (userProfile.profileImage.startsWith("data:image")) {
+      return userProfile.profileImage;
+    }
+
+    // 상대 경로인 경우 서버 URL과 결합
+    if (userProfile.profileImage.startsWith("/")) {
+      return `${Common.WWEATHERFIT}${userProfile.profileImage}`;
+    }
+
+    // 그 외의 경우 (파일명만 있는 경우 등) 서버 업로드 경로와 결합
+    return `${Common.WWEATHERFIT}/uploads/${userProfile.profileImage}`;
+  };
+
   return (
     <header
       style={{
@@ -74,16 +94,29 @@ const Header = () => {
           <span>
             {isLoggedIn ? (
               <img
-                src={userProfile?.profileImage || userIcon}
+                src={getProfileImageSrc()}
                 alt="프로필"
                 className="profile-image"
+                style={{
+                  width: "40px",
+                  height: "40px",
+                  borderRadius: "50%",
+                  objectFit: "cover",
+                }}
                 onError={(e) => {
                   console.error("이미지 로드 실패:", userProfile?.profileImage);
                   e.target.src = userIcon;
                 }}
               />
             ) : (
-              <img src={userIcon} alt="userstate" />
+              <img
+                src={userIcon}
+                alt="userstate"
+                style={{
+                  width: "40px",
+                  height: "40px",
+                }}
+              />
             )}
           </span>
           {showUserOptions && (

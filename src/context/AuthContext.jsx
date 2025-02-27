@@ -33,9 +33,13 @@ export const AuthProvider = ({ children }) => {
             email: res.data.email,
             profileImage: res.data.profileImage,
             ageGroup: res.data.ageGroup,
+            id: res.data.id, // ID 정보도 저장
           };
           setUserProfile(profileData);
-          console.log("프로필 데이터 설정:", profileData);
+          console.log("프로필 데이터 설정:", {
+            ...profileData,
+            profileImage: profileData.profileImage ? "(이미지 데이터)" : null,
+          });
         }
       } catch (error) {
         // 에러 발생 시 로그인 상태 초기화
