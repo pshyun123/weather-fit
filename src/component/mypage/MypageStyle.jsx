@@ -5,7 +5,7 @@ const MyPageBoard = styled.div`
   min-height: 100vh;
   display: flex;
   justify-content: center;
-  background-color: #f9f9f9;
+  background-color: rgba(255, 255, 255, 1);
   // padding: 40px 0;
 `;
 
@@ -65,7 +65,7 @@ const BasicInfoSection = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  border: 1px solid yellow;
+
   padding-top: 120px;
 
   .basic-info-title {
@@ -145,15 +145,15 @@ const StyleSection = styled.div`
   flex: 1;
   background: #fff;
   border-radius: 8px;
-  padding: 24px;
-  border: 1px solid green;
+  padding: 26px;
+
   padding-top: 140px;
 
   h2 {
-    font-size: 20px;
+    font-size: 24px;
     font-weight: 600;
     color: #262626;
-    margin-bottom: 24px;
+    margin-bottom: 30px;
   }
 
   .style-grid {
@@ -215,8 +215,7 @@ const TabContainer = styled.div`
   position: relative;
   width: 100%;
   height: 100px;
-  margin: 0 auto 30px;
-  border: 1px solid red;
+
   flex-direction: column;
   gap: 8px;
 `;
@@ -276,7 +275,7 @@ const TabItem = styled.div`
 const ContentContainer = styled.div`
   padding: 10px;
   min-height: 300px;
-  border: 1px solid orange;
+
   width: 786px;
   height: 470px;
   display: grid;
@@ -293,7 +292,6 @@ const SelectContainer = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  border: 1px solid blue;
 `;
 
 const DetailContainer = styled.div`
@@ -303,6 +301,8 @@ const DetailContainer = styled.div`
   padding-left: 4px;
   display: flex;
   flex-direction: row;
+
+  margin-top: 10px;
 `;
 
 const StyleButton = styled.button`
@@ -370,7 +370,7 @@ const GridBox = styled.div`
     height: 150px;
     background-color: #e0e0e0;
     border-radius: 4px;
-    border: 1px solid red;
+
     display: flex;
     align-items: center;
     justify-content: center;
@@ -383,7 +383,7 @@ const GridBox = styled.div`
     left: 106px;
     width: 40px;
     height: 40px;
-    border: 1px solid blue;
+
     z-index: 1;
     display: flex;
     align-items: center;
