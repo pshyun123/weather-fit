@@ -11,7 +11,7 @@ const LoginContainer = styled.div`
 `;
 
 // 왼쪽 로그인 폼 영역
-const LoginFormSection = styled.div`
+export const LoginFormSection = styled.div`
   width: 470px;
   height: 760px;
   display: flex;
@@ -140,6 +140,16 @@ const LoginFormSection = styled.div`
       }
     }
   }
+
+  // .input-error-message {
+  //   color: #ff3b30;
+  //   font-size: 14px;
+  //   margin-top: 8px;
+  //   margin-bottom: 16px;
+  //   height: 20px;
+  //   text-align: left;
+  //   padding-left: 10px;
+  // }
 `;
 
 // 오른쪽 캐릭터 영역
@@ -235,5 +245,5 @@ const LoginPageBoard = styled.div`
   align-items: center;
 `;
 
-export { LoginFormSection, CharacterSection, LoginContainer, LoginPageBoard };
+export { CharacterSection, LoginContainer, LoginPageBoard };
 export default LoginComp;

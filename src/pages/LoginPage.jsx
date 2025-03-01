@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import LoginComp, {
   LoginFormSection,
@@ -20,6 +20,7 @@ const LoginPage = () => {
   const [emailMessage, setEmailMessage] = useState("");
   const [pwMessage, setPwMessage] = useState("");
   const [isButtonActive, setIsButtonActive] = useState(false);
+  const [saveId, setSaveId] = useState(false);
   const { setIsLoggedIn, setUserProfile } = useAuth();
 
   //useAuth의 기능은 로그인 상태 확인 및 프로필 정보 업데이트
@@ -32,6 +33,18 @@ const LoginPage = () => {
   //6. 프로필 정보 업데이트
 
   const navigate = useNavigate();
+
+  // 페이지 로드 시 저장된 이메일 불러오기
+  useEffect(() => {
+    const savedEmail = localStorage.getItem("savedEmail");
+    const isSaveId = localStorage.getItem("saveId") === "true";
+
+    if (savedEmail && isSaveId) {
+      setInputEmail(savedEmail);
+      setSaveId(true);
+      validateInputs(savedEmail, inputPw);
+    }
+  }, []);
 
   const onChangeEmail = (e) => {
     const value = e.target.value;
@@ -56,6 +69,15 @@ const LoginPage = () => {
       console.log("로그인 응답:", res.data);
 
       if (res.data.success) {
+        // 아이디 저장 체크박스가 선택된 경우 로컬 스토리지에 이메일 저장
+        if (saveId) {
+          localStorage.setItem("savedEmail", inputEmail);
+          localStorage.setItem("saveId", "true");
+        } else {
+          localStorage.removeItem("savedEmail");
+          localStorage.setItem("saveId", "false");
+        }
+
         setIsLoggedIn(true);
         setUserProfile(res.data); // 로그인 성공 시 프로필 정보 업데이트
         navigate("/");
@@ -65,9 +87,14 @@ const LoginPage = () => {
       }
     } catch (error) {
       console.error("로그인 실패:", error);
-      setEmailMessage("로그인 중 오류가 발생했습니다.");
-      setPwMessage("로그인 중 오류가 발생했습니다.");
+      setEmailMessage("이메일 또는 비밀번호가 일치하지 않습니다.");
+      setPwMessage("이메일 또는 비밀번호가 일치하지 않습니다.");
     }
+  };
+
+  // 체크박스 상태 변경 핸들러
+  const handleSaveIdChange = (e) => {
+    setSaveId(e.target.checked);
   };
 
   return (
@@ -88,7 +115,22 @@ const LoginPage = () => {
                   emailChangeEvt={onChangeEmail}
                   pwChangeEvt={onChangePw}
                   emailMsg={emailMessage}
+                  pwMsg={pwMessage}
                 />
+                <div
+                  className="input-error-message"
+                  style={{
+                    color: "#ff3b30",
+                    fontSize: "14px",
+                    marginTop: "8px",
+                    marginBottom: "16px",
+                    height: "20px",
+                    textAlign: "left",
+                    paddingLeft: "10px",
+                  }}
+                >
+                  {emailMessage || pwMessage || " "}
+                </div>
               </div>
 
               <div style={{ width: "420px", borderRadius: "10px" }}>
@@ -103,7 +145,12 @@ const LoginPage = () => {
 
               <div className="login-id-container">
                 <div className="login-id">
-                  <input type="checkbox" className="checkbox-input" />
+                  <input
+                    type="checkbox"
+                    className="checkbox-input"
+                    checked={saveId}
+                    onChange={handleSaveIdChange}
+                  />
                   <span className="checkbox-label">아이디 저장</span>
                 </div>
 
