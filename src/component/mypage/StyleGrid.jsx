@@ -13,10 +13,15 @@ import {
   PageArrow,
 } from "./MypageStyle.jsx";
 import likeIcon from "../../images/heart_button.png";
+import likeClickedIcon from "../../images/heart_click_button.png";
 import CoordinateApi from "../../api/CoordinateApi";
+import UserApi from "../../api/UserApi";
 import Common from "../../utils/Common";
 
 const StyleGrid = () => {
+  // 날씨별 데이터를 저장할 상태 추가
+  const [weatherStyles, setWeatherStyles] = useState([]);
+
   // 스타일별 데이터를 저장할 상태 추가
   const [minimalStyles, setMinimalStyles] = useState([]);
   const [modernStyles, setModernStyles] = useState([]);
@@ -25,42 +30,317 @@ const StyleGrid = () => {
   const [livelyStyles, setLivelyStyles] = useState([]);
   const [luxuryStyles, setLuxuryStyles] = useState([]);
 
-  // 컴포넌트 마운트 시 스타일 데이터 로드
-  useEffect(() => {
-    const fetchStyleData = async () => {
-      try {
-        console.log("스타일 데이터 로드 시작");
+  // 상황별 데이터를 저장할 상태 추가
+  const [situationStyles, setSituationStyles] = useState([]);
 
-        const minimal = await CoordinateApi.getMinimalPreferenceList();
-        console.log("미니멀 스타일 데이터:", minimal);
-        setMinimalStyles(minimal);
+  // 좋아요 상태를 저장할 상태 추가
+  const [likedItems, setLikedItems] = useState({});
 
-        const modern = await CoordinateApi.getModernPreferenceList();
-        console.log("모던 스타일 데이터:", modern);
-        setModernStyles(modern);
+  // 미니멀 스타일 좋아요 아이템만 표시하는 상태 추가
+  const [showOnlyMinimalLikes, setShowOnlyMinimalLikes] = useState(false);
 
-        const casual = await CoordinateApi.getCasualPreferenceList();
-        console.log("캐주얼 스타일 데이터:", casual);
-        setCasualStyles(casual);
+  // 데이터 로딩 상태 관리
+  const [isLoading, setIsLoading] = useState(false);
+  // 현재 로그인한 사용자 ID (실제 구현 시 로그인 상태에서 가져와야 함)
+  const [userId, setUserId] = useState(1); // 임시 사용자 ID
 
-        const street = await CoordinateApi.getStreetPreferenceList();
-        console.log("스트릿 스타일 데이터:", street);
-        setStreetStyles(street);
+  const [activeTab, setActiveTab] = useState(1); // 기본적으로 "스타일별" 탭 활성화
+  const [activeDetails, setActiveDetails] = useState([]);
+  const [selectedGridItem, setSelectedGridItem] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 15; // 5*3 그리드
 
-        const lively = await CoordinateApi.getLivelyPreferenceList();
-        console.log("러블리 스타일 데이터:", lively);
-        setLivelyStyles(lively);
+  // 날씨별 데이터 로드 함수
+  const fetchWeatherData = async () => {
+    try {
+      setIsLoading(true);
+      console.log("날씨별 데이터 로드 시작");
+      // 여기에 날씨별 API 호출 추가
+      // 예: const weatherData = await CoordinateApi.getWeatherStyleList();
+      // setWeatherStyles(weatherData);
 
-        const luxury = await CoordinateApi.getLuxuryPreferenceList();
-        console.log("럭셔리 스타일 데이터:", luxury);
-        setLuxuryStyles(luxury);
-      } catch (error) {
-        console.error("스타일 데이터 로드 실패:", error);
+      // 임시 데이터 (실제 API 연결 시 대체)
+      setTimeout(() => {
+        setWeatherStyles([
+          "맑은 날 스타일 1",
+          "맑은 날 스타일 2",
+          "비 오는 날 스타일 1",
+          "비 오는 날 스타일 2",
+          "눈 오는 날 스타일 1",
+          "눈 오는 날 스타일 2",
+        ]);
+        setIsLoading(false);
+      }, 500);
+    } catch (error) {
+      console.error("날씨별 데이터 로드 실패:", error);
+      setIsLoading(false);
+    }
+  };
+
+  // 스타일별 데이터 로드 함수
+  const fetchStyleData = async () => {
+    try {
+      setIsLoading(true);
+      console.log("스타일별 데이터 로드 시작");
+
+      // 선택된 스타일이 있으면 해당 스타일만 로드
+      if (activeDetails.length > 0) {
+        const selectedStyle = activeDetails[0].toLowerCase();
+        switch (selectedStyle) {
+          case "미니멀":
+            if (minimalStyles.length === 0) {
+              const minimal = await CoordinateApi.getMinimalPreferenceList();
+              console.log("미니멀 스타일 데이터:", minimal);
+              setMinimalStyles(minimal);
+
+              // 미니멀 스타일 데이터 로드 후 좋아요 목록도 함께 로드
+              if (minimal.length > 0) {
+                fetchMinimalLikes();
+              }
+            }
+            break;
+          case "모던":
+            if (modernStyles.length === 0) {
+              const modern = await CoordinateApi.getModernPreferenceList();
+              console.log("모던 스타일 데이터:", modern);
+              setModernStyles(modern);
+            }
+            break;
+          case "캐주얼":
+            if (casualStyles.length === 0) {
+              const casual = await CoordinateApi.getCasualPreferenceList();
+              console.log("캐주얼 스타일 데이터:", casual);
+              setCasualStyles(casual);
+            }
+            break;
+          case "스트릿":
+            if (streetStyles.length === 0) {
+              const street = await CoordinateApi.getStreetPreferenceList();
+              console.log("스트릿 스타일 데이터:", street);
+              setStreetStyles(street);
+            }
+            break;
+          case "러블리":
+            if (livelyStyles.length === 0) {
+              const lively = await CoordinateApi.getLivelyPreferenceList();
+              console.log("러블리 스타일 데이터:", lively);
+              setLivelyStyles(lively);
+            }
+            break;
+          case "럭셔리":
+            if (luxuryStyles.length === 0) {
+              const luxury = await CoordinateApi.getLuxuryPreferenceList();
+              console.log("럭셔리 스타일 데이터:", luxury);
+              setLuxuryStyles(luxury);
+            }
+            break;
+          default:
+            break;
+        }
+      } else {
+        // 기본적으로 미니멀 스타일 로드
+        if (minimalStyles.length === 0) {
+          const minimal = await CoordinateApi.getMinimalPreferenceList();
+          console.log("미니멀 스타일 데이터:", minimal);
+          setMinimalStyles(minimal);
+        }
       }
-    };
+      setIsLoading(false);
+    } catch (error) {
+      console.error("스타일별 데이터 로드 실패:", error);
+      setIsLoading(false);
+    }
+  };
 
-    fetchStyleData();
-  }, []);
+  // 상황별 데이터 로드 함수
+  const fetchSituationData = async () => {
+    try {
+      setIsLoading(true);
+      console.log("상황별 데이터 로드 시작");
+      // 여기에 상황별 API 호출 추가
+      // 예: const situationData = await CoordinateApi.getSituationStyleList();
+      // setSituationStyles(situationData);
+
+      // 임시 데이터 (실제 API 연결 시 대체)
+      setTimeout(() => {
+        setSituationStyles([
+          "데이트 룩 1",
+          "데이트 룩 2",
+          "출근 룩 1",
+          "출근 룩 2",
+          "여행 룩 1",
+          "여행 룩 2",
+        ]);
+        setIsLoading(false);
+      }, 500);
+    } catch (error) {
+      console.error("상황별 데이터 로드 실패:", error);
+      setIsLoading(false);
+    }
+  };
+
+  // 탭 변경 시 해당 탭의 데이터 로드
+  useEffect(() => {
+    setActiveDetails([]);
+    setCurrentPage(1);
+    setSelectedGridItem(null);
+    setShowOnlyMinimalLikes(false); // 탭 변경 시 필터 초기화
+
+    switch (activeTab) {
+      case 0: // 날씨별
+        fetchWeatherData();
+        break;
+      case 1: // 스타일별
+        fetchStyleData();
+        break;
+      case 2: // 상황별
+        fetchSituationData();
+        break;
+      default:
+        break;
+    }
+  }, [activeTab]);
+
+  // 스타일별 탭에서 세부 스타일 선택 시 해당 데이터 로드
+  useEffect(() => {
+    if (activeTab === 1 && activeDetails.length > 0) {
+      fetchStyleData();
+      setShowOnlyMinimalLikes(false); // 스타일 변경 시 필터 초기화
+    }
+  }, [activeDetails]);
+
+  // 사용자의 좋아요 목록 가져오기
+  const fetchUserLikes = async () => {
+    try {
+      // 로그인 상태가 아니면 실행하지 않음
+      if (!userId) return;
+
+      const userLikes = await UserApi.getUserLikes(userId);
+
+      // 좋아요 상태 초기화
+      if (userLikes && userLikes.length > 0) {
+        // 현재 표시된 아이템들과 사용자의 좋아요 목록을 비교하여 상태 설정
+        const likedItemsMap = {};
+
+        // 모든 카테고리의 아이템을 확인
+        const allItems = [
+          ...weatherStyles,
+          ...minimalStyles,
+          ...modernStyles,
+          ...casualStyles,
+          ...streetStyles,
+          ...livelyStyles,
+          ...luxuryStyles,
+          ...situationStyles,
+        ];
+
+        // 각 아이템에 대해 사용자가 좋아요를 눌렀는지 확인
+        allItems.forEach((item, index) => {
+          if (typeof item !== "string" && item.id) {
+            // userLikes 배열에 현재 아이템의 id가 있는지 확인
+            const isLiked = userLikes.some(
+              (like) => like.coordinateId === item.id
+            );
+            if (isLiked) {
+              likedItemsMap[index] = true;
+            }
+          }
+        });
+
+        setLikedItems(likedItemsMap);
+        console.log("사용자 좋아요 상태 초기화 완료:", likedItemsMap);
+      }
+    } catch (error) {
+      console.error("좋아요 목록 가져오기 실패:", error);
+    }
+  };
+
+  // 미니멀 스타일의 좋아요 목록 가져오기
+  const fetchMinimalLikes = async () => {
+    try {
+      // 로그인 상태가 아니면 실행하지 않음
+      if (!userId) return;
+
+      // 미니멀 스타일 좋아요 목록 가져오기
+      const minimalLikeIds = await UserApi.getMinimalLikes(userId);
+      console.log("미니멀 스타일 좋아요 ID 목록:", minimalLikeIds);
+
+      // 미니멀 스타일 좋아요 목록이 있으면 해당 데이터 로드
+      if (minimalLikeIds && minimalLikeIds.length > 0) {
+        // 미니멀 스타일 좋아요 아이템 로드 로직 추가
+        // 예: 미니멀 스타일 좋아요 아이템만 표시하는 기능
+
+        // 좋아요 상태 업데이트
+        const likedItemsMap = { ...likedItems };
+
+        // 미니멀 스타일 아이템 중 좋아요 표시
+        minimalStyles.forEach((item, index) => {
+          if (typeof item !== "string" && item.id) {
+            const isLiked = minimalLikeIds.includes(item.id);
+            if (isLiked) {
+              likedItemsMap[index] = true;
+            }
+          }
+        });
+
+        setLikedItems(likedItemsMap);
+        console.log("미니멀 스타일 좋아요 상태 업데이트 완료:", likedItemsMap);
+      }
+    } catch (error) {
+      console.error("미니멀 스타일 좋아요 목록 가져오기 실패:", error);
+    }
+  };
+
+  // 미니멀 스타일 데이터 로드 시 좋아요 목록도 함께 로드
+  useEffect(() => {
+    if (
+      activeTab === 1 &&
+      activeDetails.includes("미니멀") &&
+      minimalStyles.length > 0
+    ) {
+      fetchMinimalLikes();
+    }
+  }, [activeTab, activeDetails, minimalStyles]);
+
+  // 컴포넌트 마운트 시 좋아요 목록 가져오기
+  useEffect(() => {
+    fetchUserLikes();
+  }, [userId]);
+
+  // 데이터 로드 후 좋아요 상태 업데이트
+  useEffect(() => {
+    // 데이터가 로드되면 좋아요 상태 업데이트
+    if (
+      !isLoading &&
+      (weatherStyles.length > 0 ||
+        minimalStyles.length > 0 ||
+        modernStyles.length > 0 ||
+        casualStyles.length > 0 ||
+        streetStyles.length > 0 ||
+        livelyStyles.length > 0 ||
+        luxuryStyles.length > 0 ||
+        situationStyles.length > 0)
+    ) {
+      fetchUserLikes();
+    }
+  }, [
+    isLoading,
+    weatherStyles,
+    minimalStyles,
+    modernStyles,
+    casualStyles,
+    streetStyles,
+    livelyStyles,
+    luxuryStyles,
+    situationStyles,
+  ]);
+
+  // 미니멀 좋아요 필터 토글 함수
+  const toggleMinimalLikesFilter = () => {
+    setShowOnlyMinimalLikes(!showOnlyMinimalLikes);
+    // 필터 토글 시 페이지 초기화
+    setCurrentPage(1);
+  };
 
   // 각 카테고리에 대한 데이터 정의
   const styleCategories = [
@@ -68,43 +348,19 @@ const StyleGrid = () => {
       title: "날씨별",
       content: "날씨별 스타일 콘텐츠가 여기에 표시됩니다.",
       details: ["맑음", "비", "눈", "흐림", "바람", "더움"],
-      gridItems: [
-        "맑은 날 캐주얼",
-        "맑은 날 포멀",
-        "맑은 날 스포티",
-        "맑은 날 데일리",
-        "맑은 날 오피스",
-        "비 오는 날 캐주얼",
-        "비 오는 날 포멀",
-        "비 오는 날 스포티",
-        "비 오는 날 데일리",
-        "비 오는 날 오피스",
-        "눈 오는 날 캐주얼",
-        "눈 오는 날 포멀",
-        "눈 오는 날 스포티",
-        "눈 오는 날 데일리",
-        "눈 오는 날 오피스",
-        "흐린 날 캐주얼",
-        "흐린 날 포멀",
-        "흐린 날 스포티",
-        "흐린 날 데일리",
-        "흐린 날 오피스",
-        "바람 부는 날 캐주얼",
-        "바람 부는 날 포멀",
-        "바람 부는 날 스포티",
-        "바람 부는 날 데일리",
-        "바람 부는 날 오피스",
-      ],
+      getItems: () => {
+        return weatherStyles.length > 0
+          ? weatherStyles
+          : ["날씨별 스타일 로딩 중..."];
+      },
     },
     {
       title: "스타일별",
       content: "스타일별 콘텐츠가 여기에 표시됩니다.",
       details: ["미니멀", "모던", "캐주얼", "스트릿", "러블리", "럭셔리"],
-      gridItems:
-        minimalStyles.length > 0 ? minimalStyles : ["미니멀 스타일 로딩 중..."],
       getItems: (detail) => {
         console.log("선택된 스타일:", detail);
-        switch (detail.toLowerCase()) {
+        switch (detail?.toLowerCase()) {
           case "미니멀":
             return minimalStyles.length > 0
               ? minimalStyles
@@ -140,51 +396,13 @@ const StyleGrid = () => {
       title: "상황별",
       content: "상황별 콘텐츠가 여기에 표시됩니다.",
       details: ["데이트", "출근", "여행", "운동", "모임", "일상"],
-      gridItems: [
-        "데이트 룩 1",
-        "데이트 룩 2",
-        "데이트 룩 3",
-        "데이트 룩 4",
-        "데이트 룩 5",
-        "출근 룩 1",
-        "출근 룩 2",
-        "출근 룩 3",
-        "출근 룩 4",
-        "출근 룩 5",
-        "여행 룩 1",
-        "여행 룩 2",
-        "여행 룩 3",
-        "여행 룩 4",
-        "여행 룩 5",
-        "운동 룩 1",
-        "운동 룩 2",
-        "운동 룩 3",
-        "운동 룩 4",
-        "운동 룩 5",
-        "모임 룩 1",
-        "모임 룩 2",
-        "모임 룩 3",
-        "모임 룩 4",
-        "모임 룩 5",
-        "일상 룩 1",
-        "일상 룩 2",
-        "일상 룩 3",
-        "일상 룩 4",
-        "일상 룩 5",
-      ],
+      getItems: () => {
+        return situationStyles.length > 0
+          ? situationStyles
+          : ["상황별 스타일 로딩 중..."];
+      },
     },
   ];
-
-  const [activeTab, setActiveTab] = useState(1); // 기본적으로 "스타일별" 탭 활성화
-  const [activeDetails, setActiveDetails] = useState([]);
-  const [selectedGridItem, setSelectedGridItem] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 15; // 5*3 그리드
-
-  // 탭이나 필터가 변경되면 페이지를 1로 리셋
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [activeTab, activeDetails]);
 
   const toggleDetail = (detail) => {
     if (activeDetails.includes(detail)) {
@@ -206,19 +424,39 @@ const StyleGrid = () => {
 
     // 선택된 스타일이 없으면 기본 아이템 표시
     if (activeDetails.length === 0) {
-      return category.gridItems;
+      return category.getItems();
     }
 
-    // 스타일별 탭에서는 getItems 함수 사용
-    if (activeTab === 1 && category.getItems) {
-      return category.getItems(activeDetails[0]);
+    // 선택된 스타일에 따라 아이템 가져오기
+    let items = category.getItems(activeDetails[0]);
+
+    // 미니멀 스타일이고 좋아요 필터가 활성화된 경우
+    if (
+      activeTab === 1 &&
+      activeDetails.includes("미니멀") &&
+      showOnlyMinimalLikes
+    ) {
+      // 문자열 아이템(로딩 중 메시지)인 경우 필터링하지 않음
+      if (items.length > 0 && typeof items[0] === "string") {
+        return items;
+      }
+
+      // 미니멀 스타일 중 좋아요한 아이템만 필터링
+      return items.filter((item) => {
+        // 객체 아이템이고 ID가 있는 경우만 확인
+        if (typeof item !== "string" && item.id) {
+          // 해당 아이템의 인덱스 찾기
+          const index = minimalStyles.findIndex(
+            (style) => style.id === item.id
+          );
+          // 해당 인덱스의 아이템이 좋아요 상태인지 확인
+          return index !== -1 && likedItems[index];
+        }
+        return false;
+      });
     }
 
-    // 다른 탭에서는 기존 필터링 로직 사용
-    const selectedStyle = activeDetails[0].toLowerCase();
-    return category.gridItems.filter((item) =>
-      item.toLowerCase().includes(selectedStyle)
-    );
+    return items;
   };
 
   // 현재 페이지에 표시할 아이템 가져오기
@@ -283,7 +521,7 @@ const StyleGrid = () => {
       buttons.push(
         <PageButton
           key={i}
-          active={i === currentPage}
+          $active={i === currentPage}
           onClick={() => handlePageChange(i)}
         >
           {i}
@@ -303,6 +541,52 @@ const StyleGrid = () => {
     );
 
     return buttons;
+  };
+
+  // 좋아요 토글 함수
+  const toggleLike = async (itemId, e) => {
+    e.stopPropagation(); // 그리드 아이템 클릭 이벤트 전파 방지
+
+    try {
+      const item = getCurrentPageItems()[itemId];
+
+      // 아이템이 문자열인 경우(로딩 중이거나 임시 데이터) API 호출 생략
+      if (typeof item === "string") {
+        console.log("문자열 아이템은 좋아요 기능을 지원하지 않습니다.");
+        return;
+      }
+
+      const coordinateId = item.id; // 착장 ID
+
+      if (!coordinateId) {
+        console.error("착장 ID가 없습니다:", item);
+        return;
+      }
+
+      // 좋아요 상태 토글
+      const newLikedState = !likedItems[itemId];
+
+      // 좋아요 상태에 따라 API 호출
+      if (newLikedState) {
+        // 좋아요 추가
+        await UserApi.addLike(userId, coordinateId);
+        console.log(`아이템 ${coordinateId} 좋아요 추가 성공`);
+      } else {
+        // 좋아요 삭제
+        await UserApi.deleteLike(userId, coordinateId);
+        console.log(`아이템 ${coordinateId} 좋아요 삭제 성공`);
+      }
+
+      // 상태 업데이트
+      setLikedItems((prev) => ({
+        ...prev,
+        [itemId]: newLikedState,
+      }));
+    } catch (error) {
+      console.error("좋아요 처리 중 오류 발생:", error);
+      // 오류 발생 시 사용자에게 알림 표시 (선택 사항)
+      alert("좋아요 처리 중 오류가 발생했습니다.");
+    }
   };
 
   return (
@@ -332,6 +616,21 @@ const StyleGrid = () => {
               {detail}
             </StyleButton>
           ))}
+
+          {/* 미니멀 스타일 선택 시 좋아요 필터 버튼 표시 */}
+          {activeTab === 1 && activeDetails.includes("미니멀") && (
+            <StyleButton
+              $active={showOnlyMinimalLikes}
+              onClick={toggleMinimalLikesFilter}
+              style={{
+                marginLeft: "20px",
+                backgroundColor: showOnlyMinimalLikes ? "#ff3b30" : "#fff",
+                borderColor: "#ff3b30",
+              }}
+            >
+              ❤️ 좋아요 필터
+            </StyleButton>
+          )}
         </DetailContainer>
       </TabContainer>
 
@@ -389,40 +688,23 @@ const StyleGrid = () => {
                     </div>
                   )}
                 </div>
-                <div className="grid-info" style={{ padding: "8px" }}>
-                  <div
-                    className="grid-preference"
-                    style={{
-                      fontSize: "14px",
-                      marginBottom: "4px",
-                      whiteSpace: "nowrap",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                    }}
-                  >
-                    {item.preference || "스타일 정보 없음"}
-                  </div>
-                </div>
               </>
             )}
             <div
               className="grid-like-icon"
               style={{
                 position: "absolute",
-                top: "8px",
-                right: "8px",
+                top: "120px",
+                right: "4px",
                 zIndex: 2,
-                backgroundColor: "rgba(255, 255, 255, 0.7)",
+                // backgroundColor: "rgba(255, 255, 255, 0.7)",
                 borderRadius: "50%",
                 padding: "4px",
               }}
-              onClick={(e) => {
-                e.stopPropagation(); // 그리드 아이템 클릭 이벤트 전파 방지
-                // 좋아요 기능 구현 (향후 추가)
-              }}
+              onClick={(e) => toggleLike(index, e)}
             >
               <img
-                src={likeIcon}
+                src={likedItems[index] ? likeClickedIcon : likeIcon}
                 alt="like"
                 style={{ width: "16px", height: "16px" }}
               />

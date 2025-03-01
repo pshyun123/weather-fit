@@ -228,8 +228,9 @@ const TabItem = styled.div`
   font-size: 20px;
   cursor: pointer;
   position: relative;
-  color: ${(props) => (props.active ? "rgba(0,0,0,1)" : "rgba(201,201,201,1)")};
-  font-weight: ${(props) => (props.active ? "500" : "500")};
+  color: ${(props) =>
+    props.$active ? "rgba(0,0,0,1)" : "rgba(201,201,201,1)"};
+  font-weight: ${(props) => (props.$active ? "500" : "500")};
 
   text-align: center;
   transition: all 0.3s ease;
@@ -268,7 +269,7 @@ const TabItem = styled.div`
 
   &:hover {
     color: ${(props) =>
-      props.active ? "rgba(0,0,0,1)" : "rgba(201,201,201,1)"};
+      props.$active ? "rgba(0,0,0,1)" : "rgba(201,201,201,1)"};
   }
 `;
 
@@ -317,14 +318,14 @@ const StyleButton = styled.button`
   border-radius: 30px;
   border: 1px solid rgba(201, 201, 201, 1);
   background-color: ${(props) =>
-    props.active ? "rgba(78,78,78,1)" : "rgba(255, 255, 255, 1)"};
-  color: ${(props) => (props.active ? "#FFFFFF" : "rgba(93, 94, 98, 1)")};
+    props.$active ? "rgba(78,78,78,1)" : "rgba(255, 255, 255, 1)"};
+  color: ${(props) => (props.$active ? "#FFFFFF" : "rgba(93, 94, 98, 1)")};
   font-size: 14px;
 
   &:hover {
     background-color: ${(props) =>
-      props.active ? "rgba(78,78,78,1)" : "#E0E0E0"};
-    color: ${(props) => (props.active ? "#FFFFFF" : "rgba(93, 94, 98, 1)")};
+      props.$active ? "rgba(78,78,78,1)" : "#E0E0E0"};
+    color: ${(props) => (props.$active ? "#FFFFFF" : "rgba(93, 94, 98, 1)")};
   }
 `;
 
@@ -377,18 +378,18 @@ const GridBox = styled.div`
     font-size: 24px;
     color: #999;
   }
-  .grid-like-icon {
-    position: absolute;
-    top: 106px;
-    left: 106px;
-    width: 40px;
-    height: 40px;
+  // .grid-like-icon {
+  //   position: absolute;
+  //   top: 106px;
+  //   left: 106px;
+  //   width: 40px;
+  //   height: 40px;
 
-    z-index: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+  //   z-index: 1;
+  //   display: flex;
+  //   align-items: center;
+  //   justify-content: center;
+  // }
 `;
 
 const PaginationContainer = styled.div`
@@ -403,9 +404,9 @@ const PageButton = styled.button`
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  border: 1px solid ${(props) => (props.active ? "#4981f8" : "#ddd")};
-  background-color: ${(props) => (props.active ? "#4981f8" : "#fff")};
-  color: ${(props) => (props.active ? "#fff" : "#333")};
+  border: 1px solid ${(props) => (props.$active ? "#4981f8" : "#ddd")};
+  background-color: ${(props) => (props.$active ? "#4981f8" : "#fff")};
+  color: ${(props) => (props.$active ? "#fff" : "#333")};
   font-size: 14px;
   font-weight: 500;
   display: flex;
@@ -415,7 +416,7 @@ const PageButton = styled.button`
   transition: all 0.2s ease;
 
   &:hover {
-    background-color: ${(props) => (props.active ? "#4981f8" : "#f0f0f0")};
+    background-color: ${(props) => (props.$active ? "#4981f8" : "#f0f0f0")};
   }
 
   &:disabled {
