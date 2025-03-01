@@ -4,7 +4,7 @@ const JoinComp = styled.section`
   display: grid;
   grid-template-columns: 1fr 1fr;
   width: 100%;
-  margin: 70px;
+  margin: 80px;
 
   .container {
     width: 700px;
@@ -20,7 +20,8 @@ const JoinComp = styled.section`
       font-size: 2em;
       font-weight: 600;
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 50px;
+      color: #5d5e62;
     }
 
     .inputArea {
@@ -32,20 +33,24 @@ const JoinComp = styled.section`
     }
 
     .select-age {
-      margin-bottom: 20px;
+      margin-bottom: 15px;
       padding: 20px;
-      border: 1px solid #ccc;
+      border: 0.5px solid #c9c9c9;
       border-radius: 5px;
 
       h3 {
         text-align: center;
-        font-size: 1.2em;
+        font-size: 20px;
         font-weight: 600;
         margin-top: 10px;
+        color: #5d5e62;
       }
 
       p {
-        margin-bottom: 30px;
+        margin: 25px 0;
+        font-size: 16px;
+        text-align: center;
+        color: #a0a0a0;
       }
     }
 
@@ -53,7 +58,7 @@ const JoinComp = styled.section`
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 10px;
-      margin-top: 10px;
+      margin-top: 50px;
     }
 
     .group-button {
@@ -63,6 +68,8 @@ const JoinComp = styled.section`
       background-color: white;
       cursor: pointer;
       transition: all 0.3s ease;
+      font-size: 16px;
+      color: #5d5e62;
     }
 
     .group-button:hover {
@@ -74,17 +81,18 @@ const JoinComp = styled.section`
     }
 
     // 완료 버튼
-    .submitButton {
+    .submit-button {
       width: 419px;
       height: 65px;
       cursor: pointer;
-      background-color: #6a6d73;
+      background-color: ${(props) =>
+        props.isFormValid ? "#6a6d73" : "#406aa0"};
       color: white;
       padding: 10px 15px;
       border: none;
       border-radius: 5px;
       font-size: 1.1em;
-      margin-left: 120px;
+      margin-left: 20px;
     }
   }
 
@@ -92,7 +100,8 @@ const JoinComp = styled.section`
     width: 460px;
     height: 65px;
     cursor: pointer;
-    background-color: #6a6d73;
+    background-color: ${(props) =>
+      props.isButtonActive ? "#406aa0" : "#6a6d73"};
     color: white;
     padding: 10px 15px;
     border: none;

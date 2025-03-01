@@ -4,7 +4,7 @@ import { styled } from "styled-components";
 // 버튼이 있는 입력창을 위한 스타일 (이메일, 인증번호용)
 const InputButtonComp = styled.div`
   width: 100%;
-  margin-bottom: 30px;
+  margin-bottom: 40px;
   position: relative;
   .inputWrap {
     width: 100%;
@@ -13,11 +13,12 @@ const InputButtonComp = styled.div`
     input {
       width: 70%; // 버튼 공간 확보
       font-size: 1em;
-      padding: 0 10px;
+      padding: 20px;
       border: 1px solid #ccc;
-      border-radius: 10px;
+      border-radius: 10px 0 0 10px;
     }
   }
+
   .msg {
     position: absolute;
     padding-top: 5px;
@@ -82,10 +83,11 @@ export const InputButton = (props) => {
           children={btnChild}
           active={active}
           width="30%"
-          height={height || "48px"}
-          fontSize="14px"
+          height={height || "60px"}
+          fontSize="16px"
           $color={active ? "#5D5E62" : "#D9D9D9"}
           $front={active ? "#737F8F" : "#D9D9D9"}
+          $borderRadius="0 10px 10px 0"
         />
       </div>
       <div className={`msg ${msgType ? "" : "fail"}`}>{msg}</div>
@@ -96,12 +98,11 @@ export const InputButton = (props) => {
 // 일반 입력창을 위한 스타일 (비밀번호, 이름용)
 const InputComp = styled.div`
   width: 100%;
-  margin-bottom: 30px;
+  margin-bottom: 40px;
   position: relative;
   input {
     width: 100%; // 버튼이 없으므로 전체 너비 사용
-    height: 48px;
-    padding: 0 10px;
+    padding: 20px;
     border: 1px solid #ccc;
     outline: none;
     border-radius: 10px;

@@ -13,7 +13,6 @@ const Join = () => {
   const [inputPw, setInputPw] = useState(""); // 비밀번호
   const [inputPw2, setInputPw2] = useState(""); // 비밀번호 확인
   const [inputName, setInputName] = useState(""); // 이름
-  const [profileImage, setProfileImage] = useState(""); // 프로필 이미지
   const [ageGroup, setAgeGroup] = useState(""); // 나이대 고르기
   const [preferences, setPreferences] = useState([]); // 취향 선택
 
@@ -23,7 +22,6 @@ const Join = () => {
   const [pwMessage, setPwMessage] = useState("");
   const [pw2Message, setPw2Message] = useState("");
   const [nameMessage, setNameMessage] = useState("");
-  const [profileImageMessage, setProfileImageMessage] = useState("");
   const [ageGroupMessage, setAgeGroupMessage] = useState("");
 
   // 입력이 모두 되어있으면 버튼 눌리도록 설정
@@ -32,7 +30,6 @@ const Join = () => {
   const [isPw, setIsPw] = useState(false);
   const [isPw2, setIsPw2] = useState(false);
   const [isName, setIsName] = useState(false);
-  const [isProfileImage, setIsProfileImage] = useState(false);
   const [isAgeGroup, setIsAgeGroup] = useState(false);
 
   // 현재 화면 단계 (1: 첫 번째 화면, 2: 두 번째 화면)
@@ -66,21 +63,6 @@ const Join = () => {
 
     checkFormValidity();
   }, [isEmail, isEmailConf, isPw, isPw2, isName, ageGroup, preferences, step]);
-  // useEffect(() => {
-  //   const isFirstStepValid = isEmail && isEmailConf && isPw && isPw2 && isName;
-  //   setIsButtonActive(
-  //     step === 1 ? isFirstStepValid : isAgeGroup && preferences.length > 0
-  //   );
-  // }, [
-  //   isEmail,
-  //   isEmailConf,
-  //   isPw,
-  //   isPw2,
-  //   isName,
-  //   isAgeGroup,
-  //   preferences,
-  //   step,
-  // ]);
 
   const handleNextStep = () => {
     if (isButtonActive && step === 1) {
@@ -117,24 +99,6 @@ const Join = () => {
       }
     });
   };
-
-  // 모든 입력이 유효한지 확인하는 함수
-  // const isAllInputValid = useCallback(() => {
-  //   if (step === 1) {
-  //     return inputEmail && isEmailConf && inputPw && isPw2 && inputName;
-  //   } else {
-  //     return ageGroup && preferences;
-  //   }
-  // }, [
-  //   step,
-  //   inputEmail,
-  //   isEmailConf,
-  //   inputPw,
-  //   isPw2,
-  //   inputName,
-  //   ageGroup,
-  //   preferences,
-  // ]);
 
   // 이메일, 비밀번호 정규식
   const regexList = {
@@ -289,17 +253,6 @@ const Join = () => {
     } else {
       setNameMessage("사용 가능한 이름입니다.");
       setIsName(true);
-    }
-  };
-
-  const onChangeProfileImage = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setProfileImage(file);
-      setIsProfileImage(true);
-    } else {
-      setProfileImageMessage("이미지를 선택하세요.");
-      setIsProfileImage(false);
     }
   };
 
@@ -477,7 +430,6 @@ const Join = () => {
             </>
           ) : (
             <>
-              <h3>취향 선택</h3>
               <div className="select-age">
                 <h3>취향</h3>
                 <p>최대 2개의 스타일을 고를 수 있어요.</p>
@@ -498,7 +450,6 @@ const Join = () => {
                 </div>
               </div>
 
-              <h3>연령대 선택</h3>
               <div className="select-age">
                 <h3>연령대</h3>
                 <p>연령대에 맞춘 스타일을 추천해드려요 :)</p>
@@ -520,8 +471,8 @@ const Join = () => {
                 <button
                   onClick={onSubmit}
                   disabled={!isFormValid}
-                  className={isFormValid ? "active" : ""}>
-                  완료하기
+                  className={`submit-button ${isFormValid ? "active" : ""}`}>
+                  회원가입 완료
                 </button>
               )}
             </>

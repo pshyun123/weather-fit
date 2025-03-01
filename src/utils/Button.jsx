@@ -10,7 +10,7 @@ const ButtonComp = styled.button`
     font-weight: 600;
     font-size: ${(props) => props.fontSize || "1em"};
     border: none;
-    border-radius: 5px;
+    border-radius: ${(props) => props.$borderRadius || "5px"};
     transition: 0.4s ease-in;
     // 단순화된 배경색 로직: props로 전달된 색상 그대로 사용
     background-color: ${(props) => props.$front};
