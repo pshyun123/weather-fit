@@ -9,7 +9,6 @@ const FooterContainer = styled.div`
   flex-direction: column;
 
   .inner-container {
-    width: 1200px;
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
@@ -87,7 +86,6 @@ const FooterBottomContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 1200px;
   margin: 0 auto;
 
   .bottom-row {
@@ -98,7 +96,6 @@ const FooterBottomContainer = styled.div`
     flex-direction: column;
 
     .bottom-line {
-      width: 1200px;
       height: 1px;
       background-color: #999;
     }

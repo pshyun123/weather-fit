@@ -1,6 +1,10 @@
-import React from "react";
+import MainBanner from "../component/main/WeatherMain";
 
 const MainPage = () => {
-  return <></>;
+  return (
+    <>
+      <MainBanner />
+    </>
+  );
 };
 export default MainPage;

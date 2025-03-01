@@ -4,7 +4,7 @@ import reset from "styled-reset";
 const GlobalStyle = createGlobalStyle`
   ${reset}
   :root {
-   
+  
   }
 
   * {
@@ -14,22 +14,34 @@ const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    margin: 0;
-    padding: 0;
+    background-color: #fff;
+  }
+  html, body, div, span, applet, object, iframe,
+  h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+  a, abbr, acronym, address, big, cite, code,
+  del, dfn, em, img, ins, kbd, q, s, samp,
+  small, strike, strong, sub, sup, tt, var,
+  b, u, i, center,
+  dl, dt, dd, ol, ul, li,
+  fieldset, form, label, legend,
+  table, caption, tbody, tfoot, thead, tr, th, td,
+  article, aside, canvas, details, embed,
+  figure, figcaption, footer, header, hgroup,
+  menu, nav, output, ruby, section, summary,
+  time, mark, audio, video{
     font-family: 'Noto Sans KR', sans-serif;
-    overflow-x: hidden;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    color: #333;
   }
 
+
   #root {
-    width: 1920px;
+    /* width: 1920px; */
+    /* width: 100%;
+    max-width: 1920px;
     height: 1440px;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: center; */
   }
 
   html, body, div, span, applet, object, iframe,
@@ -76,9 +88,10 @@ const GlobalStyle = createGlobalStyle`
   main {
   }
   .container {
-    max-width: 1920px;
+    max-width: 1200px;
+    width: 100%;
     margin: 0 auto;
-    @media only screen and (max-width:1920px){
+    @media only screen and (max-width:1200px){
       padding: 0 20px;
     }
   }
