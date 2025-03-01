@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import userIcon from "../../images/header_person.png";
-import HeaderContainer from "./HeaderStyle";
 import { useNavigate } from "react-router-dom";
 import UserApi from "../../api/UserApi";
 import Common from "../../utils/Common";
 import { useAuth } from "../../context/AuthContext";
 import logoColor from "../../images/logo_color.png";
+import HeaderContainer from "./HeaderStyle";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -51,97 +51,56 @@ const Header = () => {
       return userIcon;
     }
 
-    // Base64 이미지인 경우 그대로 사용
     if (userProfile.profileImage.startsWith("data:image")) {
       return userProfile.profileImage;
     }
 
-    // 상대 경로인 경우 서버 URL과 결합
     if (userProfile.profileImage.startsWith("/")) {
       return `${Common.WWEATHERFIT}${userProfile.profileImage}`;
     }
 
-    // 그 외의 경우 (파일명만 있는 경우 등) 서버 업로드 경로와 결합
     return `${Common.WWEATHERFIT}/uploads/${userProfile.profileImage}`;
   };
 
   return (
-    <header
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        padding: "10px 20px",
-        backgroundColor: "#fff",
-        color: "#fff",
-        height: "60px",
-        width: "100%",
-      }}
-    >
-      <HeaderContainer>
-        <div
-          className="logo"
-          onClick={handleLogoClick}
-          style={{ cursor: "pointer" }}
-        >
-          <img
-            src={logoColor}
-            alt="logoColor"
-            style={{ width: "100px", height: "auto" }}
-          />
-        </div>
+    <HeaderContainer>
+      <div className="logo" onClick={handleLogoClick}>
+        <img src={logoColor} alt="logoColor" />
+      </div>
 
-        <div
-          className="user-icon"
-          onClick={handleUserIconClick}
-          style={{ cursor: "pointer" }}
-        >
-          <span>
-            {isLoggedIn ? (
-              <img
-                src={getProfileImageSrc()}
-                alt="프로필"
-                className="profile-image"
-                style={{
-                  width: "40px",
-                  height: "40px",
-                  borderRadius: "50%",
-                  objectFit: "cover",
-                }}
-                onError={(e) => {
-                  console.error("이미지 로드 실패:", userProfile?.profileImage);
-                  e.target.src = userIcon;
-                }}
-              />
-            ) : (
-              <img
-                src={userIcon}
-                alt="userstate"
-                style={{
-                  width: "40px",
-                  height: "40px",
-                }}
-              />
-            )}
-          </span>
-          {showUserOptions && (
-            <div className={`options ${showUserOptions ? "show" : ""}`}>
-              {isLoggedIn ? (
-                <>
-                  <div onClick={() => navigate("/mypage")}>마이페이지</div>
-                  <div onClick={handleLogout}>로그아웃</div>
-                </>
-              ) : (
-                <>
-                  <div onClick={() => navigate("/login")}>로그인</div>
-                  <div onClick={() => navigate("/join")}>회원가입</div>
-                </>
-              )}
-            </div>
+      <div className="user-icon" onClick={handleUserIconClick}>
+        <span>
+          {isLoggedIn ? (
+            <img
+              src={getProfileImageSrc()}
+              alt="프로필"
+              className="profile-image"
+              onError={(e) => {
+                console.error("이미지 로드 실패:", userProfile?.profileImage);
+                e.target.src = userIcon;
+              }}
+            />
+          ) : (
+            <img src={userIcon} alt="userstate" className="default-user" />
           )}
-        </div>
-      </HeaderContainer>
-    </header>
+        </span>
+        {showUserOptions && (
+          <div className={`options ${showUserOptions ? "show" : ""}`}>
+            {isLoggedIn ? (
+              <>
+                <div onClick={() => navigate("/mypage")}>마이페이지</div>
+                <div onClick={handleLogout}>로그아웃</div>
+              </>
+            ) : (
+              <>
+                <div onClick={() => navigate("/login")}>로그인</div>
+                <div onClick={() => navigate("/join")}>회원가입</div>
+              </>
+            )}
+          </div>
+        )}
+      </div>
+    </HeaderContainer>
   );
 };
 

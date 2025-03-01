@@ -1,49 +1,50 @@
 import { styled } from "styled-components";
 
-const HeaderContainer = styled.div`
+const HeaderContainer = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
   width: 1200px;
   margin: 0 auto;
-
-  color: #fff;
-  height: 80px;
+  background-color: #fff;
+  height: 60px;
 
   .logo {
-    font-size: 40px;
-    font-weight: 400;
-    color: #333333;
-    font-family: "MedulaOne-Regular";
+    cursor: pointer;
+  }
+
+  .logo img {
+    width: 90px;
+    height: auto;
   }
 
   .user-icon {
     width: 40px;
     height: 40px;
-    position: relative;
     display: flex;
     justify-content: center;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+  }
 
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 50%;
-    }
+  .user-icon img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
 
-    .profile-image {
-      border: 1px solid #e1e1e1;
-      min-width: 40px;
-      min-height: 40px;
-    }
+  .default-user {
+    width: 30px;
+    height: 30px;
   }
 
   .options {
     position: absolute;
     top: 100%;
-    transform: translateX(50%);
-    right: 50%;
+    right: 0;
     background-color: #fff;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
@@ -55,23 +56,23 @@ const HeaderContainer = styled.div`
     z-index: 1000;
     display: flex;
     flex-direction: column;
+  }
 
-    div {
-      padding: 8px 16px;
-      color: #333;
-      cursor: pointer;
-      white-space: nowrap;
-      width: 100%;
+  .options div {
+    padding: 8px 16px;
+    color: #333;
+    cursor: pointer;
+    white-space: nowrap;
+    width: 100%;
+  }
 
-      &:hover {
-        background-color: #f5f5f5;
-      }
-    }
+  .options div:hover {
+    background-color: #f5f5f5;
   }
 
   .options.show {
     opacity: 1;
-    transform: translate(50%, 5px);
+    transform: translateY(5px);
   }
 `;
 
