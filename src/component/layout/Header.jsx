@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import UserApi from "../../api/UserApi";
 import Common from "../../utils/Common";
 import { useAuth } from "../../context/AuthContext";
+import logoColor from "../../images/logo_color.png";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -73,7 +74,7 @@ const Header = () => {
         padding: "10px 20px",
         backgroundColor: "#fff",
         color: "#fff",
-        height: "80px",
+        height: "60px",
         width: "100%",
       }}
     >
@@ -83,7 +84,11 @@ const Header = () => {
           onClick={handleLogoClick}
           style={{ cursor: "pointer" }}
         >
-          WEATHER FIT
+          <img
+            src={logoColor}
+            alt="logoColor"
+            style={{ width: "100px", height: "auto" }}
+          />
         </div>
 
         <div

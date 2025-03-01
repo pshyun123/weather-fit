@@ -13,7 +13,7 @@ import facebookIcon from "../../images/facebook-icon.png";
 const Footer = () => {
   return (
     <FooterContainer>
-      <div className="inner-container">
+      <div className="container">
         <FooterLeftContainer>
           <div className="footer-content">
             <div className="customer-service">고객센터</div>
@@ -44,7 +44,7 @@ const Footer = () => {
         </FooterRightContainer>
       </div>
       <FooterBottomContainer>
-        <div className="bottom-row">
+        <div className="container">
           <div className="bottom-line"></div>
           <div className="bottom-row-content">
             <div className="links">
@@ -52,7 +52,6 @@ const Footer = () => {
               <div className="link-divider">|</div>
               <Link to="/terms">개인정보처리방침</Link>
             </div>
-
             <div className="copyright">
               © 2025 WeatherFit. All rights reserved.
             </div>

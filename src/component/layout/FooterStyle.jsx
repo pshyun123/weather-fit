@@ -2,14 +2,13 @@ import { styled } from "styled-components";
 
 const FooterContainer = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   background-color: #333333;
   width: 100%;
   padding: 40px 0;
   flex-direction: column;
 
-  .inner-container {
-    margin: 0 auto;
+  .container {
     display: flex;
     justify-content: space-between;
   }
@@ -17,15 +16,11 @@ const FooterContainer = styled.div`
 
 const FooterLeftContainer = styled.footer`
   width: 50%;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  position: relative;
 
   .footer-content {
-    display: flex;
-    flex-direction: column;
+    line-height: 1.6;
     gap: 15px;
+    margin-bottom: 40px;
   }
 
   .customer-service {
@@ -58,14 +53,6 @@ const FooterLeftContainer = styled.footer`
 `;
 
 const FooterRightContainer = styled.footer`
-  position: relative;
-
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 20px;
-  width: 50%;
-
   .social-icons {
     display: flex;
     gap: 15px;
@@ -75,57 +62,31 @@ const FooterRightContainer = styled.footer`
       cursor: pointer;
     }
   }
-
-  .copyright {
-    color: #999;
-    font-size: 14px;
-  }
 `;
 
 const FooterBottomContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 0 auto;
-
-  .bottom-row {
+  .container {
     display: flex;
-    gap: 20px;
-    margin-top: 10px;
-    position: relative;
     flex-direction: column;
+    align-items: center;
+    gap: 10px;
 
     .bottom-line {
-      height: 1px;
-      background-color: #999;
+      width: 100%;
+      border-bottom: 1px solid #777777;
     }
-
     .bottom-row-content {
       display: flex;
-      gap: 20px;
-      position: relative;
-      align-items: center;
       justify-content: space-between;
-      flex-direction: row;
+      align-items: center;
+      width: 100%;
     }
-
     .links {
+      color: #999;
       display: flex;
       gap: 10px;
-      a {
-        color: #999;
-        text-decoration: none;
-        font-size: 14px;
-        &:hover {
-          text-decoration: underline;
-        }
-      }
-      .link-divider {
-        color: #999;
-        font-size: 14px;
-      }
+      font-size: 14px;
     }
-
     .copyright {
       color: #999;
       font-size: 14px;
