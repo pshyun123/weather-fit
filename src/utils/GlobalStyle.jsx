@@ -25,7 +25,8 @@ const GlobalStyle = createGlobalStyle`
   }
 
   #root {
-    width: 100%;
+    width: 1920px;
+    height: 1440px;
     display: flex;
     flex-direction: column;
     align-items: center;

@@ -1,8 +1,14 @@
 import axios from "axios";
 import Common from "../utils/Common";
 
-// API 설정
-const axiosInstance = axios.create({
+// 기본 API 설정
+// const axiosInstance = axios.create({
+//   baseURL: Common.WWEATHERFIT,
+//   withCredentials: true,
+// });
+
+// JSON 요청을 위한 인스턴스
+const jsonInstance = axios.create({
   baseURL: Common.WWEATHERFIT,
   withCredentials: true,
   headers: {
@@ -19,7 +25,7 @@ const UserApi = {
       type: type,
       data: data,
     };
-    return await axiosInstance.post("/auth/isunique", dataMap);
+    return await jsonInstance.post("/auth/isunique", dataMap);
   },
 
   // // 이미지가 있는 회원가입
@@ -38,11 +44,7 @@ const UserApi = {
     // 요청 전 데이터 구조 확인을 위한 로그 추가
     console.log("회원가입 요청 데이터:", userData);
 
-    return await axiosInstance.post("/auth/join", userData, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    return await jsonInstance.post("/auth/join", userData);
   },
 
   // joinUser: async (email, password, name, profileImage, ageGroup) => {
@@ -60,19 +62,19 @@ const UserApi = {
   // 이메일 인증
   emailAuth: async (email) => {
     console.log("이메일 인증 진입 : " + email);
-    return await axiosInstance.post("/auth/email/verify", { email });
+    return await jsonInstance.post("/auth/email/verify", { email });
   },
 
   // 이메일 인증 코드 확인
   emailAuthCheck: async (email, code) => {
     console.log("인증번호 확인 요청 데이터:", { email, code });
-    return await axiosInstance.post("/auth/email/check", { email, code });
+    return await jsonInstance.post("/auth/email/check", { email, code });
   },
 
   // 로그인 상태 확인
   checkLoginStatus: async () => {
     try {
-      const response = await axiosInstance.get("/auth/login/check");
+      const response = await jsonInstance.get("/auth/login/check");
       console.log("로그인 체크 요청 전 데이터:", response);
 
       // 응답 데이터 구조 확인을 위한 로깅 추가
@@ -80,8 +82,9 @@ const UserApi = {
         success: response.data.success,
         name: response.data.name,
         email: response.data.email,
-        // profileImage: response.data.profileImage,
+        profileImage: response.data.profileImage,
         ageGroup: response.data.ageGroup,
+        preferences: response.data.preferences,
       });
 
       return response;
@@ -94,10 +97,141 @@ const UserApi = {
   // 로그아웃
   logout: async () => {
     try {
-      const response = await axiosInstance.post("/auth/logout");
+      const response = await jsonInstance.post("/auth/logout");
       return response;
     } catch (error) {
       console.error("로그아웃 실패:", error);
+      throw error;
+    }
+  },
+
+  // 프로필 이미지 업데이트 (JSON 방식)
+  updateProfileImage: async (userData) => {
+    console.log("프로필 이미지 업데이트 요청 시작 (JSON 방식)");
+    // 이미지 데이터가 너무 길어 로그가 복잡해지지 않도록 이미지 데이터는 로깅에서 생략
+    console.log("요청 데이터:", {
+      ...userData,
+      profileImage: userData.profileImage ? "(Base64 이미지 데이터)" : null,
+    });
+
+    try {
+      // JSON 형식으로 프로필 이미지 데이터 업데이트
+      const response = await jsonInstance.post(
+        "/member/update/profileImage",
+        userData
+      );
+      console.log("프로필 이미지 업데이트 응답:", {
+        ...response.data,
+        profileImage: response.data?.profileImage ? "(이미지 데이터)" : null,
+      });
+      return response.data;
+    } catch (error) {
+      if (error.response) {
+        console.error("서버 응답 오류:", {
+          status: error.response.status,
+          statusText: error.response.statusText,
+          data: error.response.data,
+        });
+      } else {
+        console.error("요청 오류:", error.message);
+      }
+      throw error;
+    }
+  },
+
+  // 프로필 취향 업데이트
+  updateProfileTaste: async (userData) => {
+    console.log("프로필 취향 업데이트 요청 시작 (JSON 방식)");
+    return await jsonInstance.post("/member/update/preferences", userData);
+  },
+
+  // 프로필 연령대 업데이트
+  updateProfileAgegroup: async (userData) => {
+    console.log("프로필 연령대 업데이트 요청 시작 (JSON 방식)");
+    console.log("요청 데이터:", userData);
+
+    try {
+      // 서버 API 엔드포인트에 맞게 데이터 형식 조정
+      const requestData = {
+        id: userData.id,
+        email: userData.email,
+        ageGroup: userData.agegroup, // 서버에서 ageGroup으로 받는 경우
+      };
+
+      console.log("변환된 요청 데이터:", requestData);
+
+      const response = await jsonInstance.post(
+        "/member/update/ageGroup",
+        requestData
+      );
+      console.log("연령대 업데이트 응답:", response.data);
+      return response.data;
+    } catch (error) {
+      if (error.response) {
+        console.error("서버 응답 오류:", {
+          status: error.response.status,
+          statusText: error.response.statusText,
+          data: error.response.data,
+        });
+      } else {
+        console.error("요청 오류:", error.message);
+      }
+      throw error;
+    }
+  },
+
+  // 현재 비밀번호 확인
+  verifyPassword: async (userData) => {
+    console.log("현재 비밀번호 확인 요청 시작");
+    console.log("요청 데이터:", {
+      email: userData.email,
+      password: "********", // 비밀번호는 로그에 표시하지 않음
+    });
+
+    try {
+      // 요청 데이터에서 필요한 필드만 추출하여 새 객체 생성
+      const requestData = {
+        email: userData.email,
+        password: userData.password,
+      };
+
+      const response = await jsonInstance.post(
+        "/member/verify/password",
+        requestData
+      );
+      console.log("비밀번호 확인 응답:", response.data);
+      return response.data;
+    } catch (error) {
+      console.error("비밀번호 확인 실패:", error);
+      throw error;
+    }
+  },
+
+  // 비밀번호 업데이트
+  updatePassword: async (userData) => {
+    console.log("비밀번호 업데이트 요청 시작");
+    console.log("요청 데이터:", {
+      ...userData,
+      password: "********", // 비밀번호는 로그에 표시하지 않음
+    });
+
+    try {
+      const response = await jsonInstance.post(
+        "/member/update/password",
+        userData
+      );
+      console.log("비밀번호 업데이트 응답:", response.data);
+      return response.data;
+    } catch (error) {
+      if (error.response) {
+        console.error("서버 응답 오류:", {
+          status: error.response.status,
+          statusText: error.response.statusText,
+          data: error.response.data,
+        });
+      } else {
+        console.error("요청 오류:", error.message);
+      }
       throw error;
     }
   },

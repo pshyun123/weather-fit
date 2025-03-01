@@ -4,17 +4,14 @@ import LoginComp, {
   LoginFormSection,
   CharacterSection,
   LoginContainer,
+  LoginPageBoard,
 } from "../component/login/LoginStyle";
-import {
-  Input,
-  LoginButton,
-  JoinButton,
-} from "../component/login/LoginInputStyle";
-import logo from "../assets/weatherfitlogo.png";
+import { LoginButton, CombinedInput } from "../component/login/LoginInputStyle";
+import logo from "../images/weatherfitlogo.png";
 import LoginApi from "../api/LoginApi";
-import rainCharacter from "../assets/raniny.png";
-import sunCharacter from "../assets/sunnynohand.png";
-import snowCharacter from "../assets/snowy.png";
+import rainCharacter from "../images/raniny.png";
+import sunCharacter from "../images/sunnynohand.png";
+import snowCharacter from "../images/snowy.png";
 import { useAuth } from "../context/AuthContext";
 
 const LoginPage = () => {
@@ -74,79 +71,79 @@ const LoginPage = () => {
   };
 
   return (
-    <LoginComp>
-      <LoginContainer>
-        <LoginFormSection>
-          <div className="logo">
-            {" "}
-            <img src={logo} alt="Wheather FIT" />{" "}
-          </div>
-          <div className="title">회원님의 정보를 입력해주세요 :)</div>
-          <div className="container">
-            <div className="inputArea">
-              <Input
-                holder="이메일 입력"
-                value={inputEmail}
-                changeEvt={onChangeEmail}
-                msg={emailMessage}
-              />
-              <Input
-                holder="비밀번호 입력"
-                value={inputPw}
-                type="password"
-                changeEvt={onChangePw}
-                msg={pwMessage}
-              />
+    <LoginPageBoard>
+      <LoginComp>
+        <LoginContainer>
+          <LoginFormSection>
+            <div className="logo">
+              {" "}
+              <img src={logo} alt="Wheather FIT" />{" "}
             </div>
-
-            <div className="login-id">
-              <div className="login-id-text">아이디 기억하기</div>
-              <input type="checkbox" />
-            </div>
-
-            <LoginButton
-              $isValid={isButtonActive}
-              onClick={onClickLogin}
-              disabled={!isButtonActive}
-            >
-              로그인
-            </LoginButton>
-
-            <div className="login-links">
-              <div className="links">
-                <Link to="/find-password">비밀번호 찾기</Link>
+            <div className="title">회원님의 정보를 입력해주세요 :)</div>
+            <div className="container">
+              <div className="inputArea">
+                <CombinedInput
+                  emailValue={inputEmail}
+                  pwValue={inputPw}
+                  emailChangeEvt={onChangeEmail}
+                  pwChangeEvt={onChangePw}
+                  emailMsg={emailMessage}
+                />
               </div>
-              <div className="links-divider">|</div>
-              <div className="links">
-                {" "}
-                <Link to="/join">회원가입</Link>
+
+              <div style={{ width: "420px", borderRadius: "10px" }}>
+                <LoginButton
+                  $isValid={isButtonActive}
+                  onClick={onClickLogin}
+                  disabled={!isButtonActive}
+                >
+                  로그인
+                </LoginButton>
+              </div>
+
+              <div className="login-id-container">
+                <div className="login-id">
+                  <input type="checkbox" className="checkbox-input" />
+                  <span className="checkbox-label">아이디 저장</span>
+                </div>
+
+                <div className="login-links">
+                  <div className="links">
+                    <Link to="/find-password">비밀번호 찾기</Link>
+                  </div>
+                  <div className="links-divider"></div>
+                  <div className="links">
+                    {" "}
+                    <Link to="/join">회원가입</Link>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </LoginFormSection>
-      </LoginContainer>
+          </LoginFormSection>
+        </LoginContainer>
 
-      <CharacterSection>
-        <img
-          src={rainCharacter}
-          alt="우산 캐릭터"
-          style={{ width: "300px", height: "300px" }}
-        />
-        <img
-          src={sunCharacter}
-          alt="햇살 캐릭터"
-          style={{ width: "300px", height: "300px" }}
-        />
-        <img
-          src={snowCharacter}
-          alt="눈 캐릭터"
-          style={{ width: "300px", height: "300px" }}
-        />
+        <CharacterSection>
+          <img
+            src={rainCharacter}
+            alt="우산 캐릭터"
+            style={{ width: "300px", height: "300px" }}
+          />
+          <img
+            src={sunCharacter}
+            alt="햇살 캐릭터"
+            style={{ width: "300px", height: "300px" }}
+          />
+          <img
+            src={snowCharacter}
+            alt="눈 캐릭터"
+            style={{ width: "300px", height: "300px" }}
+          />
 
-        <div className="yellow-circle"></div>
-        <div className="opacity-yellow-circle"></div>
-      </CharacterSection>
-    </LoginComp>
+          <div className="yellow-circle"></div>
+          <div className="opacity-yellow-circle"></div>
+        </CharacterSection>
+      </LoginComp>
+    </LoginPageBoard>
   );
 };
 

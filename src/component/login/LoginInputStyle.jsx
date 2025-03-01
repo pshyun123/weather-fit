@@ -11,7 +11,7 @@ const InputComp = styled.div`
     padding: 0 15px;
     border: 1px solid #e1e1e1;
     outline: none;
-    border-radius: 5px;
+    border-radius: 10px;
     font-size: 14px;
     transition: border-color 0.3s ease;
 
@@ -49,11 +49,11 @@ export const Input = (props) => {
 };
 
 export const LoginButton = styled.button`
-  width: 420px;
+  width: 419px;
   height: 65px;
   border: none;
-  font-weight: 600;
-  font-size: 15px;
+  font-weight: 500;
+  font-size: 20px;
   background-color: ${(props) => (props.$isValid ? "#4981f8" : "#cccccc")};
   color: white;
   border-radius: 5px;
@@ -82,3 +82,73 @@ export const JoinButton = styled.button`
     color: white;
   }
 `;
+
+export const CombinedInputComp = styled.div`
+  width: 100%;
+  position: relative;
+  // margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+
+  input {
+    width: 100%;
+    height: 55px;
+    padding: 0 20px;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    color: #333;
+    background-color: transparent;
+    box-sizing: border-box;
+
+    &:focus {
+      background-color: rgba(0, 123, 255, 0.03);
+    }
+
+    &::placeholder {
+      color: #888;
+      font-size: 16px;
+    }
+  }
+
+  .divider {
+    width: 100%;
+    height: 1px;
+    background-color: #ddd;
+  }
+
+  .msg {
+    position: absolute;
+    bottom: -20px;
+    left: 0;
+    padding-left: 20px;
+    color: #ff4d4f;
+    font-size: 12px;
+  }
+`;
+
+export const CombinedInput = (props) => {
+  const { emailValue, pwValue, emailChangeEvt, pwChangeEvt, emailMsg, pwMsg } =
+    props;
+  return (
+    <CombinedInputComp>
+      <input
+        type="text"
+        value={emailValue}
+        placeholder="아이디"
+        onChange={emailChangeEvt}
+      />
+      <div className="divider"></div>
+      <input
+        type="password"
+        value={pwValue}
+        placeholder="비밀번호"
+        onChange={pwChangeEvt}
+      />
+      {(emailMsg || pwMsg) && <div className="msg">{emailMsg || pwMsg}</div>}
+    </CombinedInputComp>
+  );
+};

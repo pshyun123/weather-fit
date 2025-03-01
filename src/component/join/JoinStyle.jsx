@@ -26,12 +26,6 @@ const JoinComp = styled.section`
       flex-direction: column;
       justify-content: center;
       align-items: center;
-
-      input {
-        border: none;
-        border-bottom: 1px solid #b8b8b8;
-        border-radius: 0;
-      }
     }
 
     .select-age {
