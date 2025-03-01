@@ -73,23 +73,25 @@ const UserApi = {
 
   // 로그인 상태 확인
   checkLoginStatus: async () => {
+    console.log("UserApi - checkLoginStatus 호출됨");
     try {
       const response = await jsonInstance.get("/auth/login/check");
-      console.log("로그인 체크 요청 전 데이터:", response);
+      console.log("UserApi - 로그인 체크 응답:", response);
 
       // 응답 데이터 구조 확인을 위한 로깅 추가
-      console.log("로그인 상태 응답 데이터 구조:", {
+      console.log("UserApi - 로그인 상태 응답 데이터:", {
         success: response.data.success,
         name: response.data.name,
         email: response.data.email,
-        profileImage: response.data.profileImage,
+        id: response.data.id,
+        profileImage: response.data.profileImage ? "있음" : "없음",
         ageGroup: response.data.ageGroup,
         preferences: response.data.preferences,
       });
 
       return response;
     } catch (error) {
-      console.error("로그인 상태 확인 실패:", error);
+      console.error("UserApi - 로그인 상태 확인 실패:", error);
       throw error;
     }
   },
@@ -396,7 +398,7 @@ const UserApi = {
     console.log("요청 데이터:", { userId });
 
     try {
-      const response = await jsonInstance.get(`/member/like/lively`, {
+      const response = await jsonInstance.get(`/member/like/romantic`, {
         params: { userId },
       });
       console.log("러블리 스타일 좋아요 목록 응답:", response.data);
@@ -425,6 +427,310 @@ const UserApi = {
         params: { userId },
       });
       console.log("럭셔리 스타일 좋아요 목록 응답:", response.data);
+      return response.data;
+    } catch (error) {
+      if (error.response) {
+        console.error("서버 응답 오류:", {
+          status: error.response.status,
+          statusText: error.response.statusText,
+          data: error.response.data,
+        });
+      } else {
+        console.error("요청 오류:", error.message);
+      }
+      throw error;
+    }
+  },
+
+  ////////////////////// 날씨별 좋아요 목록 API //////////////////////
+
+  // 사용자의 좋아요 중 날씨 조건이 더움인 것들 조회
+  getHotLikes: async (userId) => {
+    console.log("더움 날씨 좋아요 목록 요청 시작");
+    console.log("요청 데이터:", { userId });
+
+    try {
+      const response = await jsonInstance.get(`/member/like/hot`, {
+        params: { userId },
+      });
+      console.log("더움 날씨 좋아요 목록 응답:", response.data);
+      return response.data;
+    } catch (error) {
+      if (error.response) {
+        console.error("서버 응답 오류:", {
+          status: error.response.status,
+          statusText: error.response.statusText,
+          data: error.response.data,
+        });
+      } else {
+        console.error("요청 오류:", error.message);
+      }
+      throw error;
+    }
+  },
+
+  // 사용자의 좋아요 중 날씨 조건이 따뜻한 것들 조회
+  getWarmLikes: async (userId) => {
+    console.log("따뜻한 날씨 좋아요 목록 요청 시작");
+    console.log("요청 데이터:", { userId });
+
+    try {
+      const response = await jsonInstance.get(`/member/like/warm`, {
+        params: { userId },
+      });
+      console.log("따뜻한 날씨 좋아요 목록 응답:", response.data);
+      return response.data;
+    } catch (error) {
+      if (error.response) {
+        console.error("서버 응답 오류:", {
+          status: error.response.status,
+          statusText: error.response.statusText,
+          data: error.response.data,
+        });
+      } else {
+        console.error("요청 오류:", error.message);
+      }
+      throw error;
+    }
+  },
+
+  // 사용자의 좋아요 중 날씨 조건이 비인 것들 조회
+  getRainLikes: async (userId) => {
+    console.log("비 날씨 좋아요 목록 요청 시작");
+    console.log("요청 데이터:", { userId });
+
+    try {
+      const response = await jsonInstance.get(`/member/like/rain`, {
+        params: { userId },
+      });
+      console.log("비 날씨 좋아요 목록 응답:", response.data);
+      return response.data;
+    } catch (error) {
+      if (error.response) {
+        console.error("서버 응답 오류:", {
+          status: error.response.status,
+          statusText: error.response.statusText,
+          data: error.response.data,
+        });
+      } else {
+        console.error("요청 오류:", error.message);
+      }
+      throw error;
+    }
+  },
+
+  // 사용자의 좋아요 중 날씨 조건이 추움인 것들 조회
+  getColdLikes: async (userId) => {
+    console.log("추운 날씨 좋아요 목록 요청 시작");
+    console.log("요청 데이터:", { userId });
+
+    try {
+      const response = await jsonInstance.get(`/member/like/cold`, {
+        params: { userId },
+      });
+      console.log("추운 날씨 좋아요 목록 응답:", response.data);
+      return response.data;
+    } catch (error) {
+      if (error.response) {
+        console.error("서버 응답 오류:", {
+          status: error.response.status,
+          statusText: error.response.statusText,
+          data: error.response.data,
+        });
+      } else {
+        console.error("요청 오류:", error.message);
+      }
+      throw error;
+    }
+  },
+
+  // 사용자의 좋아요 중 날씨 조건이 매우 추움인 것들 조회
+  getChillLikes: async (userId) => {
+    console.log("매우 추운 날씨 좋아요 목록 요청 시작");
+    console.log("요청 데이터:", { userId });
+
+    try {
+      const response = await jsonInstance.get(`/member/like/chill`, {
+        params: { userId },
+      });
+      console.log("매우 추운 날씨 좋아요 목록 응답:", response.data);
+      return response.data;
+    } catch (error) {
+      if (error.response) {
+        console.error("서버 응답 오류:", {
+          status: error.response.status,
+          statusText: error.response.statusText,
+          data: error.response.data,
+        });
+      } else {
+        console.error("요청 오류:", error.message);
+      }
+      throw error;
+    }
+  },
+
+  // 사용자의 좋아요 중 날씨 조건이 눈인 것들 조회
+  getSnowLikes: async (userId) => {
+    console.log("눈 날씨 좋아요 목록 요청 시작");
+    console.log("요청 데이터:", { userId });
+
+    try {
+      const response = await jsonInstance.get(`/member/like/snow`, {
+        params: { userId },
+      });
+      console.log("눈 날씨 좋아요 목록 응답:", response.data);
+      return response.data;
+    } catch (error) {
+      if (error.response) {
+        console.error("서버 응답 오류:", {
+          status: error.response.status,
+          statusText: error.response.statusText,
+          data: error.response.data,
+        });
+      } else {
+        console.error("요청 오류:", error.message);
+      }
+      throw error;
+    }
+  },
+
+  ////////////////////// TPO별 좋아요 목록 API //////////////////////
+
+  // 사용자의 좋아요 중 TPO가 데이트인 것들 조회
+  getDateLikes: async (userId) => {
+    console.log("데이트 TPO 좋아요 목록 요청 시작");
+    console.log("요청 데이터:", { userId });
+
+    try {
+      const response = await jsonInstance.get(`/member/like/date`, {
+        params: { userId },
+      });
+      console.log("데이트 TPO 좋아요 목록 응답:", response.data);
+      return response.data;
+    } catch (error) {
+      if (error.response) {
+        console.error("서버 응답 오류:", {
+          status: error.response.status,
+          statusText: error.response.statusText,
+          data: error.response.data,
+        });
+      } else {
+        console.error("요청 오류:", error.message);
+      }
+      throw error;
+    }
+  },
+
+  // 사용자의 좋아요 중 TPO가 출근인 것들 조회
+  getWorkLikes: async (userId) => {
+    console.log("출근 TPO 좋아요 목록 요청 시작");
+    console.log("요청 데이터:", { userId });
+
+    try {
+      const response = await jsonInstance.get(`/member/like/work`, {
+        params: { userId },
+      });
+      console.log("출근 TPO 좋아요 목록 응답:", response.data);
+      return response.data;
+    } catch (error) {
+      if (error.response) {
+        console.error("서버 응답 오류:", {
+          status: error.response.status,
+          statusText: error.response.statusText,
+          data: error.response.data,
+        });
+      } else {
+        console.error("요청 오류:", error.message);
+      }
+      throw error;
+    }
+  },
+
+  // 사용자의 좋아요 중 TPO가 여행인 것들 조회
+  getTravelLikes: async (userId) => {
+    console.log("여행 TPO 좋아요 목록 요청 시작");
+    console.log("요청 데이터:", { userId });
+
+    try {
+      const response = await jsonInstance.get(`/member/like/travel`, {
+        params: { userId },
+      });
+      console.log("여행 TPO 좋아요 목록 응답:", response.data);
+      return response.data;
+    } catch (error) {
+      if (error.response) {
+        console.error("서버 응답 오류:", {
+          status: error.response.status,
+          statusText: error.response.statusText,
+          data: error.response.data,
+        });
+      } else {
+        console.error("요청 오류:", error.message);
+      }
+      throw error;
+    }
+  },
+
+  // 사용자의 좋아요 중 TPO가 운동인 것들 조회
+  getExerciseLikes: async (userId) => {
+    console.log("운동 TPO 좋아요 목록 요청 시작");
+    console.log("요청 데이터:", { userId });
+
+    try {
+      const response = await jsonInstance.get(`/member/like/exercise`, {
+        params: { userId },
+      });
+      console.log("운동 TPO 좋아요 목록 응답:", response.data);
+      return response.data;
+    } catch (error) {
+      if (error.response) {
+        console.error("서버 응답 오류:", {
+          status: error.response.status,
+          statusText: error.response.statusText,
+          data: error.response.data,
+        });
+      } else {
+        console.error("요청 오류:", error.message);
+      }
+      throw error;
+    }
+  },
+
+  // 사용자의 좋아요 중 TPO가 모임인 것들 조회
+  getMeetingLikes: async (userId) => {
+    console.log("모임 TPO 좋아요 목록 요청 시작");
+    console.log("요청 데이터:", { userId });
+
+    try {
+      const response = await jsonInstance.get(`/member/like/meeting`, {
+        params: { userId },
+      });
+      console.log("모임 TPO 좋아요 목록 응답:", response.data);
+      return response.data;
+    } catch (error) {
+      if (error.response) {
+        console.error("서버 응답 오류:", {
+          status: error.response.status,
+          statusText: error.response.statusText,
+          data: error.response.data,
+        });
+      } else {
+        console.error("요청 오류:", error.message);
+      }
+      throw error;
+    }
+  },
+
+  // 사용자의 좋아요 중 TPO가 일상인 것들 조회
+  getDailyLikes: async (userId) => {
+    console.log("일상 TPO 좋아요 목록 요청 시작");
+    console.log("요청 데이터:", { userId });
+
+    try {
+      const response = await jsonInstance.get(`/member/like/daily`, {
+        params: { userId },
+      });
+      console.log("일상 TPO 좋아요 목록 응답:", response.data);
       return response.data;
     } catch (error) {
       if (error.response) {

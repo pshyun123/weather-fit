@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const MyPageBoard = styled.div`
-  width: 1920px;
+  width: 100%;
   min-height: 100vh;
   display: flex;
   justify-content: center;

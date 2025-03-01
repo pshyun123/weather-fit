@@ -18,6 +18,7 @@ export const AuthProvider = ({ children }) => {
   // 컴포넌트가 마운트될 때 로그인 상태 확인
   useEffect(() => {
     const checkLoginStatus = async () => {
+      console.log("AuthContext - 로그인 상태 확인 시작");
       try {
         // 백엔드에 로그인 상태 확인 요청
         const res = await UserApi.checkLoginStatus();
@@ -36,10 +37,15 @@ export const AuthProvider = ({ children }) => {
             id: res.data.id, // ID 정보도 저장
           };
           setUserProfile(profileData);
-          console.log("프로필 데이터 설정:", {
+          console.log("AuthContext - 로그인 확인 성공, 프로필 데이터 설정:", {
             ...profileData,
+            id: profileData.id,
             profileImage: profileData.profileImage ? "(이미지 데이터)" : null,
           });
+        } else {
+          console.log("AuthContext - 로그인 확인 실패: 유효한 세션 없음");
+          setIsLoggedIn(false);
+          setUserProfile(null);
         }
       } catch (error) {
         // 에러 발생 시 로그인 상태 초기화
