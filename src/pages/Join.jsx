@@ -410,22 +410,6 @@ const Join = () => {
         {/* 왼쪽: 회원가입 폼 */}
         <div className="container">
           <h2>회원가입</h2>
-          <p>웨더핏의 회원이 되기 위한 과정이예요 :) </p>
-
-          {/* 프로필 사진 */}
-          {/* <div className="profile">
-            <img
-              src={profileImage ? URL.createObjectURL(profileImage) : userIcon}
-              alt="프로필 미리보기"
-            />
-            <label htmlFor="fileUpload"></label>
-            <input
-              type="file"
-              id="fileUpload"
-              accept="image/*"
-              onChange={onChangeProfileImage}
-            />
-          </div> */}
           {step === 1 ? (
             <>
               <div className="inputArea">
@@ -478,8 +462,7 @@ const Join = () => {
               <button
                 onClick={handleNextStep}
                 disabled={!isButtonActive}
-                className={isButtonActive ? "active" : ""}
-              >
+                className={isButtonActive ? "active" : ""}>
                 다음으로
               </button>
             </>
@@ -499,8 +482,7 @@ const Join = () => {
                       onClick={() => handlePreferenceChange(pref)}
                       disabled={
                         preferences.length >= 2 && !preferences.includes(pref)
-                      }
-                    >
+                      }>
                       {pref}
                     </button>
                   ))}
@@ -518,8 +500,7 @@ const Join = () => {
                       className={`group-button ${
                         ageGroup === group ? "active" : ""
                       }`}
-                      onClick={() => onChangeAgeGroup(group)}
-                    >
+                      onClick={() => onChangeAgeGroup(group)}>
                       {group}
                     </button>
                   ))}
@@ -530,8 +511,7 @@ const Join = () => {
                 <button
                   onClick={onSubmit}
                   disabled={!isFormValid}
-                  className={isFormValid ? "active" : ""}
-                >
+                  className={isFormValid ? "active" : ""}>
                   완료하기
                 </button>
               )}

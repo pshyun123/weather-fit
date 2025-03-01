@@ -13,57 +13,14 @@ const JoinComp = styled.section`
       font-size: 2em;
       font-weight: 600;
       text-align: center;
-    }
-
-    p {
-      text-align: center;
-      font-size: 0.9em;
-      margin: 20px;
-      color: #737f8f;
+      margin-bottom: 20px;
     }
 
     /* 오른쪽 배경을 노란색으로 */
     .right-section {
-      background-color: yellow;
+      background-color: #fdf5e6;
     }
 
-    .profile {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-bottom: 50px;
-      position: relative;
-
-      label {
-        font-size: 1.3em;
-        font-weight: 600;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: absolute;
-        bottom: 0;
-        right: 33%;
-      }
-
-      label::before {
-        content: "✏️"; /* 연필 아이콘 */
-        font-size: 1.2em;
-        transform: scaleX(-1); /* 좌우 반전 */
-        display: inline-block; /* transform 적용을 위해 추가 */
-      }
-
-      input[type="file"] {
-        display: none; /* 기본 파일 업로드 버튼 숨기기 */
-      }
-
-      img {
-        width: 150px;
-        height: 150px;
-        border-radius: 50%;
-        object-fit: cover;
-      }
-    }
     .inputArea {
       display: flex;
       flex-direction: column;
