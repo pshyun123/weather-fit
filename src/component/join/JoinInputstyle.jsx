@@ -11,12 +11,11 @@ const InputButtonComp = styled.div`
     display: flex;
     justify-content: space-between;
     input {
-      width: 64%; // 버튼 공간 확보
-      outline: none;
+      width: 70%; // 버튼 공간 확보
       font-size: 1em;
       padding: 0 10px;
-      border: none;
-      border-bottom: 1px solid #ccc;
+      border: 1px solid #ccc;
+      border-radius: 10px;
     }
   }
   .msg {
@@ -105,7 +104,7 @@ const InputComp = styled.div`
     padding: 0 10px;
     border: 1px solid #ccc;
     outline: none;
-    border-radius: 5px;
+    border-radius: 10px;
     font-size: 1em;
     &:disabled {
       opacity: 1;

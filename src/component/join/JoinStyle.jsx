@@ -7,7 +7,14 @@ const JoinComp = styled.section`
   margin: 70px;
 
   .container {
-    padding: 80px;
+    width: 700px;
+    height: 1000px;
+    position: relative;
+    z-index: 10;
+    background-color: white;
+    border-radius: 10px;
+    padding: 120px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 
     h2 {
       font-size: 2em;
@@ -16,16 +23,12 @@ const JoinComp = styled.section`
       margin-bottom: 20px;
     }
 
-    /* 오른쪽 배경을 노란색으로 */
-    .right-section {
-      background-color: #fdf5e6;
-    }
-
     .inputArea {
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      height: 550px;
     }
 
     .select-age {
@@ -83,6 +86,19 @@ const JoinComp = styled.section`
       font-size: 1.1em;
       margin-left: 120px;
     }
+  }
+
+  .next-button {
+    width: 460px;
+    height: 65px;
+    cursor: pointer;
+    background-color: #6a6d73;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1em;
+    margin-top: 20px;
   }
 
   /* 오른쪽 배경을 노란색으로 */

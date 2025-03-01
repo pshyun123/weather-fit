@@ -4,6 +4,7 @@ import JoinComp from "../component/join/JoinStyle";
 import { InputButton, Input } from "../component/join/JoinInputstyle";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import bgJoin from "../images/bg_join.png";
 
 const Join = () => {
   // 입력 칸에 이메일, 이메일 인증, 비밀번호, 이름 입력 / 프로필, 나이대별 선택
@@ -405,10 +406,19 @@ const Join = () => {
 
   return (
     <>
-      <JoinComp>
+      <JoinComp
+        style={{
+          backgroundImage: `url(${bgJoin})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          height: "1000px",
+          width: "1400px",
+        }}>
         {/* 왼쪽: 회원가입 폼 */}
         <div className="container">
           <h2>회원가입</h2>
+
           {step === 1 ? (
             <>
               <div className="inputArea">
@@ -461,7 +471,7 @@ const Join = () => {
               <button
                 onClick={handleNextStep}
                 disabled={!isButtonActive}
-                className={isButtonActive ? "active" : ""}>
+                className={`next-button ${isButtonActive ? "active" : ""}`}>
                 다음으로
               </button>
             </>
@@ -517,9 +527,6 @@ const Join = () => {
             </>
           )}
         </div>
-
-        {/* 오른쪽: 노란색 배경 영역 */}
-        <div className="right-section"></div>
       </JoinComp>
     </>
   );
