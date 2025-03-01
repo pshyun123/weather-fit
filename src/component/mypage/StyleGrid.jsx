@@ -88,61 +88,205 @@ const StyleGrid = () => {
         const selectedStyle = activeDetails[0].toLowerCase();
         switch (selectedStyle) {
           case "미니멀":
-            if (minimalStyles.length === 0) {
-              const minimal = await CoordinateApi.getMinimalPreferenceList();
-              console.log("미니멀 스타일 데이터:", minimal);
-              setMinimalStyles(minimal);
+            // 미니멀 스타일은 좋아요 목록만 가져오기
+            if (userId) {
+              const minimalLikes = await UserApi.getMinimalLikes(userId);
+              console.log("미니멀 스타일 좋아요 데이터:", minimalLikes);
+              setMinimalStyles(minimalLikes || []);
 
-              // 미니멀 스타일 데이터 로드 후 좋아요 목록도 함께 로드
-              if (minimal.length > 0) {
-                fetchMinimalLikes();
+              // 좋아요 상태 업데이트
+              if (minimalLikes && minimalLikes.length > 0) {
+                const likedItemsMap = { ...likedItems };
+
+                // 미니멀 스타일 아이템은 모두 좋아요 상태로 표시
+                minimalLikes.forEach((item, index) => {
+                  if (
+                    typeof item !== "string" &&
+                    (item.id || item.coordinateId)
+                  ) {
+                    likedItemsMap[index] = true;
+                  }
+                });
+
+                setLikedItems(likedItemsMap);
+                console.log(
+                  "미니멀 스타일 좋아요 상태 업데이트 완료:",
+                  likedItemsMap
+                );
               }
             }
             break;
           case "모던":
-            if (modernStyles.length === 0) {
-              const modern = await CoordinateApi.getModernPreferenceList();
-              console.log("모던 스타일 데이터:", modern);
-              setModernStyles(modern);
+            // 모던 스타일은 좋아요 목록만 가져오기
+            if (userId) {
+              const modernLikes = await UserApi.getModernLikes(userId);
+              console.log("모던 스타일 좋아요 데이터:", modernLikes);
+              setModernStyles(modernLikes || []);
+
+              // 좋아요 상태 업데이트
+              if (modernLikes && modernLikes.length > 0) {
+                const likedItemsMap = { ...likedItems };
+
+                // 모던 스타일 아이템은 모두 좋아요 상태로 표시
+                modernLikes.forEach((item, index) => {
+                  if (
+                    typeof item !== "string" &&
+                    (item.id || item.coordinateId)
+                  ) {
+                    likedItemsMap[index] = true;
+                  }
+                });
+
+                setLikedItems(likedItemsMap);
+                console.log(
+                  "모던 스타일 좋아요 상태 업데이트 완료:",
+                  likedItemsMap
+                );
+              }
             }
             break;
           case "캐주얼":
-            if (casualStyles.length === 0) {
-              const casual = await CoordinateApi.getCasualPreferenceList();
-              console.log("캐주얼 스타일 데이터:", casual);
-              setCasualStyles(casual);
+            // 캐주얼 스타일은 좋아요 목록만 가져오기
+            if (userId) {
+              const casualLikes = await UserApi.getCasualLikes(userId);
+              console.log("캐주얼 스타일 좋아요 데이터:", casualLikes);
+              setCasualStyles(casualLikes || []);
+
+              // 좋아요 상태 업데이트
+              if (casualLikes && casualLikes.length > 0) {
+                const likedItemsMap = { ...likedItems };
+
+                // 캐주얼 스타일 아이템은 모두 좋아요 상태로 표시
+                casualLikes.forEach((item, index) => {
+                  if (
+                    typeof item !== "string" &&
+                    (item.id || item.coordinateId)
+                  ) {
+                    likedItemsMap[index] = true;
+                  }
+                });
+
+                setLikedItems(likedItemsMap);
+                console.log(
+                  "캐주얼 스타일 좋아요 상태 업데이트 완료:",
+                  likedItemsMap
+                );
+              }
             }
+
             break;
           case "스트릿":
-            if (streetStyles.length === 0) {
-              const street = await CoordinateApi.getStreetPreferenceList();
-              console.log("스트릿 스타일 데이터:", street);
-              setStreetStyles(street);
+            // 스트릿 스타일은 좋아요 목록만 가져오기
+            if (userId) {
+              const streetLikes = await UserApi.getStreetLikes(userId);
+              console.log("스트릿 스타일 좋아요 데이터:", streetLikes);
+              setStreetStyles(streetLikes || []);
+
+              // 좋아요 상태 업데이트
+              if (streetLikes && streetLikes.length > 0) {
+                const likedItemsMap = { ...likedItems };
+
+                // 스트릿 스타일 아이템은 모두 좋아요 상태로 표시
+                streetLikes.forEach((item, index) => {
+                  if (
+                    typeof item !== "string" &&
+                    (item.id || item.coordinateId)
+                  ) {
+                    likedItemsMap[index] = true;
+                  }
+                });
+
+                setLikedItems(likedItemsMap);
+                console.log(
+                  "스트릿 스타일 좋아요 상태 업데이트 완료:",
+                  likedItemsMap
+                );
+              }
             }
             break;
+
           case "러블리":
-            if (livelyStyles.length === 0) {
-              const lively = await CoordinateApi.getLivelyPreferenceList();
-              console.log("러블리 스타일 데이터:", lively);
-              setLivelyStyles(lively);
+            // 러블리 스타일은 좋아요 목록만 가져오기
+            if (userId) {
+              const livelyLikes = await UserApi.getLivelyLikes(userId);
+              console.log("러블리 스타일 좋아요 데이터:", livelyLikes);
+              setLivelyStyles(livelyLikes || []);
+
+              // 좋아요 상태 업데이트
+              if (livelyLikes && livelyLikes.length > 0) {
+                const likedItemsMap = { ...likedItems };
+
+                // 러블리 스타일 아이템은 모두 좋아요 상태로 표시
+                livelyLikes.forEach((item, index) => {
+                  if (
+                    typeof item !== "string" &&
+                    (item.id || item.coordinateId)
+                  ) {
+                    likedItemsMap[index] = true;
+                  }
+                });
+
+                setLikedItems(likedItemsMap);
+                console.log(
+                  "러블리 스타일 좋아요 상태 업데이트 완료:",
+                  likedItemsMap
+                );
+              }
             }
             break;
           case "럭셔리":
-            if (luxuryStyles.length === 0) {
-              const luxury = await CoordinateApi.getLuxuryPreferenceList();
-              console.log("럭셔리 스타일 데이터:", luxury);
-              setLuxuryStyles(luxury);
+            // 럭셔리 스타일은 좋아요 목록만 가져오기
+            if (userId) {
+              const luxuryLikes = await UserApi.getLuxuryLikes(userId);
+              console.log("럭셔리 스타일 좋아요 데이터:", luxuryLikes);
+              setLuxuryStyles(luxuryLikes || []);
+
+              // 좋아요 상태 업데이트
+              if (luxuryLikes && luxuryLikes.length > 0) {
+                const likedItemsMap = { ...likedItems };
+
+                // 럭셔리 스타일 아이템은 모두 좋아요 상태로 표시
+                luxuryLikes.forEach((item, index) => {
+                  if (
+                    typeof item !== "string" &&
+                    (item.id || item.coordinateId)
+                  ) {
+                    likedItemsMap[index] = true;
+                  }
+                });
+
+                setLikedItems(likedItemsMap);
+                console.log(
+                  "럭셔리 스타일 좋아요 상태 업데이트 완료:",
+                  likedItemsMap
+                );
+              }
             }
+
             break;
           default:
             break;
         }
       } else {
         // 기본적으로 미니멀 스타일 로드
-        if (minimalStyles.length === 0) {
-          const minimal = await CoordinateApi.getMinimalPreferenceList();
-          console.log("미니멀 스타일 데이터:", minimal);
-          setMinimalStyles(minimal);
+        if (minimalStyles.length === 0 && userId) {
+          const minimalLikes = await UserApi.getMinimalLikes(userId);
+          console.log("미니멀 스타일 좋아요 데이터:", minimalLikes);
+          setMinimalStyles(minimalLikes || []);
+
+          // 좋아요 상태 업데이트
+          if (minimalLikes && minimalLikes.length > 0) {
+            const likedItemsMap = { ...likedItems };
+
+            // 미니멀 스타일 아이템은 모두 좋아요 상태로 표시
+            minimalLikes.forEach((item, index) => {
+              if (typeof item !== "string" && (item.id || item.coordinateId)) {
+                likedItemsMap[index] = true;
+              }
+            });
+
+            setLikedItems(likedItemsMap);
+          }
         }
       }
       setIsLoading(false);
@@ -209,134 +353,10 @@ const StyleGrid = () => {
     }
   }, [activeDetails]);
 
-  // 사용자의 좋아요 목록 가져오기
-  const fetchUserLikes = async () => {
-    try {
-      // 로그인 상태가 아니면 실행하지 않음
-      if (!userId) return;
-
-      const userLikes = await UserApi.getUserLikes(userId);
-
-      // 좋아요 상태 초기화
-      if (userLikes && userLikes.length > 0) {
-        // 현재 표시된 아이템들과 사용자의 좋아요 목록을 비교하여 상태 설정
-        const likedItemsMap = {};
-
-        // 모든 카테고리의 아이템을 확인
-        const allItems = [
-          ...weatherStyles,
-          ...minimalStyles,
-          ...modernStyles,
-          ...casualStyles,
-          ...streetStyles,
-          ...livelyStyles,
-          ...luxuryStyles,
-          ...situationStyles,
-        ];
-
-        // 각 아이템에 대해 사용자가 좋아요를 눌렀는지 확인
-        allItems.forEach((item, index) => {
-          if (typeof item !== "string" && item.id) {
-            // userLikes 배열에 현재 아이템의 id가 있는지 확인
-            const isLiked = userLikes.some(
-              (like) => like.coordinateId === item.id
-            );
-            if (isLiked) {
-              likedItemsMap[index] = true;
-            }
-          }
-        });
-
-        setLikedItems(likedItemsMap);
-        console.log("사용자 좋아요 상태 초기화 완료:", likedItemsMap);
-      }
-    } catch (error) {
-      console.error("좋아요 목록 가져오기 실패:", error);
-    }
-  };
-
-  // 미니멀 스타일의 좋아요 목록 가져오기
-  const fetchMinimalLikes = async () => {
-    try {
-      // 로그인 상태가 아니면 실행하지 않음
-      if (!userId) return;
-
-      // 미니멀 스타일 좋아요 목록 가져오기
-      const minimalLikeIds = await UserApi.getMinimalLikes(userId);
-      console.log("미니멀 스타일 좋아요 ID 목록:", minimalLikeIds);
-
-      // 미니멀 스타일 좋아요 목록이 있으면 해당 데이터 로드
-      if (minimalLikeIds && minimalLikeIds.length > 0) {
-        // 미니멀 스타일 좋아요 아이템 로드 로직 추가
-        // 예: 미니멀 스타일 좋아요 아이템만 표시하는 기능
-
-        // 좋아요 상태 업데이트
-        const likedItemsMap = { ...likedItems };
-
-        // 미니멀 스타일 아이템 중 좋아요 표시
-        minimalStyles.forEach((item, index) => {
-          if (typeof item !== "string" && item.id) {
-            const isLiked = minimalLikeIds.includes(item.id);
-            if (isLiked) {
-              likedItemsMap[index] = true;
-            }
-          }
-        });
-
-        setLikedItems(likedItemsMap);
-        console.log("미니멀 스타일 좋아요 상태 업데이트 완료:", likedItemsMap);
-      }
-    } catch (error) {
-      console.error("미니멀 스타일 좋아요 목록 가져오기 실패:", error);
-    }
-  };
-
-  // 미니멀 스타일 데이터 로드 시 좋아요 목록도 함께 로드
-  useEffect(() => {
-    if (
-      activeTab === 1 &&
-      activeDetails.includes("미니멀") &&
-      minimalStyles.length > 0
-    ) {
-      fetchMinimalLikes();
-    }
-  }, [activeTab, activeDetails, minimalStyles]);
-
-  // 컴포넌트 마운트 시 좋아요 목록 가져오기
-  useEffect(() => {
-    fetchUserLikes();
-  }, [userId]);
-
-  // 데이터 로드 후 좋아요 상태 업데이트
-  useEffect(() => {
-    // 데이터가 로드되면 좋아요 상태 업데이트
-    if (
-      !isLoading &&
-      (weatherStyles.length > 0 ||
-        minimalStyles.length > 0 ||
-        modernStyles.length > 0 ||
-        casualStyles.length > 0 ||
-        streetStyles.length > 0 ||
-        livelyStyles.length > 0 ||
-        luxuryStyles.length > 0 ||
-        situationStyles.length > 0)
-    ) {
-      fetchUserLikes();
-    }
-  }, [
-    isLoading,
-    weatherStyles,
-    minimalStyles,
-    modernStyles,
-    casualStyles,
-    streetStyles,
-    livelyStyles,
-    luxuryStyles,
-    situationStyles,
-  ]);
-
   // 미니멀 좋아요 필터 토글 함수
   const toggleMinimalLikesFilter = () => {
+    // 미니멀 스타일은 이미 좋아요 목록만 표시하므로 필터 토글이 필요 없음
+    // 하지만 UI 상태는 유지
     setShowOnlyMinimalLikes(!showOnlyMinimalLikes);
     // 필터 토글 시 페이지 초기화
     setCurrentPage(1);
@@ -430,32 +450,7 @@ const StyleGrid = () => {
     // 선택된 스타일에 따라 아이템 가져오기
     let items = category.getItems(activeDetails[0]);
 
-    // 미니멀 스타일이고 좋아요 필터가 활성화된 경우
-    if (
-      activeTab === 1 &&
-      activeDetails.includes("미니멀") &&
-      showOnlyMinimalLikes
-    ) {
-      // 문자열 아이템(로딩 중 메시지)인 경우 필터링하지 않음
-      if (items.length > 0 && typeof items[0] === "string") {
-        return items;
-      }
-
-      // 미니멀 스타일 중 좋아요한 아이템만 필터링
-      return items.filter((item) => {
-        // 객체 아이템이고 ID가 있는 경우만 확인
-        if (typeof item !== "string" && item.id) {
-          // 해당 아이템의 인덱스 찾기
-          const index = minimalStyles.findIndex(
-            (style) => style.id === item.id
-          );
-          // 해당 인덱스의 아이템이 좋아요 상태인지 확인
-          return index !== -1 && likedItems[index];
-        }
-        return false;
-      });
-    }
-
+    // 미니멀 스타일은 이미 좋아요 목록만 표시하므로 추가 필터링 필요 없음
     return items;
   };
 
@@ -556,7 +551,8 @@ const StyleGrid = () => {
         return;
       }
 
-      const coordinateId = item.id; // 착장 ID
+      // 착장 ID 가져오기 (API 응답 구조에 따라 다른 필드명 사용 가능)
+      const coordinateId = item.id || item.coordinateId; // 착장 ID
 
       if (!coordinateId) {
         console.error("착장 ID가 없습니다:", item);
@@ -616,21 +612,6 @@ const StyleGrid = () => {
               {detail}
             </StyleButton>
           ))}
-
-          {/* 미니멀 스타일 선택 시 좋아요 필터 버튼 표시 */}
-          {activeTab === 1 && activeDetails.includes("미니멀") && (
-            <StyleButton
-              $active={showOnlyMinimalLikes}
-              onClick={toggleMinimalLikesFilter}
-              style={{
-                marginLeft: "20px",
-                backgroundColor: showOnlyMinimalLikes ? "#ff3b30" : "#fff",
-                borderColor: "#ff3b30",
-              }}
-            >
-              ❤️ 좋아요 필터
-            </StyleButton>
-          )}
         </DetailContainer>
       </TabContainer>
 
@@ -658,17 +639,20 @@ const StyleGrid = () => {
               // 객체 데이터인 경우 (백엔드에서 받아온 실제 데이터)
               <>
                 <div className="grid-image">
-                  {item.coordinateImg ? (
+                  {item.coordinateImg || item.imageUrl ? (
                     <img
-                      src={getImageUrl(item.coordinateImg)}
-                      alt={item.preference || "착장 이미지"}
+                      src={getImageUrl(item.coordinateImg || item.imageUrl)}
+                      alt={item.preference || item.styleName || "착장 이미지"}
                       style={{
                         width: "100%",
                         height: "100%",
                         objectFit: "cover",
                       }}
                       onError={(e) => {
-                        console.error("이미지 로드 실패:", item.coordinateImg);
+                        console.error(
+                          "이미지 로드 실패:",
+                          item.coordinateImg || item.imageUrl
+                        );
                         e.target.src =
                           "https://via.placeholder.com/150?text=No+Image";
                       }}
