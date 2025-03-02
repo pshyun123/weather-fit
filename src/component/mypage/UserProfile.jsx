@@ -31,7 +31,7 @@ const UserProfile = () => {
     name: "유저명",
     email: "유저이메일",
     preferences: "미니멀",
-    agegroup: "20대 후반",
+    ageGroup: "20대 후반",
   };
 
   // userProfile이 null이면 defaultProfile 사용
@@ -580,10 +580,10 @@ const UserProfile = () => {
       <div className="edit-container">
         <div className="edit-title">연령대</div>
         <div className="edit-content">
-          {profile?.agegroup ? (
-            <div className="edit-content">{profile.agegroup}</div>
+          {profile?.ageGroup ? (
+            <div className="edit-content">{profile.ageGroup}</div>
           ) : (
-            <div className="edit-content">{defaultProfile.agegroup}</div>
+            <div className="edit-content">{defaultProfile.ageGroup}</div>
           )}
         </div>
         <div

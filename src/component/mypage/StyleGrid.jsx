@@ -227,16 +227,40 @@ const StyleGrid = () => {
             break;
         }
       } else {
-        // 기본적으로 맑음 날씨 데이터 로드
+        // 세부 항목이 선택되지 않은 경우 모든 날씨 데이터 로드
+        console.log("모든 날씨 데이터 로드");
         try {
+          // 모든 날씨 데이터를 합쳐서 표시
+          const allWeatherData = [];
+
+          // 각 날씨별 데이터 로드
           const hotLikes = await UserApi.getHotLikes(userId);
-          console.log("더움 날씨 좋아요 데이터:", hotLikes);
-          setWeatherStyles(hotLikes || []);
+          const rainLikes = await UserApi.getRainLikes(userId);
+          const snowLikes = await UserApi.getSnowLikes(userId);
+          const coldLikes = await UserApi.getColdLikes(userId);
+          const chillLikes = await UserApi.getChillLikes(userId);
+          const warmLikes = await UserApi.getWarmLikes(userId);
+
+          // 데이터 합치기
+          if (hotLikes && hotLikes.length > 0) allWeatherData.push(...hotLikes);
+          if (rainLikes && rainLikes.length > 0)
+            allWeatherData.push(...rainLikes);
+          if (snowLikes && snowLikes.length > 0)
+            allWeatherData.push(...snowLikes);
+          if (coldLikes && coldLikes.length > 0)
+            allWeatherData.push(...coldLikes);
+          if (chillLikes && chillLikes.length > 0)
+            allWeatherData.push(...chillLikes);
+          if (warmLikes && warmLikes.length > 0)
+            allWeatherData.push(...warmLikes);
+
+          console.log("모든 날씨 데이터:", allWeatherData);
+          setWeatherStyles(allWeatherData);
 
           // 좋아요 상태 업데이트
-          if (hotLikes && hotLikes.length > 0) {
+          if (allWeatherData.length > 0) {
             const likedItemsMap = { ...likedItems };
-            hotLikes.forEach((item, index) => {
+            allWeatherData.forEach((item, index) => {
               if (typeof item !== "string" && (item.id || item.coordinateId)) {
                 likedItemsMap[index] = true;
               }
@@ -244,11 +268,15 @@ const StyleGrid = () => {
             setLikedItems(likedItemsMap);
           }
         } catch (error) {
-          console.error("더움 날씨 좋아요 데이터 로드 실패:", error);
+          console.error("모든 날씨 데이터 로드 실패:", error);
           // 임시 데이터 설정
           setWeatherStyles([
             { id: 101, styleName: "맑은 날 스타일 1", imageUrl: null },
             { id: 102, styleName: "맑은 날 스타일 2", imageUrl: null },
+            { id: 103, styleName: "비 오는 날 스타일 1", imageUrl: null },
+            { id: 104, styleName: "비 오는 날 스타일 2", imageUrl: null },
+            { id: 105, styleName: "눈 오는 날 스타일 1", imageUrl: null },
+            { id: 106, styleName: "눈 오는 날 스타일 2", imageUrl: null },
           ]);
         }
       }
@@ -452,25 +480,52 @@ const StyleGrid = () => {
             break;
         }
       } else {
-        // 기본적으로 미니멀 스타일 로드
-        if (minimalStyles.length === 0 && userId) {
+        // 세부 항목이 선택되지 않은 경우 모든 스타일 데이터 로드
+        console.log("모든 스타일 데이터 로드");
+        try {
+          // 각 스타일별 데이터 로드 - 항상 새로 로드하도록 수정
           const minimalLikes = await UserApi.getMinimalLikes(userId);
-          console.log("미니멀 스타일 좋아요 데이터:", minimalLikes);
           setMinimalStyles(minimalLikes || []);
 
-          // 좋아요 상태 업데이트
-          if (minimalLikes && minimalLikes.length > 0) {
-            const likedItemsMap = { ...likedItems };
+          const modernLikes = await UserApi.getModernLikes(userId);
+          setModernStyles(modernLikes || []);
 
-            // 미니멀 스타일 아이템은 모두 좋아요 상태로 표시
-            minimalLikes.forEach((item, index) => {
+          const casualLikes = await UserApi.getCasualLikes(userId);
+          setCasualStyles(casualLikes || []);
+
+          const streetLikes = await UserApi.getStreetLikes(userId);
+          setStreetStyles(streetLikes || []);
+
+          const livelyLikes = await UserApi.getLivelyLikes(userId);
+          setLivelyStyles(livelyLikes || []);
+
+          const luxuryLikes = await UserApi.getLuxuryLikes(userId);
+          setLuxuryStyles(luxuryLikes || []);
+
+          // 모든 스타일 데이터 합치기
+          const allStyleData = [
+            ...(minimalLikes || []),
+            ...(modernLikes || []),
+            ...(casualLikes || []),
+            ...(streetLikes || []),
+            ...(livelyLikes || []),
+            ...(luxuryLikes || []),
+          ];
+
+          console.log("모든 스타일 데이터:", allStyleData);
+
+          // 좋아요 상태 업데이트
+          if (allStyleData.length > 0) {
+            const likedItemsMap = { ...likedItems };
+            allStyleData.forEach((item, index) => {
               if (typeof item !== "string" && (item.id || item.coordinateId)) {
                 likedItemsMap[index] = true;
               }
             });
-
             setLikedItems(likedItemsMap);
           }
+        } catch (error) {
+          console.error("모든 스타일 데이터 로드 실패:", error);
         }
       }
       setIsLoading(false);
@@ -658,16 +713,41 @@ const StyleGrid = () => {
             break;
         }
       } else {
-        // 기본적으로 데이트 상황 데이터 로드
+        // 세부 항목이 선택되지 않은 경우 모든 상황 데이터 로드
+        console.log("모든 상황 데이터 로드");
         try {
+          // 모든 상황 데이터를 합쳐서 표시
+          const allSituationData = [];
+
+          // 각 상황별 데이터 로드
           const dateLikes = await UserApi.getDateLikes(userId);
-          console.log("데이트 TPO 좋아요 데이터:", dateLikes);
-          setSituationStyles(dateLikes || []);
+          const workLikes = await UserApi.getWorkLikes(userId);
+          const travelLikes = await UserApi.getTravelLikes(userId);
+          const exerciseLikes = await UserApi.getExerciseLikes(userId);
+          const meetingLikes = await UserApi.getMeetingLikes(userId);
+          const dailyLikes = await UserApi.getDailyLikes(userId);
+
+          // 데이터 합치기
+          if (dateLikes && dateLikes.length > 0)
+            allSituationData.push(...dateLikes);
+          if (workLikes && workLikes.length > 0)
+            allSituationData.push(...workLikes);
+          if (travelLikes && travelLikes.length > 0)
+            allSituationData.push(...travelLikes);
+          if (exerciseLikes && exerciseLikes.length > 0)
+            allSituationData.push(...exerciseLikes);
+          if (meetingLikes && meetingLikes.length > 0)
+            allSituationData.push(...meetingLikes);
+          if (dailyLikes && dailyLikes.length > 0)
+            allSituationData.push(...dailyLikes);
+
+          console.log("모든 상황 데이터:", allSituationData);
+          setSituationStyles(allSituationData);
 
           // 좋아요 상태 업데이트
-          if (dateLikes && dateLikes.length > 0) {
+          if (allSituationData.length > 0) {
             const likedItemsMap = { ...likedItems };
-            dateLikes.forEach((item, index) => {
+            allSituationData.forEach((item, index) => {
               if (typeof item !== "string" && (item.id || item.coordinateId)) {
                 likedItemsMap[index] = true;
               }
@@ -675,11 +755,15 @@ const StyleGrid = () => {
             setLikedItems(likedItemsMap);
           }
         } catch (error) {
-          console.error("데이트 TPO 좋아요 데이터 로드 실패:", error);
+          console.error("모든 상황 데이터 로드 실패:", error);
           // 임시 데이터 설정
           setSituationStyles([
             { id: 201, styleName: "데이트 룩 1", imageUrl: null },
             { id: 202, styleName: "데이트 룩 2", imageUrl: null },
+            { id: 203, styleName: "출근 룩 1", imageUrl: null },
+            { id: 204, styleName: "출근 룩 2", imageUrl: null },
+            { id: 205, styleName: "여행 룩 1", imageUrl: null },
+            { id: 206, styleName: "여행 룩 2", imageUrl: null },
           ]);
         }
       }
@@ -715,25 +799,41 @@ const StyleGrid = () => {
 
   // 스타일별 탭에서 세부 스타일 선택 시 해당 데이터 로드
   useEffect(() => {
-    if (activeTab === 1 && activeDetails.length > 0) {
-      fetchStyleData();
-      setShowOnlyMinimalLikes(false); // 스타일 변경 시 필터 초기화
+    if (activeTab === 1) {
+      if (activeDetails.length > 0) {
+        fetchStyleData();
+        setShowOnlyMinimalLikes(false); // 스타일 변경 시 필터 초기화
+      } else {
+        // 세부 항목이 선택 해제되면 모든 스타일 데이터 로드
+        fetchStyleData([]);
+        setShowOnlyMinimalLikes(false);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeDetails, activeTab]);
 
   // 날씨별 탭에서 세부 날씨 선택 시 해당 데이터 로드
   useEffect(() => {
-    if (activeTab === 0 && activeDetails.length > 0) {
-      fetchWeatherData();
+    if (activeTab === 0) {
+      if (activeDetails.length > 0) {
+        fetchWeatherData();
+      } else {
+        // 세부 항목이 선택 해제되면 모든 날씨 데이터 로드
+        fetchWeatherData([]);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeDetails, activeTab]);
 
   // 상황별 탭에서 세부 상황 선택 시 해당 데이터 로드
   useEffect(() => {
-    if (activeTab === 2 && activeDetails.length > 0) {
-      fetchSituationData();
+    if (activeTab === 2) {
+      if (activeDetails.length > 0) {
+        fetchSituationData();
+      } else {
+        // 세부 항목이 선택 해제되면 모든 상황 데이터 로드
+        fetchSituationData([]);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeDetails, activeTab]);
@@ -796,11 +896,20 @@ const StyleGrid = () => {
               return ["스타일 데이터 로딩 중..."];
           }
         } else {
-          // 기본적으로 미니멀 스타일 반환
-          console.log("기본 미니멀 스타일 데이터:", minimalStyles);
-          return minimalStyles.length > 0
-            ? minimalStyles
-            : ["미니멀 스타일 로딩 중..."];
+          // 세부 항목이 선택되지 않은 경우 모든 스타일 데이터 합쳐서 반환
+          console.log("모든 스타일 데이터 합쳐서 반환");
+          const allStyleData = [
+            ...(minimalStyles || []),
+            ...(modernStyles || []),
+            ...(casualStyles || []),
+            ...(streetStyles || []),
+            ...(livelyStyles || []),
+            ...(luxuryStyles || []),
+          ];
+          console.log("합쳐진 스타일 데이터:", allStyleData);
+          return allStyleData.length > 0
+            ? allStyleData
+            : ["스타일 데이터 로딩 중..."];
         }
       },
     },
@@ -824,6 +933,24 @@ const StyleGrid = () => {
       // 이미 선택된 버튼을 다시 클릭하면 선택 해제
       console.log("세부 항목 선택 해제");
       setActiveDetails([]);
+
+      // 선택 해제 시 해당 탭의 모든 데이터 로드
+      switch (activeTab) {
+        case 0: // 날씨별
+          console.log("날씨별 모든 데이터 로드");
+          fetchWeatherData([]);
+          break;
+        case 1: // 스타일별
+          console.log("스타일별 모든 데이터 로드");
+          fetchStyleData([]);
+          break;
+        case 2: // 상황별
+          console.log("상황별 모든 데이터 로드");
+          fetchSituationData([]);
+          break;
+        default:
+          break;
+      }
     } else {
       // 새로운 버튼을 클릭하면 이전 선택을 모두 해제하고 새 버튼만 선택
       console.log("새 세부 항목 선택:", detail);
@@ -854,68 +981,39 @@ const StyleGrid = () => {
     setSelectedGridItem(index === selectedGridItem ? null : index);
   };
 
-  // 선택된 스타일에 따라 필터링된 그리드 아이템 가져오기
+  // 현재 선택된 탭과 세부 항목에 따라 그리드 아이템 필터링
   const getFilteredGridItems = () => {
+    console.log(
+      "getFilteredGridItems 호출됨, activeTab:",
+      activeTab,
+      "activeDetails:",
+      activeDetails
+    );
     const category = styleCategories[activeTab];
-    console.log("getFilteredGridItems 호출됨, 현재 탭:", activeTab);
 
-    // 선택된 세부 항목이 없으면 기본 아이템 표시
+    if (!category) return [];
+
+    // 세부 항목이 선택되지 않은 경우
     if (activeDetails.length === 0) {
-      console.log("선택된 세부 항목 없음, 기본 아이템 반환");
+      console.log("세부 항목 선택되지 않음, 카테고리 전체 데이터 반환");
       return category.getItems();
     }
 
-    // 선택된 세부 항목에 따라 아이템 가져오기
-    console.log("선택된 세부 항목:", activeDetails[0]);
-
-    // 각 탭에 맞는 데이터 반환
+    // 세부 항목이 선택된 경우
+    console.log("세부 항목 선택됨:", activeDetails[0]);
     switch (activeTab) {
       case 0: // 날씨별
-        console.log("날씨별 데이터 반환:", weatherStyles);
         return weatherStyles.length > 0
           ? weatherStyles
-          : ["날씨별 데이터 로딩 중..."];
-
+          : ["날씨별 스타일 로딩 중..."];
       case 1: // 스타일별
-        const selectedStyle = activeDetails[0];
-        console.log("스타일별 데이터 반환, 선택된 스타일:", selectedStyle);
-        switch (selectedStyle) {
-          case "미니멀":
-            return minimalStyles.length > 0
-              ? minimalStyles
-              : ["미니멀 스타일 로딩 중..."];
-          case "모던":
-            return modernStyles.length > 0
-              ? modernStyles
-              : ["모던 스타일 로딩 중..."];
-          case "캐주얼":
-            return casualStyles.length > 0
-              ? casualStyles
-              : ["캐주얼 스타일 로딩 중..."];
-          case "스트릿":
-            return streetStyles.length > 0
-              ? streetStyles
-              : ["스트릿 스타일 로딩 중..."];
-          case "러블리":
-            return livelyStyles.length > 0
-              ? livelyStyles
-              : ["러블리 스타일 로딩 중..."];
-          case "럭셔리":
-            return luxuryStyles.length > 0
-              ? luxuryStyles
-              : ["럭셔리 스타일 로딩 중..."];
-          default:
-            return ["스타일 데이터 로딩 중..."];
-        }
-
+        return category.getItems();
       case 2: // 상황별
-        console.log("상황별 데이터 반환:", situationStyles);
         return situationStyles.length > 0
           ? situationStyles
-          : ["상황별 데이터 로딩 중..."];
-
+          : ["상황별 스타일 로딩 중..."];
       default:
-        return ["데이터 로딩 중..."];
+        return [];
     }
   };
 
