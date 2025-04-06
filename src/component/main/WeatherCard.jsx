@@ -3,7 +3,12 @@ import styled from "styled-components";
 import sunnyIcon from "../../images/sunnynohand.png";
 
 const WeatherCardContainer = styled.div`
-  background-color: #ffcdd2;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(226, 226, 226, 1) 50%,
+    rgba(255, 255, 255, 1) 100%
+  );
   width: 480px;
   height: 780px;
   border-radius: 15px;

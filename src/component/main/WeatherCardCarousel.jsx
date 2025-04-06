@@ -1,61 +1,74 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import WeatherCard from "./WeatherCard";
-
-const CarouselSection = styled.div`
-  padding: 60px 0;
-  width: 100%;
-  border-radius: 0;
-`;
+import arrowImage from "../../images/carouselarrow.png";
 
 const CarouselContainer = styled.div`
   position: relative;
   width: 100%;
-  max-width: 1200px;
+  max-width: 480px;
   display: flex;
   justify-content: center;
   align-items: center;
   margin: 0 auto;
-  padding: 40px 0;
-  perspective: 1000px;
-  cursor: grab;
-
-  &:active {
-    cursor: grabbing;
-  }
+  padding: 40px 20px;
+  overflow: visible;
 `;
 
 const CarouselWrapper = styled.div`
   position: relative;
   width: 100%;
-  height: 100%;
+  height: 780px;
   display: flex;
   justify-content: center;
-  transform-style: preserve-3d;
 `;
 
 const CarouselSlide = styled.div`
   position: absolute;
+  left: ${(props) => props.$position.x}px;
+  top: ${(props) => props.$position.y}px;
   width: 480px;
-  transform: ${(props) => {
-    const offset = props.$index - props.$activeIndex;
-    if (offset === 0) return "translateX(0) scale(1) translateZ(0)";
-
-    // 비활성화된 카드는 오른쪽으로 살짝 이동하고 크기를 줄이고 뒤쪽에 배치
-    const xOffset = offset * 40; // 오른쪽으로 40px씩 이동
-    const zOffset = offset * -50; // 뒤로 50px씩 이동
-    const scale = 1 - Math.abs(offset) * 0.05; // 크기를 5%씩 줄임
-
-    return `translateX(${xOffset}px) scale(${scale}) translateZ(${zOffset}px)`;
-  }};
-  opacity: ${(props) =>
-    Math.abs(props.$index - props.$activeIndex) > 2 ? 0 : 1};
-  z-index: ${(props) => 10 - Math.abs(props.$index - props.$activeIndex)};
+  z-index: ${(props) => props.$position.z};
+  transform: ${(props) =>
+    props.$position.scale ? `scale(${props.$position.scale})` : "scale(1)"};
   transition: all 0.5s ease-in-out;
-  box-shadow: ${(props) =>
-    props.$index === props.$activeIndex
-      ? "0 10px 20px rgba(0, 0, 0, 0.15)"
-      : "0 5px 10px rgba(0, 0, 0, 0.1)"};
+  opacity: ${(props) =>
+    props.$position.opacity !== undefined ? props.$position.opacity : 1};
+  display: ${(props) => (props.$position.visible ? "block" : "none")};
+`;
+
+const NavArrow = styled.div`
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 20;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  &.prev {
+    left: -30px;
+    transform: translateY(-50%) rotate(180deg);
+  }
+
+  &.next {
+    right: -30px;
+  }
+`;
+
+const ArrowImage = styled.img`
+  width: 30px;
+  height: 30px;
+  filter: drop-shadow(0px 2px 3px rgba(0, 0, 0, 0.2));
 `;
 
 const CarouselDots = styled.div`
@@ -80,9 +93,7 @@ const CarouselDot = styled.div`
 
 const WeatherCardCarousel = ({ weatherCards = [] }) => {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [startX, setStartX] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
-  const containerRef = useRef(null);
+  const [isAnimating, setIsAnimating] = useState(false);
 
   // 기본 날씨 데이터
   const defaultWeatherCards = [
@@ -115,96 +126,108 @@ const WeatherCardCarousel = ({ weatherCards = [] }) => {
   // 전달된 데이터가 없으면 기본 데이터 사용
   const cards = weatherCards.length > 0 ? weatherCards : defaultWeatherCards;
 
+  // 카드 위치 계산 함수 - 3개의 카드만 표시하도록 수정
+  const getCardPosition = (index) => {
+    // 활성 카드와의 상대적 위치 계산
+    const totalCards = cards.length;
+    const relativePosition = (index - activeIndex + totalCards) % totalCards;
+
+    // 현재 보이는 활성 카드 (중앙)
+    if (relativePosition === 0) {
+      return {
+        x: 0,
+        y: 0,
+        z: 10,
+        opacity: 1,
+        scale: 1,
+        visible: true,
+      };
+    }
+
+    // 바로 다음 카드 (오른쪽)
+    if (relativePosition === 1) {
+      return {
+        x: 40,
+        y: 0,
+        z: 9,
+        opacity: 0.85,
+        scale: 0.96,
+        visible: true,
+      };
+    }
+
+    // 바로 이전 카드 (뒤쪽)
+    if (relativePosition === totalCards - 1) {
+      return {
+        x: 80, // 첫-둘 차이만큼 더 이동 (40 + 40)
+        y: 0, // y는 0으로 유지
+        z: 8, // z 인덱스도 동일한 차이 (9 - 1 = 8)
+        opacity: 0.7, // 투명도도 비슷한 차이 (0.85 - 0.15 = 0.70)
+        scale: 0.94, // 크기도 비슷한 차이 (0.98 - 0.02 = 0.96)
+        visible: true,
+      };
+    }
+
+    // 나머지 카드는 숨김
+    return {
+      x: 0,
+      y: 0,
+      z: 0,
+      opacity: 0,
+      visible: false,
+    };
+  };
+
+  // 다음 카드로 이동
+  const handleNext = () => {
+    if (isAnimating) return;
+
+    setIsAnimating(true);
+    setActiveIndex((prev) => (prev === cards.length - 1 ? 0 : prev + 1));
+
+    setTimeout(() => {
+      setIsAnimating(false);
+    }, 500);
+  };
+
+  // 이전 카드로 이동
+  const handlePrev = () => {
+    if (isAnimating) return;
+
+    setIsAnimating(true);
+    setActiveIndex((prev) => (prev === 0 ? cards.length - 1 : prev - 1));
+
+    setTimeout(() => {
+      setIsAnimating(false);
+    }, 500);
+  };
+
+  // 특정 카드로 이동
   const handleDotClick = (index) => {
+    if (isAnimating || index === activeIndex) return;
+
+    setIsAnimating(true);
     setActiveIndex(index);
-  };
 
-  const handleMouseDown = (e) => {
-    setStartX(e.clientX);
-    setIsDragging(true);
-  };
-
-  const handleMouseMove = (e) => {
-    if (!isDragging) return;
-
-    const diffX = e.clientX - startX;
-
-    // 충분한 거리를 드래그했을 때만 슬라이드 변경
-    if (Math.abs(diffX) > 50) {
-      if (diffX > 0 && activeIndex > 0) {
-        // 오른쪽으로 드래그 - 이전 슬라이드
-        setActiveIndex(activeIndex - 1);
-      } else if (diffX < 0 && activeIndex < cards.length - 1) {
-        // 왼쪽으로 드래그 - 다음 슬라이드
-        setActiveIndex(activeIndex + 1);
-      }
-
-      // 드래그 상태 리셋
-      setIsDragging(false);
-    }
-  };
-
-  const handleMouseUp = () => {
-    setIsDragging(false);
-  };
-
-  // 컴포넌트 바깥에서 마우스 버튼을 놓은 경우에도 드래그 상태 리셋
-  useEffect(() => {
-    const handleGlobalMouseUp = () => {
-      setIsDragging(false);
-    };
-
-    window.addEventListener("mouseup", handleGlobalMouseUp);
-
-    return () => {
-      window.removeEventListener("mouseup", handleGlobalMouseUp);
-    };
-  }, []);
-
-  // 터치 이벤트 핸들러 - 모바일 지원
-  const handleTouchStart = (e) => {
-    setStartX(e.touches[0].clientX);
-    setIsDragging(true);
-  };
-
-  const handleTouchMove = (e) => {
-    if (!isDragging) return;
-
-    const diffX = e.touches[0].clientX - startX;
-
-    if (Math.abs(diffX) > 50) {
-      if (diffX > 0 && activeIndex > 0) {
-        setActiveIndex(activeIndex - 1);
-      } else if (diffX < 0 && activeIndex < cards.length - 1) {
-        setActiveIndex(activeIndex + 1);
-      }
-
-      setIsDragging(false);
-    }
-  };
-
-  const handleTouchEnd = () => {
-    setIsDragging(false);
+    setTimeout(() => {
+      setIsAnimating(false);
+    }, 500);
   };
 
   return (
-    <CarouselSection>
-      <CarouselContainer
-        ref={containerRef}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-        onMouseLeave={handleMouseUp}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
-      >
+    <>
+      <CarouselContainer>
+        <NavArrow className="prev" onClick={handlePrev}>
+          <ArrowImage src={arrowImage} alt="이전" />
+        </NavArrow>
+
         <CarouselWrapper>
           {cards.map((card, index) => (
             <CarouselSlide
-              key={index}
+              key={`${card.date}-${index}`}
               $index={index}
               $activeIndex={activeIndex}
+              $position={getCardPosition(index)}
             >
               <WeatherCard
                 date={card.date}
@@ -217,18 +240,22 @@ const WeatherCardCarousel = ({ weatherCards = [] }) => {
             </CarouselSlide>
           ))}
         </CarouselWrapper>
+
+        <NavArrow className="next" onClick={handleNext}>
+          <ArrowImage src={arrowImage} alt="다음" />
+        </NavArrow>
       </CarouselContainer>
 
       <CarouselDots>
         {cards.map((_, index) => (
           <CarouselDot
             key={index}
-            $active={activeIndex === index}
+            $active={index === activeIndex}
             onClick={() => handleDotClick(index)}
           />
         ))}
       </CarouselDots>
-    </CarouselSection>
+    </>
   );
 };
 
