@@ -7,6 +7,7 @@ import Mypage from "./pages/Mypage";
 import Join from "./pages/Join";
 import WeatherDetailPage from "./pages/WetherDetailPage";
 import { AuthProvider } from "./context/AuthContext";
+import React from "react";
 
 function App() {
   return (
