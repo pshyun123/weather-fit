@@ -1,183 +1,239 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import OutfitsPreferCard from "./OutfitsPreferCard";
+import dumyimg from "../../images/imgdumy.jpg";
+import modernimg from "../../images/morderndumy.jpg";
+import streetimg from "../../images/streetdumy.jpg";
+import casualimg from "../../images/casoueldumy.jpg";
+import luxuryimg from "../../images/luxurydumy.jpg";
 
 const OutfitsPreferComp = styled.section`
   padding: 60px 0;
   background-color: #fff;
+  overflow: hidden;
 
   .container {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 60px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .section-title-container {
+    width: 100%;
+    max-width: 1200px;
+  }
+
+  .style-grid-container {
+    width: 100%;
+    max-width: 1200px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
 
   .section-title {
     font-size: 24px;
-    font-weight: bold;
-    text-align: center;
+    font-weight: 500;
     margin-bottom: 40px;
   }
 
   .style-tabs {
     display: flex;
-    justify-content: center;
-    margin-bottom: 30px;
-    gap: 15px;
-    flex-wrap: wrap;
+    gap: 32px;
+    margin-bottom: 40px;
   }
 
-  .style-tab {
-    padding: 8px 20px;
-    border-radius: 30px;
-    border: 1px solid #ddd;
+  .tab-button {
+    padding: 0;
+    width: 100px;
+    height: 40px;
+    font-size: 15px;
     cursor: pointer;
-    font-size: 14px;
+    color: #999;
+    background-color: rgba(255, 255, 255, 1);
+    position: relative;
+    border: 1px solid rgba(229, 229, 229, 1);
+    border-radius: 32px;
 
     &.active {
-      background-color: #4981f8;
-      color: white;
-      border-color: #4981f8;
-    }
-
-    &:hover {
-      background-color: #f5f5f5;
-      &.active {
-        background-color: #4981f8;
-      }
+      color: #000;
+      font-weight: 500;
     }
   }
 
   .style-grid {
     display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin-top: 20px;
+    gap: 24px;
     position: relative;
+    transition: transform 0.5s ease;
   }
 
-  .style-card {
-    width: 150px;
-    height: 200px;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-  }
-
-  .carousel-controls {
+  .carousel-nav {
     position: absolute;
-    width: 100%;
-    top: 50%;
+    top: 70%;
     transform: translateY(-50%);
+    width: 100%;
+    left: 0;
+    right: 0;
     display: flex;
     justify-content: space-between;
     pointer-events: none;
+    z-index: 2;
   }
 
-  .control-arrow {
-    width: 40px;
-    height: 40px;
+  .nav-button {
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #eee;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: rgba(255, 255, 255, 0.8);
-    border-radius: 50%;
     cursor: pointer;
     pointer-events: auto;
-    font-size: 20px;
+    font-size: 24px;
     color: #333;
+    transition: all 0.3s ease;
 
     &:hover {
-      background-color: white;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
   }
 `;
 
 const OutfitsPrefer = () => {
-  const [activeTab, setActiveTab] = useState("모던");
+  const [activeTab, setActiveTab] = useState("minimal");
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const styleData = {
+    minimal: [
+      { id: 1, imageUrl: dumyimg, alt: "미니멀 스타일 1" },
+      { id: 2, imageUrl: dumyimg, alt: "미니멀 스타일 2" },
+      { id: 3, imageUrl: dumyimg, alt: "미니멀 스타일 3" },
+      { id: 4, imageUrl: dumyimg, alt: "미니멀 스타일 4" },
+      { id: 5, imageUrl: dumyimg, alt: "미니멀 스타일 5" },
+    ],
+    modern: [
+      { id: 1, imageUrl: modernimg, alt: "모던 스타일 1" },
+      { id: 2, imageUrl: modernimg, alt: "모던 스타일 2" },
+      { id: 3, imageUrl: modernimg, alt: "모던 스타일 3" },
+      { id: 4, imageUrl: modernimg, alt: "모던 스타일 4" },
+      { id: 5, imageUrl: modernimg, alt: "모던 스타일 5" },
+    ],
+    street: [
+      { id: 1, imageUrl: streetimg, alt: "스트릿 스타일 1" },
+      { id: 2, imageUrl: streetimg, alt: "스트릿 스타일 2" },
+      { id: 3, imageUrl: streetimg, alt: "스트릿 스타일 3" },
+      { id: 4, imageUrl: streetimg, alt: "스트릿 스타일 4" },
+      { id: 5, imageUrl: streetimg, alt: "스트릿 스타일 5" },
+    ],
+    casual: [
+      { id: 1, imageUrl: casualimg, alt: "캐주얼 스타일 1" },
+      { id: 2, imageUrl: casualimg, alt: "캐주얼 스타일 2" },
+      { id: 3, imageUrl: casualimg, alt: "캐주얼 스타일 3" },
+      { id: 4, imageUrl: casualimg, alt: "캐주얼 스타일 4" },
+      { id: 5, imageUrl: casualimg, alt: "캐주얼 스타일 5" },
+    ],
+    luxury: [
+      { id: 1, imageUrl: luxuryimg, alt: "럭셔리 스타일 1" },
+      { id: 2, imageUrl: luxuryimg, alt: "럭셔리 스타일 2" },
+      { id: 3, imageUrl: luxuryimg, alt: "럭셔리 스타일 3" },
+      { id: 4, imageUrl: luxuryimg, alt: "럭셔리 스타일 4" },
+      { id: 5, imageUrl: luxuryimg, alt: "럭셔리 스타일 5" },
+    ],
+  };
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
+    setCurrentIndex(0);
+  };
+
+  const handleCardClick = (id) => {
+    console.log(`Clicked card ${id} from ${activeTab} style`);
+  };
+
+  const handlePrev = () => {
+    setCurrentIndex((prev) => Math.max(prev - 1, 0));
+  };
+
+  const handleNext = () => {
+    const maxIndex = styleData[activeTab].length - 5;
+    setCurrentIndex((prev) => Math.min(prev + 1, maxIndex));
   };
 
   return (
     <OutfitsPreferComp>
       <div className="container">
-        <h2 className="section-title">취향에 맞는 스타일을 찾아보세요</h2>
-
-        <div className="style-tabs">
-          <div
-            className={`style-tab ${activeTab === "미니멀" ? "active" : ""}`}
-            onClick={() => handleTabClick("미니멀")}
-          >
-            미니멀
-          </div>
-          <div
-            className={`style-tab ${activeTab === "모던" ? "active" : ""}`}
-            onClick={() => handleTabClick("모던")}
-          >
-            모던
-          </div>
-          <div
-            className={`style-tab ${activeTab === "스트릿" ? "active" : ""}`}
-            onClick={() => handleTabClick("스트릿")}
-          >
-            스트릿
-          </div>
-          <div
-            className={`style-tab ${activeTab === "캐주얼" ? "active" : ""}`}
-            onClick={() => handleTabClick("캐주얼")}
-          >
-            캐주얼
-          </div>
-          <div
-            className={`style-tab ${activeTab === "러블리" ? "active" : ""}`}
-            onClick={() => handleTabClick("러블리")}
-          >
-            러블리
+        <div className="section-title-container">
+          <h2 className="section-title">취향에 맞는 스타일을 찾아보세요</h2>
+          <div className="style-tabs">
+            <button
+              className={`tab-button ${
+                activeTab === "minimal" ? "active" : ""
+              }`}
+              onClick={() => handleTabClick("minimal")}
+            >
+              미니멀
+            </button>
+            <button
+              className={`tab-button ${activeTab === "modern" ? "active" : ""}`}
+              onClick={() => handleTabClick("modern")}
+            >
+              모던
+            </button>
+            <button
+              className={`tab-button ${activeTab === "street" ? "active" : ""}`}
+              onClick={() => handleTabClick("street")}
+            >
+              스트릿
+            </button>
+            <button
+              className={`tab-button ${activeTab === "casual" ? "active" : ""}`}
+              onClick={() => handleTabClick("casual")}
+            >
+              캐주얼
+            </button>
+            <button
+              className={`tab-button ${activeTab === "luxury" ? "active" : ""}`}
+              onClick={() => handleTabClick("luxury")}
+            >
+              럭셔리
+            </button>
           </div>
         </div>
 
-        <div className="style-grid">
-          <div className="style-card">
-            <img
-              src="https://via.placeholder.com/150x200"
-              alt="스타일 이미지"
-            />
+        <div className="style-grid-container">
+          <div
+            className="style-grid"
+            style={{
+              transform: `translateX(-${currentIndex * (280 + 24)}px)`,
+            }}
+          >
+            {styleData[activeTab].map((style) => (
+              <OutfitsPreferCard
+                key={style.id}
+                imageUrl={style.imageUrl}
+                alt={style.alt}
+                onClick={() => handleCardClick(style.id)}
+              />
+            ))}
           </div>
-          <div className="style-card">
-            <img
-              src="https://via.placeholder.com/150x200"
-              alt="스타일 이미지"
-            />
-          </div>
-          <div className="style-card">
-            <img
-              src="https://via.placeholder.com/150x200"
-              alt="스타일 이미지"
-            />
-          </div>
-          <div className="style-card">
-            <img
-              src="https://via.placeholder.com/150x200"
-              alt="스타일 이미지"
-            />
-          </div>
-          <div className="style-card">
-            <img
-              src="https://via.placeholder.com/150x200"
-              alt="스타일 이미지"
-            />
-          </div>
-
-          <div className="carousel-controls">
-            <div className="control-arrow">❮</div>
-            <div className="control-arrow">❯</div>
+          <div className="carousel-nav">
+            <button className="nav-button" onClick={handlePrev}>
+              ‹
+            </button>
+            <button className="nav-button" onClick={handleNext}>
+              ›
+            </button>
           </div>
         </div>
       </div>

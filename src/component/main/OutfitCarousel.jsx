@@ -5,9 +5,7 @@ import arrowImage from "../../images/carouselarrow.png";
 
 const CarouselContainer = styled.div`
   position: relative;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100vw;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -16,20 +14,27 @@ const CarouselContainer = styled.div`
 `;
 
 const CarouselHeading = styled.h2`
-  color: white;
+  color: #333;
   font-size: 20px;
   text-align: center;
   margin-bottom: 20px;
   font-weight: normal;
 `;
 
+const CarouselViewport = styled.div`
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+`;
+
 const CarouselTrack = styled.div`
   display: flex;
   gap: 20px;
   padding: 0 20px;
-  transition: transform ${(props) => (props.$isHovered ? "0s" : "30s")} linear
-    infinite;
-  transform: translateX(${(props) => props.$translateX}%);
+  transform: translateX(${(props) => props.$translateX}px);
+  transition: transform 0.5s ease;
+  will-change: transform;
+
   &:hover {
     animation-play-state: paused;
   }
@@ -91,39 +96,44 @@ const OutfitCarousel = ({ outfits = [] }) => {
   const duplicatedCards = [...cards, ...cards];
 
   useEffect(() => {
-    if (!isHovered) {
-      const interval = setInterval(() => {
-        setTranslateX((prev) => {
-          if (prev <= -100) {
-            return 0;
-          }
-          return prev - 0.01;
-        });
-      }, 10);
+    if (!isHovered && trackRef.current) {
+      const cardWidth = 410; // 카드 너비
+      const gap = 20; // 카드 간격
+      const totalWidth = cards.length * (cardWidth + gap);
 
-      return () => clearInterval(interval);
+      const animate = () => {
+        setTranslateX((prev) => {
+          const next = prev - 1;
+          return next <= -totalWidth ? 0 : next;
+        });
+      };
+
+      const animation = setInterval(animate, 30);
+
+      return () => clearInterval(animation);
     }
-  }, [isHovered]);
+  }, [isHovered, cards.length]);
 
   return (
     <CarouselContainer>
       <CarouselHeading>지금 날씨에 이런 옷은 어때요?</CarouselHeading>
 
-      <CarouselTrack
-        ref={trackRef}
-        $isHovered={isHovered}
-        $translateX={translateX}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-      >
-        {duplicatedCards.map((outfit, index) => (
-          <OutfitCard
-            key={`${outfit.title}-${index}`}
-            title={outfit.title}
-            imageUrl={outfit.imageUrl}
-          />
-        ))}
-      </CarouselTrack>
+      <CarouselViewport>
+        <CarouselTrack
+          ref={trackRef}
+          $translateX={translateX}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
+          {duplicatedCards.map((outfit, index) => (
+            <OutfitCard
+              key={`${outfit.title}-${index}`}
+              title={outfit.title}
+              imageUrl={outfit.imageUrl}
+            />
+          ))}
+        </CarouselTrack>
+      </CarouselViewport>
     </CarouselContainer>
   );
 };

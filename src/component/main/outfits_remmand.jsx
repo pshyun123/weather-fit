@@ -5,10 +5,15 @@ import OutfitCarousel from "./OutfitCarousel";
 const OutfitsRecommendComp = styled.section`
   padding: 60px 0;
   background-color: #f9f9f9;
-  border: 1px solid red;
   display: flex;
   justify-content: center;
+  width: 100%;
+
   .container {
+    width: 100%;
+    max-width: 1920px;
+    margin: 0 auto;
+    overflow: hidden;
   }
 
   .section-title {
@@ -24,43 +29,23 @@ const OutfitsRecommend = () => {
   const outfitData = [
     {
       title: "겨울 코트",
-      imageUrl: "https://via.placeholder.com/220x300",
+      imageUrl: "https://via.placeholder.com/410x546",
     },
     {
       title: "스카프 코디",
-      imageUrl: "https://via.placeholder.com/220x300",
+      imageUrl: "https://via.placeholder.com/410x546",
     },
     {
       title: "부츠 스타일",
-      imageUrl: "https://via.placeholder.com/220x300",
+      imageUrl: "https://via.placeholder.com/410x546",
     },
     {
       title: "따뜻한 니트",
-      imageUrl: "https://via.placeholder.com/220x300",
+      imageUrl: "https://via.placeholder.com/410x546",
     },
     {
       title: "패딩 점퍼",
-      imageUrl: "https://via.placeholder.com/220x300",
-    },
-    {
-      title: "겨울 코트",
-      imageUrl: "https://via.placeholder.com/220x300",
-    },
-    {
-      title: "스카프 코디",
-      imageUrl: "https://via.placeholder.com/220x300",
-    },
-    {
-      title: "부츠 스타일",
-      imageUrl: "https://via.placeholder.com/220x300",
-    },
-    {
-      title: "따뜻한 니트",
-      imageUrl: "https://via.placeholder.com/220x300",
-    },
-    {
-      title: "패딩 점퍼",
-      imageUrl: "https://via.placeholder.com/220x300",
+      imageUrl: "https://via.placeholder.com/410x546",
     },
   ];
 
