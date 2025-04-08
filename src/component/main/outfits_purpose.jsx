@@ -21,7 +21,7 @@ const OutfitsPurposeComp = styled.section`
   .situations-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
+    gap: 4px;
 
     @media (max-width: 992px) {
       grid-template-columns: repeat(2, 1fr);
@@ -44,7 +44,11 @@ const OutfitsPurposeComp = styled.section`
     height: 250px;
     border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e0e0e0;
+    &:hover {
+      transform: scale(1.05);
+      transition: transform 0.3s ease;
+    }
 
     img {
       width: 100%;
@@ -54,11 +58,10 @@ const OutfitsPurposeComp = styled.section`
 
     .card-label {
       position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background-color: rgba(0, 0, 0, 0.6);
-      color: white;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: black;
       padding: 10px;
       text-align: center;
       font-size: 16px;
@@ -69,14 +72,14 @@ const OutfitsPurposeComp = styled.section`
 
 const OutfitsPurpose = () => {
   const situations = [
-    { id: 1, name: "데일리", image: "https://via.placeholder.com/300x250" },
-    { id: 2, name: "워크웨어", image: "https://via.placeholder.com/300x250" },
-    { id: 3, name: "데이트", image: "https://via.placeholder.com/300x250" },
-    { id: 4, name: "모임", image: "https://via.placeholder.com/300x250" },
-    { id: 5, name: "운동", image: "https://via.placeholder.com/300x250" },
-    { id: 6, name: "여행", image: "https://via.placeholder.com/300x250" },
-    { id: 7, name: "비즈니스", image: "https://via.placeholder.com/300x250" },
-    { id: 8, name: "이벤트", image: "https://via.placeholder.com/300x250" },
+    { id: 1, name: "데일리룩", image: "https://via.placeholder.com/300x250" },
+    { id: 2, name: "하객룩", image: "https://via.placeholder.com/300x250" },
+    { id: 3, name: "휴양지룩", image: "https://via.placeholder.com/300x250" },
+    { id: 4, name: "장마룩", image: "https://via.placeholder.com/300x250" },
+    { id: 5, name: "파티룩", image: "https://via.placeholder.com/300x250" },
+    { id: 6, name: "오피스룩", image: "https://via.placeholder.com/300x250" },
+    { id: 7, name: "한파", image: "https://via.placeholder.com/300x250" },
+    { id: 8, name: "데이트룩", image: "https://via.placeholder.com/300x250" },
   ];
 
   // 상황별 카드를 2x4 그리드로 렌더링

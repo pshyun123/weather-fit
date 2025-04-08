@@ -39,7 +39,7 @@ const OutfitsPreferComp = styled.section`
   }
 
   .section-title {
-    font-size: 24px;
+    font-size: 34px;
     font-weight: 500;
     margin-bottom: 40px;
   }
