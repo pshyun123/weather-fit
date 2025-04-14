@@ -1,6 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import sunnyIcon from "../../images/sunnynohand.png";
+import cloudyIcon from "../../images/cloud.png";
+import rainyIcon from "../../images/raniny.png";
+import snowyIcon from "../../images/snowy.png";
 
 const WeatherCardContainer = styled.div`
   background: linear-gradient(
@@ -25,6 +28,12 @@ const WeatherCardContainer = styled.div`
     color: #666;
     font-size: 14px;
     margin-bottom: 5px;
+  }
+
+  .time {
+    color: #888;
+    font-size: 12px;
+    margin-bottom: 28px;
   }
 
   .location {
@@ -74,6 +83,12 @@ const WeatherCardContainer = styled.div`
     line-height: 1;
   }
 
+  .temperature-range {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 24px;
+  }
+
   .weather-details {
     display: flex;
     justify-content: center;
@@ -90,7 +105,51 @@ const WeatherCardContainer = styled.div`
     margin: 0 5px;
     align-self: center;
   }
+
+  .weather-description {
+    margin-top: 16px;
+    color: #666;
+    font-size: 14px;
+  }
+
+  .coordinates {
+    margin-top: 10px;
+    color: #888;
+    font-size: 12px;
+  }
 `;
+
+// 날씨 상태에 따른 아이콘 매핑
+const getWeatherIcon = (weatherCondition) => {
+  switch (weatherCondition) {
+    case "SUNNY":
+      return sunnyIcon;
+    case "CLOUDY":
+      return cloudyIcon;
+    case "RAINY":
+      return rainyIcon;
+    case "SNOWY":
+      return snowyIcon;
+    default:
+      return sunnyIcon;
+  }
+};
+
+// 날씨 상태 한글 변환
+const getWeatherDescription = (weatherCondition) => {
+  switch (weatherCondition) {
+    case "SUNNY":
+      return "맑음";
+    case "CLOUDY":
+      return "흐림";
+    case "RAINY":
+      return "비";
+    case "SNOWY":
+      return "눈";
+    default:
+      return "맑음";
+  }
+};
 
 const WeatherCard = ({
   date = "2025년 7월 22일",
@@ -99,14 +158,31 @@ const WeatherCard = ({
   temperature = "23°C",
   humidity = "38%",
   wind = "0.9m/s",
+  weatherCondition = "SUNNY",
+  minTemp,
+  maxTemp,
+  description,
+  time,
+  latitude,
+  longitude,
 }) => {
+  // 좌표 정보가 있는 경우에만 좌표 문자열 생성
+  const hasCoordinates = latitude !== undefined && longitude !== undefined;
+  const coordinatesText = hasCoordinates
+    ? `${latitude.toFixed(2)}, ${longitude.toFixed(2)}`
+    : "";
+
   return (
     <WeatherCardContainer>
       <div className="date">{date}</div>
+      {time && <div className="time">{time}</div>}
       <div className="location">{location}</div>
 
       <div className="weather-icon">
-        <img src={sunnyIcon} alt="맑음" />
+        <img
+          src={getWeatherIcon(weatherCondition)}
+          alt={getWeatherDescription(weatherCondition)}
+        />
       </div>
 
       <div className="city">
@@ -114,13 +190,26 @@ const WeatherCard = ({
         <span className="city-name">{city}</span>
       </div>
 
+      {hasCoordinates && (
+        <div className="coordinates">
+          <small>좌표: {coordinatesText}</small>
+        </div>
+      )}
+
       <div className="temperature">{temperature}</div>
+      {minTemp !== undefined && maxTemp !== undefined && (
+        <div className="temperature-range">
+          최저 {minTemp}°C / 최고 {maxTemp}°C
+        </div>
+      )}
 
       <div className="weather-details">
         <div>습도 {humidity}</div>
         <div className="divider"></div>
         <div>풍속 {wind}</div>
       </div>
+
+      {description && <div className="weather-description">{description}</div>}
     </WeatherCardContainer>
   );
 };

@@ -91,7 +91,7 @@ const CarouselDot = styled.div`
   }
 `;
 
-const WeatherCardCarousel = ({ weatherCards = [] }) => {
+const WeatherCardCarousel = ({ weatherData = [] }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
 
@@ -101,30 +101,39 @@ const WeatherCardCarousel = ({ weatherCards = [] }) => {
       date: "2025년 7월 22일",
       location: "현재 날씨",
       city: "서빙고동",
-      temperature: "23°C",
+      temperature: "23.0°C",
       humidity: "38%",
       wind: "0.9m/s",
+      weatherCondition: "SUNNY",
+      minTemp: "20.0",
+      maxTemp: "26.0",
     },
     {
       date: "2025년 7월 23일",
       location: "내일 날씨",
       city: "서빙고동",
-      temperature: "25°C",
+      temperature: "25.0°C",
       humidity: "40%",
       wind: "0.8m/s",
+      weatherCondition: "CLOUDY",
+      minTemp: "22.0",
+      maxTemp: "28.0",
     },
     {
       date: "2025년 7월 24일",
       location: "모레 날씨",
       city: "서빙고동",
-      temperature: "22°C",
+      temperature: "22.0°C",
       humidity: "65%",
       wind: "1.2m/s",
+      weatherCondition: "RAINY",
+      minTemp: "18.0",
+      maxTemp: "24.0",
     },
   ];
 
   // 전달된 데이터가 없으면 기본 데이터 사용
-  const cards = weatherCards.length > 0 ? weatherCards : defaultWeatherCards;
+  const cards = weatherData.length > 0 ? weatherData : defaultWeatherCards;
 
   // 카드 위치 계산 함수 - 3개의 카드만 표시하도록 수정
   const getCardPosition = (index) => {
@@ -236,6 +245,13 @@ const WeatherCardCarousel = ({ weatherCards = [] }) => {
                 temperature={card.temperature}
                 humidity={card.humidity}
                 wind={card.wind}
+                weatherCondition={card.weatherCondition}
+                minTemp={card.minTemp}
+                maxTemp={card.maxTemp}
+                description={card.description}
+                time={card.time}
+                latitude={card.latitude}
+                longitude={card.longitude}
               />
             </CarouselSlide>
           ))}

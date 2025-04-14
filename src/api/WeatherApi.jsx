@@ -1,5 +1,5 @@
 import axios from "axios";
-import Common from "../common/Common";
+import Common from "../utils/Common";
 
 // API 설정
 const axiosInstance = axios.create({
@@ -29,8 +29,24 @@ export const getWeatherForecast = async () => {
   try {
     console.log("날씨 예보 정보 요청");
     const response = await axiosInstance.get("/weather/forecast");
-    console.log("날씨 예보 정보 응답:", response.data);
-    return response.data;
+
+    // 응답 데이터 로깅 시 주요 필드 정보 함께 표시
+    const forecastData = response.data;
+    console.log("날씨 예보 정보 응답:", forecastData);
+
+    if (forecastData && forecastData.length > 0) {
+      console.log("첫 번째 예보 데이터 샘플:", {
+        날짜: forecastData[0].forecastDate,
+        시간: forecastData[0].forecastTime,
+        기온: forecastData[0].forecastTemp,
+        최저기온: forecastData[0].forecastTempMin,
+        최고기온: forecastData[0].forecastTempMax,
+        날씨상태: forecastData[0].forecastWeatherCondition,
+        설명: forecastData[0].forecastDescription,
+      });
+    }
+
+    return forecastData;
   } catch (error) {
     console.error("날씨 예보 정보 요청 실패:", error);
     throw error;
