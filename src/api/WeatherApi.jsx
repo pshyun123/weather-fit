@@ -43,6 +43,7 @@ export const getWeatherForecast = async () => {
         최고기온: forecastData[0].forecastTempMax,
         날씨상태: forecastData[0].forecastWeatherCondition,
         설명: forecastData[0].forecastDescription,
+        위치: forecastData[0].forecastLocationName,
       });
     }
 

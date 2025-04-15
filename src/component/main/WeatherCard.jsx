@@ -1,9 +1,13 @@
 import React from "react";
 import styled from "styled-components";
 import sunnyIcon from "../../images/sunnynohand.png";
-import cloudyIcon from "../../images/cloud.png";
 import rainyIcon from "../../images/raniny.png";
 import snowyIcon from "../../images/snowy.png";
+import hotIcon from "../../images/hot.png";
+import warmIcon from "../../images/hot.png";
+import midIcon from "../../images/sunnynohand.png";
+import coldIcon from "../../images/cold.png";
+import chillIcon from "../../images/chill.png";
 
 const WeatherCardContainer = styled.div`
   background: linear-gradient(
@@ -36,7 +40,7 @@ const WeatherCardContainer = styled.div`
     margin-bottom: 28px;
   }
 
-  .location {
+  .description {
     font-weight: 500;
     font-size: 18px;
     color: #333;
@@ -67,7 +71,7 @@ const WeatherCardContainer = styled.div`
     color: #555;
   }
 
-  .location-icon {
+  .description-icon {
     font-size: 18px;
   }
 
@@ -122,13 +126,19 @@ const WeatherCardContainer = styled.div`
 // 날씨 상태에 따른 아이콘 매핑
 const getWeatherIcon = (weatherCondition) => {
   switch (weatherCondition) {
-    case "SUNNY":
-      return sunnyIcon;
-    case "CLOUDY":
-      return cloudyIcon;
-    case "RAINY":
+    case "HOT":
+      return hotIcon;
+    case "WARM":
+      return warmIcon;
+    case "MID":
+      return midIcon;
+    case "COLD":
+      return coldIcon;
+    case "CHILL":
+      return chillIcon;
+    case "RAIN":
       return rainyIcon;
-    case "SNOWY":
+    case "SNOW":
       return snowyIcon;
     default:
       return sunnyIcon;
@@ -138,13 +148,19 @@ const getWeatherIcon = (weatherCondition) => {
 // 날씨 상태 한글 변환
 const getWeatherDescription = (weatherCondition) => {
   switch (weatherCondition) {
-    case "SUNNY":
-      return "맑음";
-    case "CLOUDY":
-      return "흐림";
-    case "RAINY":
+    case "HOT":
+      return "더움";
+    case "WARM":
+      return "따뜻함";
+    case "MID":
+      return "중간";
+    case "COLD":
+      return "추움";
+    case "CHILL":
+      return "한파";
+    case "RAIN":
       return "비";
-    case "SNOWY":
+    case "SNOW":
       return "눈";
     default:
       return "맑음";
@@ -153,15 +169,15 @@ const getWeatherDescription = (weatherCondition) => {
 
 const WeatherCard = ({
   date = "2025년 7월 22일",
-  location = "현재 날씨",
-  city = "서빙고동",
+  description = "현재 날씨",
+  location = "서빙고동",
   temperature = "23°C",
   humidity = "38%",
   wind = "0.9m/s",
   weatherCondition = "SUNNY",
   minTemp,
   maxTemp,
-  description,
+
   time,
   latitude,
   longitude,
@@ -176,7 +192,7 @@ const WeatherCard = ({
     <WeatherCardContainer>
       <div className="date">{date}</div>
       {time && <div className="time">{time}</div>}
-      <div className="location">{location}</div>
+      <div className="description">{description}</div>
 
       <div className="weather-icon">
         <img
@@ -186,8 +202,8 @@ const WeatherCard = ({
       </div>
 
       <div className="city">
-        <span className="location-icon">⦿</span>
-        <span className="city-name">{city}</span>
+        <span className="description-icon">⦿</span>
+        <span className="city-name">{location}</span>
       </div>
 
       {hasCoordinates && (
@@ -208,8 +224,6 @@ const WeatherCard = ({
         <div className="divider"></div>
         <div>풍속 {wind}</div>
       </div>
-
-      {description && <div className="weather-description">{description}</div>}
     </WeatherCardContainer>
   );
 };

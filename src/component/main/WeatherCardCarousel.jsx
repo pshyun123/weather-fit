@@ -240,15 +240,14 @@ const WeatherCardCarousel = ({ weatherData = [] }) => {
             >
               <WeatherCard
                 date={card.date}
+                description={card.description}
                 location={card.location}
-                city={card.city}
                 temperature={card.temperature}
                 humidity={card.humidity}
                 wind={card.wind}
                 weatherCondition={card.weatherCondition}
                 minTemp={card.minTemp}
                 maxTemp={card.maxTemp}
-                description={card.description}
                 time={card.time}
                 latitude={card.latitude}
                 longitude={card.longitude}

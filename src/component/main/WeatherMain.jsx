@@ -152,8 +152,8 @@ const WeatherMain = () => {
 
       cards.push({
         date: formattedDate,
-        location: "현재 날씨",
-        city: "서빙고동",
+        description: currentWeather.weatherDescription || "현재 날씨",
+        location: currentWeather.locationName || "서빙고동",
         temperature: `${formatTemperature(currentWeather.currentTemp)}°C`,
         humidity: `${currentWeather.currentHumidity}%`,
         wind: `${formatTemperature(currentWeather.currentWindSpeed)}m/s`,
@@ -188,13 +188,9 @@ const WeatherMain = () => {
         formattedTime = forecast.forecastTime.substring(0, 5);
       }
 
-      // 시간별 위치 텍스트
-      const locationText = formatForecastLocation(index + 1);
-
       cards.push({
         date: formattedDate,
-        location: locationText,
-        city: "서빙고동",
+        location: forecast.forecastLocationName || "역삼역",
         temperature: `${formatTemperature(forecast.forecastTemp || 0)}°C`,
         humidity: `${forecast.forecastHumidity || 0}%`,
         wind: `${formatTemperature(forecast.forecastWindSpeed || 0)}m/s`,
@@ -213,8 +209,7 @@ const WeatherMain = () => {
     if (cards.length === 0) {
       cards.push({
         date: "날씨 정보를 불러올 수 없습니다",
-        location: "정보 없음",
-        city: "서빙고동",
+        location: "서빙고동",
         temperature: "0.0°C",
         humidity: "0%",
         wind: "0.0m/s",
