@@ -37,6 +37,10 @@ const Header = () => {
   const handleLogout = async () => {
     try {
       await UserApi.logout();
+      // 세션 스토리지에서 사용자 정보 제거
+      sessionStorage.removeItem("userInfo");
+      console.log("세션 스토리지에서 사용자 정보 제거됨");
+
       setIsLoggedIn(false);
       setUserProfile(null);
       navigate("/");

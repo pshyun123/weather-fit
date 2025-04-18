@@ -55,31 +55,77 @@ export const getWeatherForecast = async () => {
 };
 
 // 현재 날씨 조건과 사용자의 선호 스타일을 기반으로 랜덤 스타일을 추천하는 함수
-export const getCurrentWeatherBasedRandomStyles = async (userId) => {
+export const getCurrentWeatherBasedRandomStyles = async (email) => {
   try {
-    console.log(`현재 날씨 기반 랜덤 스타일 추천 요청: userId=${userId}`);
-    const response = await axiosInstance.get(
-      `/styles/current/random?userId=${userId}`
-    );
+    console.log("스타일 추천 요청 시작:", {
+      전달받은_이메일: email,
+      타입: typeof email,
+    });
+
+    // 이메일 유효성 검사
+    if (!email) {
+      console.error("유효하지 않은 이메일:", email);
+      throw new Error("유효하지 않은 이메일입니다.");
+    }
+
+    // API 요청 전 헤더 확인
+    console.log("API 요청 설정:", {
+      baseURL: axiosInstance.defaults.baseURL,
+      headers: axiosInstance.defaults.headers,
+      withCredentials: axiosInstance.defaults.withCredentials,
+    });
+
+    const response = await axiosInstance.get(`/weather/styles/current/random`, {
+      params: {
+        email: email,
+      },
+      withCredentials: true,
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    });
 
     // 응답 데이터 로깅
+    console.log("API 응답 상태:", response.status);
     const styles = response.data;
-    console.log("현재 날씨 기반 랜덤 스타일 추천 응답:", styles);
 
-    if (styles && styles.length > 0) {
-      console.log("첫 번째 추천 스타일 샘플:", {
-        스타일ID: styles[0].id,
-        스타일명: styles[0].name,
-        이미지URL: styles[0].imageUrl,
-        날씨조건: styles[0].weatherCondition,
-        설명: styles[0].description,
+    if (!styles) {
+      console.log("응답에 데이터가 없습니다.");
+      return [];
+    }
+
+    console.log("스타일 추천 응답 데이터:", {
+      데이터_타입: typeof styles,
+      배열_여부: Array.isArray(styles),
+      데이터_길이: Array.isArray(styles) ? styles.length : 0,
+    });
+
+    if (styles && Array.isArray(styles) && styles.length > 0) {
+      console.log("첫 번째 추천 스타일:", {
+        id: styles[0].id,
+        name: styles[0].name,
+        imageUrl: styles[0].imageUrl,
+        weatherCondition: styles[0].weatherCondition,
+        description: styles[0].description,
       });
     }
 
     return styles;
   } catch (error) {
-    console.error("현재 날씨 기반 랜덤 스타일 추천 요청 실패:", error);
-    throw error;
+    console.error("스타일 추천 요청 실패:", {
+      에러_메시지: error.message,
+      응답_데이터: error.response?.data,
+      상태_코드: error.response?.status,
+      요청_설정: {
+        url: error.config?.url,
+        method: error.config?.method,
+        params: error.config?.params,
+      },
+    });
+
+    // 에러 발생 시 빈 배열 반환
+    return [];
   }
 };
 

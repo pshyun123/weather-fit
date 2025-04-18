@@ -10,52 +10,117 @@ const AuthContext = createContext(null);
 // 2. 사용자 프로필 정보 관리 (userProfile)
 // 3. 페이지 새로고침시에도 로그인 상태 유지
 export const AuthProvider = ({ children }) => {
-  // 로그인 상태를 저장하는 state
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  // 사용자 프로필 정보를 저장하는 state
-  const [userProfile, setUserProfile] = useState(null);
+  // 초기 상태를 세션 스토리지에서 가져옴
+  const initializeAuthState = () => {
+    try {
+      const storedUserInfo = sessionStorage.getItem("userInfo");
+      if (storedUserInfo) {
+        const userInfo = JSON.parse(storedUserInfo);
+        return {
+          isLoggedIn: true,
+          userProfile: userInfo,
+        };
+      }
+    } catch (error) {
+      console.error("세션 스토리지 초기화 중 오류:", error);
+    }
+    return {
+      isLoggedIn: false,
+      userProfile: null,
+    };
+  };
+
+  // 초기 상태 설정
+  const initialState = initializeAuthState();
+  const [isLoggedIn, setIsLoggedIn] = useState(initialState.isLoggedIn);
+  const [userProfile, setUserProfile] = useState(initialState.userProfile);
+
+  // 상태 변경 시 세션 스토리지 동기화
+  useEffect(() => {
+    if (isLoggedIn && userProfile) {
+      sessionStorage.setItem("userInfo", JSON.stringify(userProfile));
+    } else if (!isLoggedIn) {
+      sessionStorage.removeItem("userInfo");
+    }
+  }, [isLoggedIn, userProfile]);
 
   // 컴포넌트가 마운트될 때 로그인 상태 확인
   useEffect(() => {
     const checkLoginStatus = async () => {
       console.log("AuthContext - 로그인 상태 확인 시작");
-      try {
-        // 백엔드에 로그인 상태 확인 요청
-        const res = await UserApi.checkLoginStatus();
-        console.log("AuthContext 로그인 체크 응답:", res.data);
 
-        // 로그인이 유효한 경우
-        if (res.data && res.data.success) {
-          // 로그인 상태를 true로 설정
-          setIsLoggedIn(true);
-          // 사용자 프로필 정보 설정
-          const profileData = {
-            name: res.data.name,
-            email: res.data.email,
-            profileImage: res.data.profileImage,
-            ageGroup: res.data.ageGroup,
-            id: res.data.id, // ID 정보도 저장
-          };
-          setUserProfile(profileData);
-          console.log("AuthContext - 로그인 확인 성공, 프로필 데이터 설정:", {
-            ...profileData,
-            id: profileData.id,
-            profileImage: profileData.profileImage ? "(이미지 데이터)" : null,
-          });
+      try {
+        // 먼저 세션 스토리지에서 로그인 정보 확인
+        const storedUserInfo = sessionStorage.getItem("userInfo");
+        console.log("세션 스토리지 저장된 정보:", storedUserInfo);
+
+        if (storedUserInfo) {
+          const userInfo = JSON.parse(storedUserInfo);
+          console.log("파싱된 사용자 정보:", userInfo);
+
+          if (userInfo && userInfo.id) {
+            // 백엔드에 로그인 상태 확인 요청
+            try {
+              const res = await UserApi.checkLoginStatus();
+              console.log("백엔드 로그인 체크 응답:", res.data);
+
+              if (res.data && res.data.success) {
+                setIsLoggedIn(true);
+                const profileData = {
+                  id: res.data.id || userInfo.id,
+                  name: res.data.name || userInfo.name,
+                  email: res.data.email || userInfo.email,
+                  profileImage: res.data.profileImage || userInfo.profileImage,
+                  ageGroup: res.data.ageGroup || userInfo.ageGroup,
+                  preferences: res.data.preferences || userInfo.preferences,
+                };
+                setUserProfile(profileData);
+                console.log("로그인 상태 설정 완료:", {
+                  isLoggedIn: true,
+                  profileData,
+                });
+              } else {
+                console.log("백엔드 인증 실패 - 세션 정보 유지");
+                // 백엔드 인증 실패시에도 세션 정보 유지
+                setIsLoggedIn(true);
+                setUserProfile(userInfo);
+              }
+            } catch (error) {
+              console.error(
+                "백엔드 연결 실패 - 세션 정보로 로그인 상태 유지:",
+                error
+              );
+              // 백엔드 연결 실패시 세션 정보로 로그인 상태 유지
+              setIsLoggedIn(true);
+              setUserProfile(userInfo);
+            }
+          } else {
+            console.log("세션에 유효한 사용자 ID 없음");
+            setIsLoggedIn(false);
+            setUserProfile(null);
+            sessionStorage.removeItem("userInfo");
+          }
         } else {
-          console.log("AuthContext - 로그인 확인 실패: 유효한 세션 없음");
+          console.log("세션에 저장된 사용자 정보 없음");
           setIsLoggedIn(false);
           setUserProfile(null);
         }
       } catch (error) {
-        // 에러 발생 시 로그인 상태 초기화
-        console.error("AuthContext 로그인 체크 실패:", error);
-        setIsLoggedIn(false);
-        setUserProfile(null);
+        console.error("로그인 상태 확인 중 오류:", error);
+        // 에러 발생 시 세션 정보 확인
+        const storedUserInfo = sessionStorage.getItem("userInfo");
+        if (storedUserInfo) {
+          const userInfo = JSON.parse(storedUserInfo);
+          setIsLoggedIn(true);
+          setUserProfile(userInfo);
+          console.log("에러 발생 - 세션 정보로 로그인 상태 복구");
+        } else {
+          setIsLoggedIn(false);
+          setUserProfile(null);
+        }
       }
     };
 
-    // 컴포넌트 마운트 시 로그인 상태 확인 실행
     checkLoginStatus();
   }, []);
 
@@ -63,10 +128,10 @@ export const AuthProvider = ({ children }) => {
   return (
     <AuthContext.Provider
       value={{
-        isLoggedIn, // 현재 로그인 상태
-        setIsLoggedIn, // 로그인 상태 변경 함수
-        userProfile, // 사용자 프로필 정보
-        setUserProfile, // 프로필 정보 변경 함수
+        isLoggedIn,
+        setIsLoggedIn,
+        userProfile,
+        setUserProfile,
       }}
     >
       {children}

@@ -78,6 +78,18 @@ const LoginPage = () => {
           localStorage.setItem("saveId", "false");
         }
 
+        // 세션 스토리지에 사용자 정보 저장
+        const userInfo = {
+          id: res.data.id,
+          email: res.data.email,
+          name: res.data.name,
+          profileImage: res.data.profileImage,
+          ageGroup: res.data.ageGroup,
+          preferences: res.data.preferences,
+        };
+        sessionStorage.setItem("userInfo", JSON.stringify(userInfo));
+        console.log("세션 스토리지에 저장된 사용자 정보:", userInfo);
+
         setIsLoggedIn(true);
         setUserProfile(res.data); // 로그인 성공 시 프로필 정보 업데이트
         navigate("/");
