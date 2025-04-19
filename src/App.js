@@ -6,6 +6,7 @@ import Login from "./pages/LoginPage";
 import Mypage from "./pages/Mypage";
 import Join from "./pages/Join";
 import WeatherDetailPage from "./pages/WetherDetailPage";
+import PurposeDetailPage from "./pages/PurposeDetailPage";
 import { AuthProvider } from "./context/AuthContext";
 import React from "react";
 
@@ -17,6 +18,7 @@ function App() {
         <Routes>
           <Route element={<Layout />}>
             <Route path="/" element={<MainPage />} />
+            <Route path="/purpose" element={<PurposeDetailPage />} />
             <Route path="/mypage" element={<Mypage />} />
             <Route path="/weatherdetailpage" element={<WeatherDetailPage />} />
           </Route>

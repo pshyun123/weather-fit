@@ -1,6 +1,14 @@
 import React from "react";
 import styled from "styled-components";
-
+import { useNavigate } from "react-router-dom";
+import daillyImage from "../../images/daillydumy.jpg";
+import weddingImage from "../../images/weadingdumy.jpg";
+import travelImage from "../../images/traveldumy.jpg";
+import rainyImage from "../../images/raindaydumy.jpg";
+import partyImage from "../../images/partydumy.jpg";
+import officeImage from "../../images/officedumy.jpg";
+import coldImage from "../../images/winterdumy.jpg";
+import dateImage from "../../images/datedumy.jpg";
 const OutfitsPurposeComp = styled.section`
   padding: 60px 0;
   background-color: #f9f9f9;
@@ -66,26 +74,34 @@ const OutfitsPurposeComp = styled.section`
       text-align: center;
       font-size: 16px;
       font-weight: bold;
+      color: rgba(255, 255, 255, 1);
     }
   }
 `;
 
 const OutfitsPurpose = () => {
+  const navigate = useNavigate();
+
   const situations = [
-    { id: 1, name: "데일리룩", image: "https://via.placeholder.com/300x250" },
-    { id: 2, name: "하객룩", image: "https://via.placeholder.com/300x250" },
-    { id: 3, name: "휴양지룩", image: "https://via.placeholder.com/300x250" },
-    { id: 4, name: "장마룩", image: "https://via.placeholder.com/300x250" },
-    { id: 5, name: "파티룩", image: "https://via.placeholder.com/300x250" },
-    { id: 6, name: "오피스룩", image: "https://via.placeholder.com/300x250" },
-    { id: 7, name: "한파", image: "https://via.placeholder.com/300x250" },
-    { id: 8, name: "데이트룩", image: "https://via.placeholder.com/300x250" },
+    { id: 1, name: "데일리룩", image: daillyImage },
+    { id: 2, name: "하객룩", image: weddingImage },
+    { id: 3, name: "휴양지룩", image: travelImage },
+    { id: 4, name: "장마룩", image: rainyImage },
+    { id: 5, name: "파티룩", image: partyImage },
+    { id: 6, name: "오피스룩", image: officeImage },
+    { id: 7, name: "한파룩", image: coldImage },
+    { id: 8, name: "데이트룩", image: dateImage },
   ];
 
   // 상황별 카드를 2x4 그리드로 렌더링
   const renderSituationCards = () => {
     return situations.map((situation) => (
-      <div key={situation.id} className="situation-card">
+      <div
+        key={situation.id}
+        className="situation-card"
+        onClick={() => navigate(`/purpose`)}
+        style={{ cursor: "pointer" }}
+      >
         <img src={situation.image} alt={situation.name} />
         <div className="card-label">{situation.name}</div>
       </div>
